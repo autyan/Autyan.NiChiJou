@@ -31,7 +31,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         protected DatabaseGeneratedOption KeyOption => Metadata.Key.Option;
 
-        public BaseDapperRepository()
+        protected BaseDapperRepository()
         {
             Factory = new DefaultDbConnectionFactory();
             Metadata = MetadataContext.Instance[typeof(TEntity)];
@@ -133,6 +133,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
                 case DatabaseGeneratedOption.Computed:
                     GetComputedInsertSql(builder);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             entity.CreatedAt = DateTime.Now;
             return await Connection.ExecuteAsync(builder.ToString(), entity);
