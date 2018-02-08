@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[PostComment]
 (
-	[Id] BIGINT NOT NULL PRIMARY KEY NONCLUSTERED IDENTITY, 
+	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
 	[Content] NVARCHAR(2000) NOT NULL, 
 	[BlogUserId] BIGINT NOT NULL, 
 	[PostId] BIGINT NOT NULL, 
@@ -15,4 +15,8 @@
 
 GO
 
-CREATE CLUSTERED INDEX [IX_PostComment_BlogUserId_PostId] ON [dbo].[PostComment] ([BlogUserId],[PostId])
+CREATE INDEX [IX_PostComment_BlogUserId] ON [dbo].[PostComment] ([BlogUserId])
+
+GO
+
+CREATE INDEX [IX_PostComment_PostId] ON [dbo].[PostComment] ([PostId])

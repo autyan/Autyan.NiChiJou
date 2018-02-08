@@ -10,3 +10,7 @@
 	[ModifyBy] BIGINT NULL
 	CONSTRAINT [FK_Blog_ToBlogUser] FOREIGN KEY ([BlogUserId]) REFERENCES [BlogUser]([Id])
 )
+
+GO
+
+CREATE INDEX [IX_Blog_BlogUser] ON [dbo].[Blog] ([BlogUserId])

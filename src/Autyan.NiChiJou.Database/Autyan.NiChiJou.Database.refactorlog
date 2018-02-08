@@ -28,4 +28,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[IX_ActivityLog_OperateUserId_ClientType_ActivityType]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="202fa300-a738-4f4b-9cb5-1bfee62e4feb" ChangeDateTime="02/08/2018 09:16:16">
+    <Property Name="ElementName" Value="[dbo].[PostComment].[IX_PostComment_BlogUserId_PostId]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[PostComment]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_PostComment_BlogUserId]" />
+  </Operation>
 </Operations>

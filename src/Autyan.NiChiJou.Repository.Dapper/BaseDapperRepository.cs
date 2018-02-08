@@ -39,7 +39,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         public async Task<TEntity> GetByIdAsyc(TKey id)
         {
-            return await FirstOrDefaultAsync(new 
+            return await FirstOrDefaultAsync(new
             {
                 Id = id
             });
@@ -225,21 +225,21 @@ namespace Autyan.NiChiJou.Repository.Dapper
             if (queryParamter.Name.EndsWith("Range") && queryParamter.PropertyType.IsArray)
             {
                 var fieldName = queryParamter.Name.RemoveTail("Range");
-                builder.Append(" AND ").Append(fieldName).Append(" IN @").Append(paramterPrefix + queryParamter.Name);
+                builder.Append(" AND ").Append(fieldName).Append(" IN @").Append(paramterPrefix).Append(queryParamter.Name);
                 return;
             }
 
             if (queryParamter.Name.EndsWith("From") && !queryParamter.PropertyType.IsArray)
             {
                 var fieldName = queryParamter.Name.RemoveTail("From");
-                builder.Append(" AND ").Append(fieldName).Append(" > @").Append(paramterPrefix + queryParamter.Name);
+                builder.Append(" AND ").Append(fieldName).Append(" > @").Append(paramterPrefix).Append(queryParamter.Name);
                 return;
             }
 
             if (queryParamter.Name.EndsWith("To") && !queryParamter.PropertyType.IsArray)
             {
                 var fieldName = queryParamter.Name.RemoveTail("To");
-                builder.Append(" AND ").Append(fieldName).Append(" < @").Append(paramterPrefix + queryParamter.Name);
+                builder.Append(" AND ").Append(fieldName).Append(" < @").Append(paramterPrefix).Append(queryParamter.Name);
                 return;
             }
 
@@ -261,7 +261,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             return properties;
         }
 
-        protected static IDictionary<string, object> GetObjectValues(object obj, string keyPrefix = null, bool ignoreNullValues = false)
+        protected static IDictionary<string, object> GetObjectValues(object obj, string keyPrefix = null, bool ignoreNullValues = true)
         {
             var dic = new Dictionary<string, object>();
             if (obj == null)

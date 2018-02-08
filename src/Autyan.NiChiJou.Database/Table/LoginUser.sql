@@ -13,3 +13,15 @@
 	[ModifyAt] DATETIMEOFFSET NULL,
 	[ModifyBy] BIGINT NULL
 )
+
+GO
+
+CREATE UNIQUE INDEX [IX_LoginUser_LoginName] ON [dbo].[LoginUser] ([LoginName])
+
+GO
+
+CREATE UNIQUE INDEX [IX_LoginUser_Email] ON [dbo].[LoginUser] ([Email])
+
+GO
+
+CREATE UNIQUE INDEX [IX_LoginUser_PhoneNumber] ON [dbo].[LoginUser] ([PhoneNumber])
