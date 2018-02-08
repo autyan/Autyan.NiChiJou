@@ -2,11 +2,11 @@
 
 namespace Autyan.NiChiJou.Core.Data
 {
-    public class BaseQuery<TKey>
+    public class BaseQuery<TKey> : IPagedQuery
     {
         public TKey Id { get; set; }
 
-        public TKey[] Ids { get; set; }
+        public TKey[] IdRange { get; set; }
 
         public TKey IdFrom { get; set; }
 

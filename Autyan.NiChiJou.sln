@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Core", "src\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj", "{74B663F2-9DB9-4509-A25B-1DF0CF117F15}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Schedule", "4.Schedule", "{D8860A29-4ACA-4DB0-A1B2-831C4CD48CD6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Blog", "src\Autyan.NiChiJou.Blog\Autyan.NiChiJou.Blog.csproj", "{466B3858-DCFA-49D1-9038-6B383AA359D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.Blog.Services", "Autyan.NiChiJou.Blog.Services\Autyan.NiChiJou.Blog.Services.csproj", "{94E68C90-4B3A-42E6-997B-0C9037CE56DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{466B3858-DCFA-49D1-9038-6B383AA359D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{466B3858-DCFA-49D1-9038-6B383AA359D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{466B3858-DCFA-49D1-9038-6B383AA359D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E68C90-4B3A-42E6-997B-0C9037CE56DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E68C90-4B3A-42E6-997B-0C9037CE56DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E68C90-4B3A-42E6-997B-0C9037CE56DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E68C90-4B3A-42E6-997B-0C9037CE56DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{0B75D7E3-0F45-4A4B-B465-58BD8A5167BE} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{07484EE2-429C-438B-85B8-D7AE07B412D6} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{466B3858-DCFA-49D1-9038-6B383AA359D0} = {7F995D7C-D748-4D1A-930D-3661FC4C88A0}
+		{94E68C90-4B3A-42E6-997B-0C9037CE56DA} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F714C1-1106-4673-AB1C-D928ED8A3E31}

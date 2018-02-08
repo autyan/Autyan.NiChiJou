@@ -2,9 +2,9 @@
 
 namespace Autyan.NiChiJou.Core.Data
 {
-    public class PagedQueryResult<TEntity>
+    public class PagedResult<TEntity>
     {
-        public IEnumerable<TEntity> Entities { get; set; }
+        public IEnumerable<TEntity> Results { get; set; }
 
         public int TotalCount { get; set; }
     }
