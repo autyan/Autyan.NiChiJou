@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="0df2fad5-0b62-4007-b60f-42f5e5d2b386" ChangeDateTime="01/14/2018 03:05:49">
+    <Property Name="ElementName" Value="[dbo].[LoginUser].[LoginNa]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LoginUser]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LoginName" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f190910c-4851-4755-9172-db4a0d93d2e8" ChangeDateTime="01/14/2018 06:32:18">
+    <Property Name="ElementName" Value="[dbo].[ActivityLog].[OperateUser]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ActivityLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OperateUserId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="57cf21f0-ec04-46e0-b74f-44d17ed7a6e1" ChangeDateTime="01/14/2018 06:35:12">
+    <Property Name="ElementName" Value="[dbo].[ActivityLog].[IX_ActivityLog_OperateUserId_ActivityType]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[ActivityLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_ActivityLog_OperateUserId_ActivityType_ClientType]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9110286e-2608-4241-992b-7e21c670842a" ChangeDateTime="01/14/2018 06:35:18">
+    <Property Name="ElementName" Value="[dbo].[ActivityLog].[IX_ActivityLog_OperateUserId_ClientType]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[ActivityLog]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_ActivityLog_OperateUserId_ClientType_ActivityType]" />
+  </Operation>
+</Operations>
