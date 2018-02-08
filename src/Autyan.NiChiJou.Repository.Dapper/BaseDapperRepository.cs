@@ -14,8 +14,8 @@ using Dapper;
 
 namespace Autyan.NiChiJou.Repository.Dapper
 {
-    public class BaseDapperRepository<TEntity, TKey> : BaseDapperRepository, IRepository<TEntity, TKey>
-        where TEntity : BaseEntity<TKey>
+    public class BaseDapperRepository<TEntity> : BaseDapperRepository, IRepository<TEntity>
+        where TEntity : BaseEntity
     {
         private IDbConnection _connection;
 
@@ -37,12 +37,9 @@ namespace Autyan.NiChiJou.Repository.Dapper
             Metadata = MetadataContext.Instance[typeof(TEntity)];
         }
 
-        public async Task<TEntity> GetByIdAsyc(TKey id)
+        public async Task<TEntity> GetByIdAsyc(TEntity entity)
         {
-            return await FirstOrDefaultAsync(new
-            {
-                Id = id
-            });
+            return await FirstOrDefaultAsync(entity);
         }
 
         public virtual async Task<TEntity> FirstOrDefaultAsync(object query)
@@ -64,7 +61,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             var builder = new StringBuilder();
             builder.Append("DELETE FROM ").Append(TableName).Append(" WHERE Id = @Id");
 
-            return await Connection.ExecuteAsync(builder.ToString(), new { entity.Id });
+            return await Connection.ExecuteAsync(builder.ToString(), entity);
         }
 
         public virtual async Task<int> DeleteByConditionAsync(object condition)

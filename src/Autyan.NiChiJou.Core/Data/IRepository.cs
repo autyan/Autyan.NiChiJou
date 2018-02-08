@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 
 namespace Autyan.NiChiJou.Core.Data
 {
-    public interface IRepository<TEntity, in TKey>
-        where TEntity : BaseEntity<TKey>
+    public interface IRepository<TEntity>
     {
-        Task<TEntity> GetByIdAsyc(TKey id);
+        Task<TEntity> GetByIdAsyc(TEntity entity);
 
         Task<TEntity> FirstOrDefaultAsync(object query);
 
