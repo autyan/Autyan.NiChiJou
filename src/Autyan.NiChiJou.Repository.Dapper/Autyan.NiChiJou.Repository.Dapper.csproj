@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Blog\" />
+    <Folder Include="Extension\" />
   </ItemGroup>
 
 </Project>
