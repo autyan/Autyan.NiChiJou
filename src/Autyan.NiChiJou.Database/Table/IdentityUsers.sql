@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[LoginUsers]
+﻿CREATE TABLE [dbo].[IdentityUsers]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
 	[LoginName] NVARCHAR(50) NOT NULL, 
@@ -16,4 +16,13 @@
 
 GO
 
-CREATE UNIQUE INDEX [IX_LoginUsers_LoginName] ON [dbo].[LoginUsers] ([LoginName])
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_IdentityUsers_LoginName] ON [dbo].[IdentityUsers] ([LoginName])
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_IdentityUsers_Email] ON [dbo].[IdentityUsers] ([Email])
+
+GO
+
+CREATE NONCLUSTERED INDEX [IX_IdentityUsers_PhoneNumber] ON [dbo].[IdentityUsers] ([PhoneNumber])

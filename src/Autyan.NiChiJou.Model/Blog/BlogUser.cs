@@ -12,7 +12,7 @@ namespace Autyan.NiChiJou.Model.Blog
 
         public virtual long? LoginUserId { get; set; }
 
-        public virtual LoginUser LoginUser { get; set; }
+        public virtual IdentityUser IdentityUser { get; set; }
 
         public virtual Gender Gender { get; set; }
     }

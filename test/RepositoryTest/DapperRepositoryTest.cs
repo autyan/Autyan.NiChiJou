@@ -32,12 +32,12 @@ namespace RepositoryTest
         [TestMethod]
         public void SelectTest()
         {
-            var totalInsert = 1;
+            var totalInsert = 500000;
             var random = new Random();
             for (var i = 0; i < totalInsert; i++)
             {
                 var length = random.Next(4, 20);
-                var user = new LoginUser
+                var user = new IdentityUser
                 {
                     LoginName = RandomString(random, length),
                     PasswordHash = "userlogin",
@@ -46,8 +46,9 @@ namespace RepositoryTest
                     PhoneNumberConfirmed = false
                 };
                 var repo = new IdentityUserRepository();
+                var queryUser = repo.FirstOrDefaultAsync(new {user.LoginName}).Result;
+                if (queryUser != null) continue;
                 var result = Task.Factory.StartNew(() => repo.InsertAsync(user)).Result.Result;
-                Console.WriteLine(result);
             }
         }
 

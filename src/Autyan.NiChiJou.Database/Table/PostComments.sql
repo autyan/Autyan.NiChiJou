@@ -15,8 +15,8 @@
 
 GO
 
-CREATE INDEX [IX_PostComments_BlogUserId] ON [dbo].[PostComments] ([BlogUserId])
+CREATE NONCLUSTERED INDEX [IX_PostComments_BlogUserId] ON [dbo].[PostComments] ([BlogUserId])
 
 GO
 
-CREATE INDEX [IX_PostComments_PostId] ON [dbo].[PostComments] ([PostId])
+CREATE NONCLUSTERED INDEX [IX_PostComments_PostId] ON [dbo].[PostComments] ([PostId])

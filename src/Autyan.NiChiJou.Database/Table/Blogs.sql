@@ -13,4 +13,4 @@
 
 GO
 
-CREATE INDEX [IX_Blogs_BlogUser] ON [dbo].[Blogs] ([BlogUserId])
+CREATE NONCLUSTERED INDEX [IX_Blogs_BlogUser] ON [dbo].[Blogs] ([BlogUserId])

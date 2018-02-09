@@ -189,4 +189,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="CreatedBy" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="38cb929a-bc48-4dce-b197-f77377a93ae2" ChangeDateTime="02/09/2018 13:31:16">
+    <Property Name="ElementName" Value="[dbo].[IdentityUsers].[IX_IdentityUsers_LoginUser]" />
+    <Property Name="ElementType" Value="SqlIndex" />
+    <Property Name="ParentElementName" Value="[dbo].[IdentityUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[IX_IdentityUsers_LoginName]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="01e785dd-02b3-44b9-929e-7eae16dbb8cb" ChangeDateTime="02/09/2018 13:34:48">
+    <Property Name="ElementName" Value="[dbo].[BlogUsers].[LoginUserId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[BlogUsers]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdentityUserId" />
+  </Operation>
 </Operations>

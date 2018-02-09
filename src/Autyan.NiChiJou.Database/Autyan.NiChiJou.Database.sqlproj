@@ -60,7 +60,7 @@
     <Folder Include="Table" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Table\LoginUsers.sql" />
+    <Build Include="Table\IdentityUsers.sql" />
     <Build Include="Table\BlogUsers.sql" />
     <Build Include="Table\Blogs.sql" />
     <Build Include="Table\BlogPosts.sql" />

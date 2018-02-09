@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Model.Identity
 {
-    public class LoginUser : LongKeyBaseEntity
+    public class IdentityUser : LongKeyBaseEntity
     {
         public virtual string LoginName { get; set; }
 

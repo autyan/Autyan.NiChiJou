@@ -3,7 +3,7 @@ using Autyan.NiChiJou.Model.Identity;
 
 namespace Autyan.NiChiJou.Repository.Dapper.Identity
 {
-    public class IdentityUserRepository : LongKeyDapperRepository<LoginUser>, IIdentityUserRepository
+    public class IdentityUserRepository : LongKeyDapperRepository<IdentityUser>, IIdentityUserRepository
     {
     }
 }

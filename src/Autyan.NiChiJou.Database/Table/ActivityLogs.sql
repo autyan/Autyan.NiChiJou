@@ -8,7 +8,7 @@
 	[ClientType] TINYINT NOT NULL, 
 	[CreatedAt] DATETIMEOFFSET NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL
-	CONSTRAINT [FK_ActivityLogs_ToLoginUser] FOREIGN KEY ([OperateUserId]) REFERENCES [LoginUsers]([Id])
+	CONSTRAINT [FK_ActivityLogs_ToLoginUser] FOREIGN KEY ([OperateUserId]) REFERENCES [IdentityUsers]([Id])
 )
 
 GO
