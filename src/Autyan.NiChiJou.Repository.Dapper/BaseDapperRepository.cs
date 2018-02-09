@@ -76,7 +76,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             }
 
             builder.WhereAnd("Id = @Id");
-            entity.ModifiedAt = DateTime.Now;
+            entity.ModifiedAt = DateTimeOffset.Now;
 
             return await Connection.ExecuteAsync(builder.End(), entity);
         }
@@ -85,10 +85,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             builder.Update(TableName);
-            foreach (var field in GetProperties(updateParamters.GetType()))
-            {
-                builder.Set(field.Name, $"@{field.Name}");
-            }
+            SetUpdateValue(builder, updateParamters);
             AppendWhere(builder, condition, "w_");
             var whereConditions = GetObjectValues(condition, "w_");
 
@@ -211,6 +208,16 @@ namespace Autyan.NiChiJou.Repository.Dapper
                     AppendWhereOnQueryParamter(builder, queryParamter, paramterPrefix);
                 }
             }
+        }
+
+        protected virtual void SetUpdateValue(ISqlBuilder builder, object updateParamters)
+        {
+            foreach (var field in GetProperties(updateParamters.GetType()))
+            {
+                builder.Set(field.Name, $"@{field.Name}");
+            }
+
+            builder.Set("ModifiedAt", "@ModifiedAt");
         }
 
         protected virtual void AppendWhereOnQueryParamter(ISqlBuilder builder, PropertyInfo queryParamter, string paramterPrefix = null)
