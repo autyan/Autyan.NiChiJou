@@ -1,7 +1,7 @@
 ﻿using Autyan.NiChiJou.Core.Repository.Blog;
-using Autyan.NiChiJou.Core.Repository.Identity;
 using Autyan.NiChiJou.Repository.Dapper.Blog;
 using Autyan.NiChiJou.Repository.Dapper.Identity;
+using Autyan.NiChiJou.Repository.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Autyan.NiChiJou.Repository.Dapper.Extension

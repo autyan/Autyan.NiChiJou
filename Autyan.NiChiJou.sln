@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Core", "src\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj", "{74B663F2-9DB9-4509-A25B-1DF0CF117F15}"
 EndProject
@@ -25,13 +25,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Schedule", "4.Schedule", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Blog", "src\Autyan.NiChiJou.Blog\Autyan.NiChiJou.Blog.csproj", "{466B3858-DCFA-49D1-9038-6B383AA359D0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Service.Identity", "src\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj", "{2A6FB3C2-4920-46BA-B57E-C5FA6BCF5813}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.IdentityServer", "src\Autyan.NiChiJou.IdentityServer\Autyan.NiChiJou.IdentityServer.csproj", "{6B8558A9-A7DA-4F2D-A17A-CF3D7D5F204C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9.Test", "9.Test", "{93BB521B-0490-4D29-A0EE-EF3F5BEFA2CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryTest", "test\RepositoryTest\RepositoryTest.csproj", "{CB21CB1D-9832-4BFE-81AF-B0120684E1D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryTest", "test\RepositoryTest\RepositoryTest.csproj", "{CB21CB1D-9832-4BFE-81AF-B0120684E1D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Service.Identity", "src\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj", "{B910274E-D39F-47C5-A650-48620C1EE396}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.Service", "src\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj", "{42DB294D-32A0-415F-A684-E5EB5D76EDFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.Repository", "Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj", "{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,10 +65,6 @@ Global
 		{466B3858-DCFA-49D1-9038-6B383AA359D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{466B3858-DCFA-49D1-9038-6B383AA359D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{466B3858-DCFA-49D1-9038-6B383AA359D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A6FB3C2-4920-46BA-B57E-C5FA6BCF5813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A6FB3C2-4920-46BA-B57E-C5FA6BCF5813}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A6FB3C2-4920-46BA-B57E-C5FA6BCF5813}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A6FB3C2-4920-46BA-B57E-C5FA6BCF5813}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B8558A9-A7DA-4F2D-A17A-CF3D7D5F204C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6B8558A9-A7DA-4F2D-A17A-CF3D7D5F204C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B8558A9-A7DA-4F2D-A17A-CF3D7D5F204C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,6 +73,18 @@ Global
 		{CB21CB1D-9832-4BFE-81AF-B0120684E1D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB21CB1D-9832-4BFE-81AF-B0120684E1D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB21CB1D-9832-4BFE-81AF-B0120684E1D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B910274E-D39F-47C5-A650-48620C1EE396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B910274E-D39F-47C5-A650-48620C1EE396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B910274E-D39F-47C5-A650-48620C1EE396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B910274E-D39F-47C5-A650-48620C1EE396}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42DB294D-32A0-415F-A684-E5EB5D76EDFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42DB294D-32A0-415F-A684-E5EB5D76EDFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42DB294D-32A0-415F-A684-E5EB5D76EDFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42DB294D-32A0-415F-A684-E5EB5D76EDFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,9 +95,11 @@ Global
 		{5C7DBF70-7E14-4E81-ADB5-76929C4351A5} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{07484EE2-429C-438B-85B8-D7AE07B412D6} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{466B3858-DCFA-49D1-9038-6B383AA359D0} = {7F995D7C-D748-4D1A-930D-3661FC4C88A0}
-		{2A6FB3C2-4920-46BA-B57E-C5FA6BCF5813} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
 		{6B8558A9-A7DA-4F2D-A17A-CF3D7D5F204C} = {55C86EE4-5501-485E-BB74-8C617F6A2077}
 		{CB21CB1D-9832-4BFE-81AF-B0120684E1D8} = {93BB521B-0490-4D29-A0EE-EF3F5BEFA2CB}
+		{B910274E-D39F-47C5-A650-48620C1EE396} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
+		{42DB294D-32A0-415F-A684-E5EB5D76EDFA} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
+		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F714C1-1106-4673-AB1C-D928ED8A3E31}
