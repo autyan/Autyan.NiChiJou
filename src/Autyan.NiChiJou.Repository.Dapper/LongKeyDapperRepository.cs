@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Data;
-using Autyan.NiChiJou.Core.Utility.Sql;
 
 namespace Autyan.NiChiJou.Repository.Dapper
 {
@@ -25,10 +26,12 @@ namespace Autyan.NiChiJou.Repository.Dapper
             return await base.UpdateByIdAsync(entity);
         }
 
-        protected override void SetUpdateValue(ISqlBuilder builder, object updateParamters)
+        protected override Dictionary<string, object> ParseUpdateValues(object paramters)
         {
-            builder.Set("ModifiedBy", "@ModifiedBy");
-            base.SetUpdateValue(builder, updateParamters);
+            var dic = base.ParseUpdateValues(paramters);
+            dic.Add("ModifiedAt", DateTimeOffset.Now);
+            dic.Add("ModifiedBy", -1);
+            return dic;
         }
     }
 }

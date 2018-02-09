@@ -83,9 +83,19 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         public virtual async Task<int> UpdateByConditionAsync(object updateParamters, object condition)
         {
+            var dic = ParseUpdateValues(updateParamters);
+
+            return await UpdateByConditionAsync(dic, condition);
+        }
+
+        protected async Task<int> UpdateByConditionAsync(Dictionary<string, object> updateParamters, object condition)
+        {
             var builder = StartSql();
             builder.Update(TableName);
-            SetUpdateValue(builder, updateParamters);
+            foreach (var item in updateParamters)
+            {
+                builder.Set(item.Key, $"@{item.Key}");
+            }
             AppendWhere(builder, condition, "w_");
             var whereConditions = GetObjectValues(condition, "w_");
 
@@ -210,14 +220,15 @@ namespace Autyan.NiChiJou.Repository.Dapper
             }
         }
 
-        protected virtual void SetUpdateValue(ISqlBuilder builder, object updateParamters)
+        protected virtual Dictionary<string, object> ParseUpdateValues(object paramters)
         {
-            foreach (var field in GetProperties(updateParamters.GetType()))
+            var updateDic = new Dictionary<string, object>();
+            foreach (var property in GetProperties(paramters.GetType()))
             {
-                builder.Set(field.Name, $"@{field.Name}");
+                updateDic.Add(property.Name, property.GetValue(paramters));
             }
 
-            builder.Set("ModifiedAt", "@ModifiedAt");
+            return updateDic;
         }
 
         protected virtual void AppendWhereOnQueryParamter(ISqlBuilder builder, PropertyInfo queryParamter, string paramterPrefix = null)
