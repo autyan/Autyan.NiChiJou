@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Core.Data
 {
-    public class LongKeyBaseEntity : BaseEntity<long?, long?>
+    public abstract class LongKeyBaseEntity : BaseEntity<long?, long?>
     {
     }
 

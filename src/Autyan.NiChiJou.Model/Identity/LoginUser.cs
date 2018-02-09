@@ -8,11 +8,11 @@ namespace Autyan.NiChiJou.Model.Identity
 
         public virtual string Email { get; set; }
 
-        public virtual bool EmailConfirmed { get; set; }
+        public virtual bool? EmailConfirmed { get; set; }
 
         public virtual string PhoneNumber { get; set; }
 
-        public virtual bool PhoneNumberConfirmed { get; set; }
+        public virtual bool? PhoneNumberConfirmed { get; set; }
 
         public virtual string PasswordHash { get; set; }
 

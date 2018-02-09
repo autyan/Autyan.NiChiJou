@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Data;
+using Autyan.NiChiJou.Core.Extension;
 using Humanizer;
 
 namespace Autyan.NiChiJou.Repository.Dapper
@@ -20,8 +23,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
         private static readonly Type[] DatabaseTypes = {
             typeof (int), typeof (long), typeof (byte), typeof (bool), typeof (short), typeof (string),typeof(decimal),
             typeof (int?), typeof (long?), typeof (byte?), typeof (bool?), typeof (short?),typeof(decimal?),
-            typeof (DateTime),
-            typeof (DateTime?)
+            typeof (DateTime), typeof (DateTime?), typeof(DateTimeOffset), typeof(DateTimeOffset?)
         };
 
         public static MetadataContext Instance { get; } = new MetadataContext();
@@ -31,20 +33,26 @@ namespace Autyan.NiChiJou.Repository.Dapper
         public void Initilize(Assembly[] assemblies)
         {
             var finder = TypeFinder.Scope(assemblies);
-            foreach (var type in finder.Find(t => !t.IsAbstract && t.IsClass && t.BaseType == typeof(BaseEntity)))
+            foreach (var type in finder.Find(t => !t.IsAbstract && t.IsClass && t.HasBaseType(typeof(BaseEntity))))
             {
                 var properties =
                     type.GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public);
                 var columns = new List<string>();
-                if (properties.Any(p => p.Name == "Id"))
+                var keyColumn = properties.FirstOrDefault(p => p.HasAttribute(typeof(KeyAttribute)));
+                if (keyColumn == null) throw new ArgumentException("DataObject Has No Key Column");
+                var keyOption = new KeyInfomation
                 {
-                    columns.Add("Id");
-                }
-                columns.AddRange(properties.Where(p => p.Name != "Id" && DatabaseTypes.Contains(p.PropertyType)).Select(p => p.Name));
+                    ColumnName = keyColumn.Name,
+                    Option =
+                        ((DatabaseGeneratedAttribute) keyColumn.GetAttributeValue(typeof(DatabaseGeneratedAttribute)))
+                        .DatabaseGeneratedOption
+                };
+                columns.AddRange(properties.Where(p => DatabaseTypes.Contains(p.PropertyType)).Select(p => p.Name));
                 MetadataMapping[type] = new DatabaseModelMetadata
                 {
                     TableName = type.Name.Pluralize(),
-                    Columns = columns
+                    Columns = columns,
+                    Key = keyOption
                 };
             }
         }

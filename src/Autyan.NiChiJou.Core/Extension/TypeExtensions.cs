@@ -15,5 +15,18 @@ namespace Autyan.NiChiJou.Core.Extension
             var underlyingType = Nullable.GetUnderlyingType(type);
             return underlyingType?.IsPrimitive == true;
         }
+
+        public static bool HasBaseType(this Type type, Type targetType)
+        {
+            var currentType = type;
+            while (currentType.BaseType != null)
+            {
+                var baseType = currentType.BaseType;
+                if (baseType == targetType) return true;
+                currentType = currentType.BaseType;
+            }
+
+            return false;
+        }
     }
 }

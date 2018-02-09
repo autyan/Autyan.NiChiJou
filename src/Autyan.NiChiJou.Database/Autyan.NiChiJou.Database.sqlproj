@@ -60,12 +60,12 @@
     <Folder Include="Table" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Table\LoginUser.sql" />
-    <Build Include="Table\BlogUser.sql" />
-    <Build Include="Table\Blog.sql" />
-    <Build Include="Table\BlogPost.sql" />
-    <Build Include="Table\PostComment.sql" />
-    <Build Include="Table\ActivityLog.sql" />
+    <Build Include="Table\LoginUsers.sql" />
+    <Build Include="Table\BlogUsers.sql" />
+    <Build Include="Table\Blogs.sql" />
+    <Build Include="Table\BlogPosts.sql" />
+    <Build Include="Table\PostComments.sql" />
+    <Build Include="Table\ActivityLogs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Autyan.NiChiJou.Database.refactorlog" />

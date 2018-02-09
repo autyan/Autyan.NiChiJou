@@ -1,8 +1,9 @@
-﻿using Autyan.NiChiJou.Model.Identity;
+﻿using Autyan.NiChiJou.Core.Repository.Identity;
+using Autyan.NiChiJou.Model.Identity;
 
 namespace Autyan.NiChiJou.Repository.Dapper.Identity
 {
-    public class IdentityUserRepository : BaseDapperRepository<LoginUser>
+    public class IdentityUserRepository : LongKeyDapperRepository<LoginUser>, IIdentityUserRepository
     {
     }
 }

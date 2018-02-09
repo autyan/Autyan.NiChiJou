@@ -24,9 +24,9 @@
 
         ISqlBuilder OrderBy(string column, bool isAsc = true);
 
-        ISqlBuilder Skip(int skip);
+        ISqlBuilder Skip(int? skip);
 
-        ISqlBuilder Take(int take);
+        ISqlBuilder Take(int? take);
 
         string End();
     }

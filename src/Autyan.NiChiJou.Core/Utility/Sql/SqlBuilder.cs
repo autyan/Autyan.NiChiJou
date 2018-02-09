@@ -105,13 +105,13 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
             return this;
         }
 
-        public ISqlBuilder Skip(int skip)
+        public ISqlBuilder Skip(int? skip)
         {
             SkipRows = skip;
             return this;
         }
 
-        public ISqlBuilder Take(int take)
+        public ISqlBuilder Take(int? take)
         {
             TakeRows = take;
             return this;
@@ -150,8 +150,9 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
         {
             StrBuilder.Append("INSERT INTO ").Append(TableName)
                 .Append(" (").Append(string.Join(", ", Values.Select(v => v.Key)))
-                .Append(") VALUES ")
-                .Append(string.Join(", ", Values.Select(v => v.Value)));
+                .Append(") VALUES (")
+                .Append(string.Join(", ", Values.Where(v => !string.IsNullOrEmpty(v.Value)).Select(v => v.Value)))
+                .Append(")");
             BuildWhere();
         }
 
@@ -176,7 +177,7 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
         protected virtual void BuildUpdate()
         {
             StrBuilder.Append("UPDATE ").Append(TableName).Append(" SET ")
-                .Append(string.Join(", ", Values.Select(v => $"{v.Key} = {v.Value}")));
+                .Append(string.Join(", ", Values.Where(v => !string.IsNullOrEmpty(v.Value)).Select(v => $"{v.Key} = {v.Value}")));
             BuildWhere();
         }
 

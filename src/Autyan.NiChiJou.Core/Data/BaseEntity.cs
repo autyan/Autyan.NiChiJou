@@ -1,9 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Autyan.NiChiJou.Core.Data
 {
-    public class BaseEntity<TKey, TUserKey> : BaseEntity, ICreateTrace<TUserKey>, IModifyTrace<TUserKey>
+    public abstract class BaseEntity<TKey, TUserKey> : BaseEntity, ICreateTrace<TUserKey>, IModifyTrace<TUserKey>
     {
+        [Key]
+        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public virtual TKey Id { get; set; }
 
         public TUserKey CreatedBy { get; set; }
