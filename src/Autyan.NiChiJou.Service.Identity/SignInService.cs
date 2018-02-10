@@ -14,7 +14,7 @@ namespace Autyan.NiChiJou.Service.Identity
             UserRepo = userRepository;
         }
 
-        public async Task<ServiceResult> RegisterUser(IdentityUser user)
+        public async Task<ServiceResult> RegisterUserAsyc(IdentityUser user)
         {
             var existUser = await UserRepo.UserRegisteredAsync(user);
             if (existUser != null && existUser.LoginName == user.LoginName)
@@ -34,6 +34,11 @@ namespace Autyan.NiChiJou.Service.Identity
 
             await UserRepo.InsertAsync(user);
             return ServiceResult.Success();
+        }
+
+        public async Task<ServiceResult> PasswordSignInAsync(string loginName, string password)
+        {
+            return await Task.FromResult<ServiceResult>(null);
         }
     }
 }
