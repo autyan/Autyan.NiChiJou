@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Autyan.NiChiJou.Core.Mvc\Autyan.NiChiJou.Core.Mvc.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Repository.Dapper\Autyan.NiChiJou.Repository.Dapper.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj" />
