@@ -1,4 +1,5 @@
 ﻿using Autyan.NiChiJou.Core.Mvc;
+using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
 using Autyan.NiChiJou.Service.Identity.Extension;
@@ -21,7 +22,7 @@ namespace Autyan.NiChiJou.IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.Filters.Add(new ViewModelValidationActionFilter()));
+            services.AddMvc(options => options.Filters.Add(new ViewModelValidationActionFilterAttribute()));
             services.AddNiChiJouDataModel()
                 .AddDapper()
                 .AddIdentityService();
