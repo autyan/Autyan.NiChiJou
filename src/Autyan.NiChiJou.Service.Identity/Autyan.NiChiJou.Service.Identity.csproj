@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Autyan.NiChiJou.BusinessModel\Autyan.NiChiJou.BusinessModel.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

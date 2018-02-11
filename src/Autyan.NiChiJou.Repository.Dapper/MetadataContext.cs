@@ -1,79 +1,60 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
+using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Data;
+using Autyan.NiChiJou.Core.Extension;
 using Humanizer;
 
 namespace Autyan.NiChiJou.Repository.Dapper
 {
     public class MetadataContext
     {
-        private static readonly ConcurrentDictionary<Type, MetaData> EntityMetaDataCache = new ConcurrentDictionary<Type, MetaData>();
-
-        private static readonly ConcurrentDictionary<Type, MetaData> DynamicParamMetaDataCache = new ConcurrentDictionary<Type, MetaData>();
-
         private MetadataContext()
         {
 
         }
 
+        private static readonly IDictionary<Type, DatabaseModelMetadata> MetadataMapping = new Dictionary<Type, DatabaseModelMetadata>();
+
+        private static readonly Type[] DatabaseTypes = {
+            typeof (int), typeof (long), typeof (byte), typeof (bool), typeof (short), typeof (string),typeof(decimal),
+            typeof (int?), typeof (long?), typeof (byte?), typeof (bool?), typeof (short?),typeof(decimal?),
+            typeof (DateTime), typeof (DateTime?), typeof(DateTimeOffset), typeof(DateTimeOffset?)
+        };
+
         public static MetadataContext Instance { get; } = new MetadataContext();
 
-        public MetaData this[Type type]
+        public DatabaseModelMetadata this[Type type] => MetadataMapping.ContainsKey(type) ? MetadataMapping[type] : null;
+
+        public void Initilize(Assembly[] assemblies)
         {
-            get
+            var finder = TypeFinder.Scope(assemblies);
+            foreach (var type in finder.Find(t => !t.IsAbstract && t.IsClass && t.HasBaseType(typeof(BaseEntity))))
             {
-                if (EntityMetaDataCache.ContainsKey(type))
+                var properties =
+                    type.GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public);
+                var columns = new List<string>();
+                var keyColumn = properties.FirstOrDefault(p => p.HasAttribute(typeof(KeyAttribute)));
+                if (keyColumn == null) throw new ArgumentException("DataObject Has No Key Column");
+                var keyOption = new KeyInfomation
                 {
-                    return EntityMetaDataCache[type];
-                }
-
-                if (DynamicParamMetaDataCache.ContainsKey(type))
+                    ColumnName = keyColumn.Name,
+                    Option =
+                        ((DatabaseGeneratedAttribute) keyColumn.GetAttributeValue(typeof(DatabaseGeneratedAttribute)))
+                        .DatabaseGeneratedOption
+                };
+                columns.AddRange(properties.Where(p => DatabaseTypes.Contains(p.PropertyType)).Select(p => p.Name));
+                MetadataMapping[type] = new DatabaseModelMetadata
                 {
-                    return DynamicParamMetaDataCache[type];
-                }
-
-                var metaData = MetadataGenerator(type);
-                if (typeof(BaseEntity).IsAssignableFrom(type))
-                {
-                    EntityMetaDataCache.TryAdd(type, metaData);
-                }
-                else
-                {
-                    DynamicParamMetaDataCache.TryAdd(type, metaData);
-                }
-                return metaData;
+                    TableName = type.Name.Pluralize(),
+                    Columns = columns,
+                    Key = keyOption
+                };
             }
         }
-
-        private static MetaData MetadataGenerator(Type type)
-        {
-            var typeProperties = type.GetProperties().Where(p => DatabaseTypes.Contains(p.PropertyType)).ToList();
-            var metadata = new MetaData
-            {
-                EntityType = type,
-                TableName = type.Name.Pluralize(),
-                Columns = typeProperties.Select(p => p.Name),
-                PropertyInfos = typeProperties
-            };
-            return metadata;
-        }
-
-        public static void PreInitialEntities(IEnumerable<Type> types)
-        {
-            foreach (var type in types)
-            {
-                var metadata = MetadataGenerator(type);
-                EntityMetaDataCache.TryAdd(type, metadata);
-            }
-        }
-
-        private static readonly Type[] DatabaseTypes =
-        {
-            typeof(int), typeof(int?), typeof(string), typeof(Enum), typeof(bool), typeof(bool?), typeof(long), typeof(long?),
-            typeof(DateTimeOffset), typeof(DateTimeOffset?), typeof(double), typeof(double?), typeof(float), typeof(float?),
-            typeof(DateTime), typeof(DateTime?), typeof(decimal), typeof(decimal?), typeof(short), typeof(short?), typeof(byte[])
-        };
     }
 }
