@@ -66,6 +66,7 @@
     <Build Include="Table\BlogPosts.sql" />
     <Build Include="Table\PostComments.sql" />
     <Build Include="Table\ActivityLogs.sql" />
+    <Build Include="Table\BusinessSystem.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Autyan.NiChiJou.Database.refactorlog" />

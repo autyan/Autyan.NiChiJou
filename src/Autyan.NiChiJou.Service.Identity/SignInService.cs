@@ -12,9 +12,17 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private IIdentityUserRepository UserRepo { get; }
 
-        public SignInService(IIdentityUserRepository userRepository)
+        private IBusinessSystemRepository BuSysRepo { get; }
+
+        private ISessionService SessionService { get; }
+
+        public SignInService(IIdentityUserRepository userRepository,
+            IBusinessSystemRepository buSysRepo,
+            ISessionService sessionService)
         {
             UserRepo = userRepository;
+            BuSysRepo = buSysRepo;
+            SessionService = sessionService;
         }
 
         public async Task<ServiceResult> RegisterUserAsync(UserRegisterModel model)
@@ -48,9 +56,34 @@ namespace Autyan.NiChiJou.Service.Identity
             var computedHash = HashEncrypter.Sha256Encrypt(password, user.SecuritySalt);
             if (computedHash != user.PasswordHash)
             {
-                ServiceResult.Failed("LoginName exists!", (int)IdentityStatus.InvalidPassword);
+                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.InvalidPassword);
             }
             return ServiceResult<IdentityUser>.Success(user);
+        }
+
+        public async Task<ServiceResult<BusinessSystemSignInModel>> BusinessSystemPasswordSignIn(string loginName, string password, string businessCode)
+        {
+            var user = await PasswordSignInAsync(loginName, password);
+            if (!user.Succeed)
+            {
+                return ServiceResult<BusinessSystemSignInModel>.Failed(user.Messages, user.ErrorCode);
+            }
+
+            var model = new BusinessSystemSignInModel();
+            var session = await SessionService.GetOrCreateSessionAsync(user.Data);
+            if (!session.Succeed)
+            {
+                return ServiceResult<BusinessSystemSignInModel>.Failed(session.Messages, session.ErrorCode);
+            }
+            model.SessionId = session.Data.Id;
+
+            var business = await BuSysRepo.FirstOrDefaultAsync(new { Code = businessCode });
+            if (business != null)
+            {
+                model.BusinessDomainUrl = business.MainDomain;
+            }
+
+            return ServiceResult<BusinessSystemSignInModel>.Success(model);
         }
     }
 }

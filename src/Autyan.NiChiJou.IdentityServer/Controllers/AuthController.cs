@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.IdentityServer.Models.Auth;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -16,26 +17,43 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        [AllowAnonymous]
+        public IActionResult Login(string businessId)
         {
-            return View();
+            return View(new LoginViewModel
+            {
+                BusinessId = businessId
+            });
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var result = await _signInServcice.PasswordSignInAsync(model.LoginName, model.Password);
-            if (result.Succeed)
+            var signInResult = await _signInServcice.BusinessSystemPasswordSignIn(model.LoginName, model.Password, model.BusinessId);
+            if (!signInResult.Succeed)
             {
-                return View();
+                foreach (var message in signInResult.Messages)
+                {
+                    ModelState.AddModelError(string.Empty, message);
+                }
+                return View(model);
             }
 
-            foreach (var message in result.Messages)
+            return RedirectToAction(nameof(BusinessLoginEnd));
+        }
+
+        public IActionResult BusinessLoginEnd(BusinessSystemSignInModel model)
+        {
+            Response.Cookies.Append("Autyan_SessionId", model.SessionId);
+            var targetModel = new SignInRedirectViewModel
             {
-                ModelState.AddModelError(string.Empty, message);
-            }
-            return View(model);
+                TargetUrl = string.IsNullOrEmpty(model.BusinessDomainUrl)
+                    ? "/"
+                    : $"https://{model.BusinessDomainUrl}?sessionId={model.SessionId}"
+            };
+
+            return View(targetModel);
         }
     }
 }

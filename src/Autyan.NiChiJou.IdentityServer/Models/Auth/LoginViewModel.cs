@@ -12,5 +12,12 @@ namespace Autyan.NiChiJou.IdentityServer.Models.Auth
 
         [Compare(nameof(Password), ErrorMessage = "Confirm password doesn't match, Type again !")]
         public string PasswordConfirm { get; set; }
+
+        public string BusinessId { get; set; }
+    }
+
+    public class SignInRedirectViewModel
+    {
+        public string TargetUrl { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Autyan.NiChiJou.Core.Mvc;
+﻿using Autyan.NiChiJiu.Repository.Redis.Extension;
 using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
@@ -24,6 +24,7 @@ namespace Autyan.NiChiJou.IdentityServer
         {
             services.AddMvc(options => options.Filters.Add(new ViewModelValidationActionFilterAttribute()));
             services.AddNiChiJouDataModel()
+                .AddRedis()
                 .AddDapper()
                 .AddIdentityService();
         }

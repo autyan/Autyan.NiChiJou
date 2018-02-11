@@ -4,6 +4,11 @@ namespace Autyan.NiChiJou.Core.Service
 {
     public class ServiceResult<T> : ServiceResult
     {
+        private ServiceResult()
+        {
+
+        }
+
         public T Data { get; protected set; }
 
         public static ServiceResult<T> Success(T data) => new ServiceResult<T>
@@ -24,10 +29,10 @@ namespace Autyan.NiChiJou.Core.Service
             return result;
         }
 
-        public new static ServiceResult<T> Failed(string[] message)
+        public new static ServiceResult<T> Failed(IEnumerable<string> messages)
         {
             var result = Failed();
-            result.ErrorMessages.AddRange(message);
+            result.ErrorMessages.AddRange(messages);
             return result;
         }
 
@@ -46,18 +51,18 @@ namespace Autyan.NiChiJou.Core.Service
             return result;
         }
 
-        public new static ServiceResult<T> Failed(string[] message, int errorCode)
+        public new static ServiceResult<T> Failed(IEnumerable<string> messages, int errorCode)
         {
             var result = Failed();
-            result.ErrorMessages.AddRange(message);
+            result.ErrorMessages.AddRange(messages);
             result.ErrorCode = errorCode;
             return result;
         }
 
-        public static ServiceResult<T> Failed(string[] message, T data)
+        public static ServiceResult<T> Failed(IEnumerable<string> messages, T data)
         {
             var result = Failed();
-            result.ErrorMessages.AddRange(message);
+            result.ErrorMessages.AddRange(messages);
             result.Data = data;
             return result;
         }
@@ -70,10 +75,19 @@ namespace Autyan.NiChiJou.Core.Service
             return result;
         }
 
-        public static ServiceResult<T> Failed(string[] message, int errorCode, T data)
+        public static ServiceResult<T> Failed(string message, int errorCode, T data)
         {
             var result = Failed();
-            result.ErrorMessages.AddRange(message);
+            result.ErrorMessages.Add(message);
+            result.ErrorCode = errorCode;
+            result.Data = data;
+            return result;
+        }
+
+        public static ServiceResult<T> Failed(IEnumerable<string> messages, int errorCode, T data)
+        {
+            var result = Failed();
+            result.ErrorMessages.AddRange(messages);
             result.ErrorCode = errorCode;
             result.Data = data;
             return result;
@@ -120,10 +134,10 @@ namespace Autyan.NiChiJou.Core.Service
             return result;
         }
 
-        public static ServiceResult Failed(string[] message)
+        public static ServiceResult Failed(IEnumerable<string> messages)
         {
             var result = Failed();
-            result.ErrorMessages.AddRange(message);
+            result.ErrorMessages.AddRange(messages);
             return result;
         }
 
@@ -142,10 +156,10 @@ namespace Autyan.NiChiJou.Core.Service
             return result;
         }
 
-        public static ServiceResult Failed(string[] message, int errorCode)
+        public static ServiceResult Failed(IEnumerable<string> messages, int errorCode)
         {
             var result = Failed();
-            result.ErrorMessages.AddRange(message);
+            result.ErrorMessages.AddRange(messages);
             result.ErrorCode = errorCode;
             return result;
         }

@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background: #E4E4E4 url(../images/bg-body.jpg) repeat
 }
 
 /* Wrapping element */
@@ -33,3 +34,13 @@
         display: none;
     }
 }
+
+/* validation-summary-valid styles */
+.validation-summary-errors ul {
+    list-style-type: circle;
+    padding: 0 0 0 20px;
+}
+
+    .validation-summary-errors ul li {
+        color: red;
+    }

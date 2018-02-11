@@ -203,4 +203,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdentityUserId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="af72288b-d1c0-43c4-82dd-e795c2046b97" ChangeDateTime="02/11/2018 06:55:13">
+    <Property Name="ElementName" Value="[dbo].[BusinessSystem].[CreatedAt]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[BusinessSystem]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MainDomain" />
+  </Operation>
 </Operations>
