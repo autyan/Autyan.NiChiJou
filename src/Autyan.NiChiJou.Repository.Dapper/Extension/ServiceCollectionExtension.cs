@@ -1,4 +1,5 @@
-﻿using Autyan.NiChiJou.Core.Repository.Blog;
+﻿using System;
+using Autyan.NiChiJou.Core.Repository.Blog;
 using Autyan.NiChiJou.Repository.Dapper.Blog;
 using Autyan.NiChiJou.Repository.Dapper.Identity;
 using Autyan.NiChiJou.Repository.Identity;
@@ -10,7 +11,10 @@ namespace Autyan.NiChiJou.Repository.Dapper.Extension
     {
         public static IServiceCollection AddDapper(this IServiceCollection services)
         {
-            //Default database use mssql
+            //load model Metadata
+            MetadataContext.Instance.Initilize(AppDomain.CurrentDomain.GetAssemblies());
+
+            //default database use mssql
             UseDapperWithMsSql(services);
 
             services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();

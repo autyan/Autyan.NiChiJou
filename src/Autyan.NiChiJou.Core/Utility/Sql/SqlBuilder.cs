@@ -25,6 +25,8 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
 
         protected int? TakeRows;
 
+        protected List<ISqlBuilder> Builders = new List<ISqlBuilder>();
+
         private void CheckAction()
         {
             if (Action != null) throw new InvalidOperationException("action set already.");
@@ -117,12 +119,23 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
             return this;
         }
 
+        public ISqlBuilder AppendSqlBuilder(ISqlBuilder builder)
+        {
+            Builders.Add(builder);
+            return this;
+        }
+
         public string End()
         {
             if (Action == null) throw new ArgumentNullException(nameof(Action));
             StrBuilder = new StringBuilder();
             BuildAction();
             StrBuilder.Append(";");
+            if (!(Builders?.Count > 0)) return StrBuilder.ToString();
+            foreach (var builder in Builders)
+            {
+                StrBuilder.Append("\r\n").Append(builder.End());
+            }
 
             return StrBuilder.ToString();
         }

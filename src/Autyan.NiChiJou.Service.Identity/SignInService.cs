@@ -25,12 +25,12 @@ namespace Autyan.NiChiJou.Service.Identity
             SessionService = sessionService;
         }
 
-        public async Task<ServiceResult> RegisterUserAsync(UserRegisterModel model)
+        public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegisterModel model)
         {
-            var existUser = await UserRepo.FirstOrDefaultAsync(new {model.LoginName});
+            var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)
             {
-                return ServiceResult.Failed("LoginName exists!", (int)IdentityStatus.LoginNameExists);
+                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.LoginNameExists);
             }
 
             var salt = Guid.NewGuid().ToString().ToLower();
@@ -39,10 +39,27 @@ namespace Autyan.NiChiJou.Service.Identity
             {
                 LoginName = model.LoginName,
                 PasswordHash = passwordHash,
-                SecuritySalt = salt
+                SecuritySalt = salt,
+                EmailConfirmed = false,
+                PhoneNumberConfirmed = false
             };
-            await UserRepo.InsertAsync(user);
-            return ServiceResult.Success();
+            var id = await UserRepo.InsertAsync(user);
+            user = await UserRepo.GetByIdAsyc(new IdentityUser
+            {
+                Id = id
+            });
+            return ServiceResult<IdentityUser>.Success(user);
+        }
+
+        public async Task<ServiceResult<string>> RegisterSiginInAsync(UserRegisterModel model)
+        {
+            var userResult = await RegisterUserAsync(model);
+            if (!userResult.Succeed)
+            {
+                return ServiceResult<string>.Failed(userResult.Messages, userResult.ErrorCode);
+            }
+            var sessionResult = await SessionService.GetOrCreateSessionAsync(userResult.Data);
+            return ServiceResult<string>.Success(sessionResult.Data.Id);
         }
 
         public async Task<ServiceResult<IdentityUser>> PasswordSignInAsync(string loginName, string password)

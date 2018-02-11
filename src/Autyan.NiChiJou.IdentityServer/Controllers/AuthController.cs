@@ -46,7 +46,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [HttpGet]
         public IActionResult BusinessLoginEnd([FromRoute]BusinessSystemSignInModel model)
         {
-            Response.Cookies.Append("Autyan_SessionId", model.SessionId);
+            Response.Cookies.Append("autyan.sessionId", model.SessionId);
             var targetModel = new SignInRedirectViewModel
             {
                 TargetUrl = string.IsNullOrEmpty(model.BusinessDomainUrl)
@@ -60,5 +60,27 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register() => View();
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(UserRegisterViewModel model)
+        {
+            var registerResult = await _signInServcice.RegisterSiginInAsync(new UserRegisterModel
+            {
+                LoginName = model.LoginName,
+                Password = model.Password
+            });
+
+            if (registerResult.Succeed)
+            {
+                Response.Cookies.Append("autyan.sessionId", registerResult.Data);
+                return RedirectToAction("Index", "Home");
+            }
+            foreach (var message in registerResult.Messages)
+            {
+                ModelState.AddModelError(string.Empty, message);
+            }
+            return View(model);
+        }
     }
 }

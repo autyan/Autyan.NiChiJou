@@ -11,8 +11,15 @@ namespace Autyan.NiChiJou.Service.Identity
         /// register new user.
         /// </summary>
         /// <param name="model">infomation that register needed</param>
-        /// <returns>register result</returns>
-        Task<ServiceResult> RegisterUserAsync(UserRegisterModel model);
+        /// <returns>registed user</returns>
+        Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegisterModel model);
+
+        /// <summary>
+        /// register new user, return sessionId.
+        /// </summary>
+        /// <param name="model">infomation that register needed</param>
+        /// <returns>sessionId</returns>
+        Task<ServiceResult<string>> RegisterSiginInAsync(UserRegisterModel model);
 
         /// <summary>
         /// use password sigin in, will get user infomation.

@@ -13,6 +13,7 @@ namespace Autyan.NiChiJou.Core.Service
 
         public static ServiceResult<T> Success(T data) => new ServiceResult<T>
         {
+            Succeed = true,
             Data = data
         };
 

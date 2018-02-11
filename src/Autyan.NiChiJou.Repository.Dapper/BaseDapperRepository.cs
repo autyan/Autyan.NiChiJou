@@ -141,7 +141,9 @@ namespace Autyan.NiChiJou.Repository.Dapper
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return await Connection.ExecuteAsync(builder.End(), entity);
+
+            builder.AppendSqlBuilder(StartSql().Select("Id").FromTable(TableName));
+            return await Connection.ExecuteScalarAsync<long>(builder.End(), entity);
         }
 
         private void GetSequenceInsertSql(ISqlBuilder builder)

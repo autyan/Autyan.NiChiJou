@@ -28,6 +28,8 @@
 
         ISqlBuilder Take(int? take);
 
+        ISqlBuilder AppendSqlBuilder(ISqlBuilder builder);
+
         string End();
     }
 }
