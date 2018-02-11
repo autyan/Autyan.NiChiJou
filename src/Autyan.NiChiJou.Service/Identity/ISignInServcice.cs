@@ -7,7 +7,7 @@ namespace Autyan.NiChiJou.Service.Identity
 {
     public interface ISignInServcice
     {
-        Task<ServiceResult> RegisterUserAsyc(UserRegisterModel model);
+        Task<ServiceResult> RegisterUserAsync(UserRegisterModel model);
 
         Task<ServiceResult<IdentityUser>> PasswordSignInAsync(string loginName, string password);
     }

@@ -17,7 +17,7 @@ namespace Autyan.NiChiJou.Service.Identity
             UserRepo = userRepository;
         }
 
-        public async Task<ServiceResult> RegisterUserAsyc(UserRegisterModel model)
+        public async Task<ServiceResult> RegisterUserAsync(UserRegisterModel model)
         {
             var existUser = await UserRepo.FirstOrDefaultAsync(new {model.LoginName});
             if (existUser != null)
