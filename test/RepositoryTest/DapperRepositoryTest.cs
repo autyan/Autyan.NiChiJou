@@ -37,7 +37,7 @@ namespace RepositoryTest
             for (var i = 0; i < totalInsert; i++)
             {
                 var length = random.Next(4, 20);
-                var user = new UserRegisterModel
+                var user = new IdentityUser
                 {
                     LoginName = RandomString(random, length),
                     PasswordHash = "userlogin",
