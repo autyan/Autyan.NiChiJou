@@ -1,13 +1,10 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Autyan.NiChiJou.Core.Repository.DbConnectionFactory;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Dapper;
 using Autyan.NiChiJou.Repository.Dapper.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,11 +15,11 @@ namespace RepositoryTest
     {
         public DapperRepositoryTest()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true)
-                .Build();
-            BaseDbConnectionFactory.SetConfigurationRoot(builder);
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json", optional: true)
+            //    .Build();
+            //BaseDbConnectionFactory.SetConfigurationRoot(builder);
             DapperConfiguration.UseMssql();
             var serviceCollection = new ServiceCollection() as IServiceCollection;
             serviceCollection.AddNiChiJouDataModel();

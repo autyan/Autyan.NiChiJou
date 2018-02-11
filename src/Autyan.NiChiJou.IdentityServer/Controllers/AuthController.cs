@@ -31,19 +31,20 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var signInResult = await _signInServcice.BusinessSystemPasswordSignIn(model.LoginName, model.Password, model.BusinessId);
-            if (!signInResult.Succeed)
+            if (signInResult.Succeed) return RedirectToAction(nameof(BusinessLoginEnd), new BusinessSystemSignInModel
             {
-                foreach (var message in signInResult.Messages)
-                {
-                    ModelState.AddModelError(string.Empty, message);
-                }
-                return View(model);
+                SessionId = signInResult.Data.SessionId,
+                BusinessDomainUrl = signInResult.Data.BusinessDomainUrl
+            });
+            foreach (var message in signInResult.Messages)
+            {
+                ModelState.AddModelError(string.Empty, message);
             }
-
-            return RedirectToAction(nameof(BusinessLoginEnd));
+            return View(model);
         }
 
-        public IActionResult BusinessLoginEnd(BusinessSystemSignInModel model)
+        [HttpGet]
+        public IActionResult BusinessLoginEnd([FromRoute]BusinessSystemSignInModel model)
         {
             Response.Cookies.Append("Autyan_SessionId", model.SessionId);
             var targetModel = new SignInRedirectViewModel
@@ -55,5 +56,9 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 
             return View(targetModel);
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register() => View();
     }
 }

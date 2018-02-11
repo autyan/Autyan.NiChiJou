@@ -54,11 +54,9 @@ namespace Autyan.NiChiJou.Service.Identity
             }
 
             var computedHash = HashEncrypter.Sha256Encrypt(password, user.SecuritySalt);
-            if (computedHash != user.PasswordHash)
-            {
-                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.InvalidPassword);
-            }
-            return ServiceResult<IdentityUser>.Success(user);
+            return computedHash != user.PasswordHash
+                ? ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.InvalidPassword)
+                : ServiceResult<IdentityUser>.Success(user);
         }
 
         public async Task<ServiceResult<BusinessSystemSignInModel>> BusinessSystemPasswordSignIn(string loginName, string password, string businessCode)

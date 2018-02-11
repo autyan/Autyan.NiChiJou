@@ -1,4 +1,5 @@
-﻿using Autyan.NiChiJiu.Repository.Redis.Extension;
+﻿using Autyan.NiChiJou.Core.Config;
+using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
@@ -23,8 +24,13 @@ namespace Autyan.NiChiJou.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(options => options.Filters.Add(new ViewModelValidationActionFilterAttribute()));
-            services.AddNiChiJouDataModel()
-                .AddRedis()
+            services.AddResourceConfiguration()
+                .AddDistributedRedisCache(options =>
+                {
+                    options.Configuration = ResourceConfiguration.RedisAddress;
+                    options.InstanceName = ResourceConfiguration.RedisInstanceName;
+                })
+                .AddNiChiJouDataModel()
                 .AddDapper()
                 .AddIdentityService();
         }

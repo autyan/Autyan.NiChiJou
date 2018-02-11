@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Core", "src\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj", "{74B663F2-9DB9-4509-A25B-1DF0CF117F15}"
 EndProject
@@ -15,13 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Model", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Repository.Dapper", "src\Autyan.NiChiJou.Repository.Dapper\Autyan.NiChiJou.Repository.Dapper.csproj", "{07484EE2-429C-438B-85B8-D7AE07B412D6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Business", "2.Business", "{20753C4F-60B6-474F-A867-1F8D1F937CCD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Business", "3.Business", "{20753C4F-60B6-474F-A867-1F8D1F937CCD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Api", "3.Api", "{55C86EE4-5501-485E-BB74-8C617F6A2077}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Api", "4.Api", "{55C86EE4-5501-485E-BB74-8C617F6A2077}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.UI", "5.UI", "{7F995D7C-D748-4D1A-930D-3661FC4C88A0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.UI", "6.UI", "{7F995D7C-D748-4D1A-930D-3661FC4C88A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Schedule", "4.Schedule", "{D8860A29-4ACA-4DB0-A1B2-831C4CD48CD6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Schedule", "5.Schedule", "{D8860A29-4ACA-4DB0-A1B2-831C4CD48CD6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Blog", "src\Autyan.NiChiJou.Blog\Autyan.NiChiJou.Blog.csproj", "{466B3858-DCFA-49D1-9038-6B383AA359D0}"
 EndProject
@@ -39,9 +39,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Repository"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Core.Mvc", "src\Autyan.NiChiJou.Core.Mvc\Autyan.NiChiJou.Core.Mvc.csproj", "{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJiu.Repository.Redis", "src\Autyan.NiChiJiu.Repository.Redis\Autyan.NiChiJiu.Repository.Redis.csproj", "{A02AFBBD-8CD2-4181-9D60-AE36AFA2149E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.IdentityServer", "src\Autyan.NiChiJou.IdentityServer\Autyan.NiChiJou.IdentityServer.csproj", "{E714EDA1-63A4-4CC4-A13B-E4B86D504549}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.DistributedCache", "2.DistributedCache", "{48AC073B-AFBB-4690-905F-E257DC9BF871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.DistributedCache.Redis", "Autyan.NiChiJou.DistributedCache.Redis\Autyan.NiChiJou.DistributedCache.Redis.csproj", "{77BFD4CE-BD85-4179-9630-E3ECE9B9E67C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,14 +97,14 @@ Global
 		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A02AFBBD-8CD2-4181-9D60-AE36AFA2149E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A02AFBBD-8CD2-4181-9D60-AE36AFA2149E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A02AFBBD-8CD2-4181-9D60-AE36AFA2149E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A02AFBBD-8CD2-4181-9D60-AE36AFA2149E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77BFD4CE-BD85-4179-9630-E3ECE9B9E67C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77BFD4CE-BD85-4179-9630-E3ECE9B9E67C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77BFD4CE-BD85-4179-9630-E3ECE9B9E67C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77BFD4CE-BD85-4179-9630-E3ECE9B9E67C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,8 +121,8 @@ Global
 		{7CEA33C1-9A4C-485A-AEDC-02F7543A16CB} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{DF8579C0-A791-47AB-A443-2441533535BB} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A} = {B3C0C2D3-2D7E-4B8F-BC76-9A89F72A6927}
-		{A02AFBBD-8CD2-4181-9D60-AE36AFA2149E} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549} = {7F995D7C-D748-4D1A-930D-3661FC4C88A0}
+		{77BFD4CE-BD85-4179-9630-E3ECE9B9E67C} = {48AC073B-AFBB-4690-905F-E257DC9BF871}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F714C1-1106-4673-AB1C-D928ED8A3E31}
