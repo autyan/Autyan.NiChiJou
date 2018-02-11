@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Core.Extension
 {
-    public static class TypeExtensions
+    public static class TypeExtension
     {
         public static bool IsQueryTypes(this Type type)
         {

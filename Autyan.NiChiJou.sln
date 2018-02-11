@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.BusinessMod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Repository", "src\Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj", "{DF8579C0-A791-47AB-A443-2441533535BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.Core.Mvc", "src\Autyan.NiChiJou.Core.Mvc\Autyan.NiChiJou.Core.Mvc.csproj", "{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{DF8579C0-A791-47AB-A443-2441533535BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF8579C0-A791-47AB-A443-2441533535BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF8579C0-A791-47AB-A443-2441533535BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +113,7 @@ Global
 		{42DB294D-32A0-415F-A684-E5EB5D76EDFA} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
 		{7CEA33C1-9A4C-485A-AEDC-02F7543A16CB} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{DF8579C0-A791-47AB-A443-2441533535BB} = {31861046-C442-4C1C-B2CE-DC71816E0507}
+		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A} = {B3C0C2D3-2D7E-4B8F-BC76-9A89F72A6927}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F714C1-1106-4673-AB1C-D928ED8A3E31}

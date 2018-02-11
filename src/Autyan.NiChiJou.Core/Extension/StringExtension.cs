@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Core.Extension
 {
-    public static class StringExtensions
+    public static class StringExtension
     {
         public static string RemoveTail(this string original, string removeWord, StringComparison comparison = StringComparison.Ordinal)
         {

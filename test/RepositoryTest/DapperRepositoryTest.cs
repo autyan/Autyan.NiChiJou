@@ -25,7 +25,7 @@ namespace RepositoryTest
             BaseDbConnectionFactory.SetConfigurationRoot(builder);
             DapperConfiguration.UseMssql();
             var serviceCollection = new ServiceCollection() as IServiceCollection;
-            serviceCollection.WormUpModel();
+            serviceCollection.AddNiChiJouDataModel();
             MetadataContext.Instance.Initilize(AppDomain.CurrentDomain.GetAssemblies());
         }
 

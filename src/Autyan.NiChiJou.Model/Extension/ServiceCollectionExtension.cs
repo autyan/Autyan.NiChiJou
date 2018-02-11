@@ -4,7 +4,7 @@ namespace Autyan.NiChiJou.Model.Extension
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection WormUpModel(this IServiceCollection services)
+        public static IServiceCollection AddNiChiJouDataModel(this IServiceCollection services)
         {
             return services;
         }

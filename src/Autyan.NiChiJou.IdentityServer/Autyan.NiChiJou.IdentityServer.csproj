@@ -13,4 +13,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Repository.Dapper\Autyan.NiChiJou.Repository.Dapper.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj" />
+  </ItemGroup>
+
 </Project>

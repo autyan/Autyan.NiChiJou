@@ -1,5 +1,3 @@
-using System;
-
 namespace Autyan.NiChiJou.IdentityServer.Models
 {
     public class ErrorViewModel
