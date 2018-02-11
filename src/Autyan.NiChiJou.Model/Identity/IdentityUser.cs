@@ -19,7 +19,7 @@ namespace Autyan.NiChiJou.Model.Identity
         public virtual string SecuritySalt { get; set; }
     }
 
-    public class LoginUserQuery : LongKeyBaseEntityQuery
+    public class IdentityUserQuery : LongKeyBaseEntityQuery
     {
         public string LoginName { get; set; }
 

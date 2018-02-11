@@ -11,6 +11,12 @@ namespace Autyan.NiChiJou.Service.Identity
         EmailRegistered = 1002,
 
         [Description("PhoneNumber Registered!")]
-        PhoneNumberRegistered = 1003
+        PhoneNumberRegistered = 1003,
+
+        [Description("User Not Found")]
+        UserNotFound = 2000,
+
+        [Description("Invalid Password")]
+        InvalidPassword = 2001
     }
 }

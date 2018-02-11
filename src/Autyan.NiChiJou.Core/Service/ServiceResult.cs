@@ -6,12 +6,10 @@ namespace Autyan.NiChiJou.Core.Service
     {
         public T Data { get; protected set; }
 
-        private static readonly ServiceResult<T> SuccessResult = new ServiceResult<T>
+        public static ServiceResult<T> Success(T data) => new ServiceResult<T>
         {
-            Succeed = true
+            Data = data
         };
-
-        public new static ServiceResult<T> Success() => SuccessResult;
 
         public new static ServiceResult<T> Failed()
         {

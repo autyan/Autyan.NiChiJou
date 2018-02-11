@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Core", "src\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj", "{74B663F2-9DB9-4509-A25B-1DF0CF117F15}"
 EndProject
@@ -33,9 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoryTest", "test\Repo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Service.Identity", "src\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj", "{B910274E-D39F-47C5-A650-48620C1EE396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.Service", "src\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj", "{42DB294D-32A0-415F-A684-E5EB5D76EDFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Service", "src\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj", "{42DB294D-32A0-415F-A684-E5EB5D76EDFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.Repository", "Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj", "{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.Repository", "Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj", "{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autyan.NiChiJou.BusinessModel", "Autyan.NiChiJou.BusinessModel\Autyan.NiChiJou.BusinessModel.csproj", "{94EA02AF-93AB-4145-9E41-07F5A4CB6EC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EA02AF-93AB-4145-9E41-07F5A4CB6EC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EA02AF-93AB-4145-9E41-07F5A4CB6EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EA02AF-93AB-4145-9E41-07F5A4CB6EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EA02AF-93AB-4145-9E41-07F5A4CB6EC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{B910274E-D39F-47C5-A650-48620C1EE396} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
 		{42DB294D-32A0-415F-A684-E5EB5D76EDFA} = {20753C4F-60B6-474F-A867-1F8D1F937CCD}
 		{1B83F94A-8F44-4CD1-9902-720CB8E96FE8} = {31861046-C442-4C1C-B2CE-DC71816E0507}
+		{94EA02AF-93AB-4145-9E41-07F5A4CB6EC6} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F714C1-1106-4673-AB1C-D928ED8A3E31}
