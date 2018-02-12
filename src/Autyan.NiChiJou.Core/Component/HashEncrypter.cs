@@ -20,5 +20,12 @@ namespace Autyan.NiChiJou.Core.Component
                 return Convert.ToBase64String(hashedDataBytes);
             }
         }
+
+        public static string Md5Encrypt(string phrase)
+        {
+            var md5Hash = MD5.Create();
+            var data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(phrase));
+            return Convert.ToBase64String(data);
+        }
     }
 }
