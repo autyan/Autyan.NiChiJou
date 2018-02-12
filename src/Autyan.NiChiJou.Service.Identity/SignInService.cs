@@ -12,7 +12,7 @@ using Autyan.NiChiJou.Repository.Identity;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
-    public class SignInService : BaseService, ISignInServcice
+    public class SignInService : BaseService, ISignInService
     {
         private IIdentityUserRepository UserRepo { get; }
 
@@ -48,14 +48,14 @@ namespace Autyan.NiChiJou.Service.Identity
                 PhoneNumberConfirmed = false
             };
             var id = await UserRepo.InsertAsync(user);
-            user = await UserRepo.GetByIdAsyc(new IdentityUser
+            user = await UserRepo.GetByIdAsync(new IdentityUser
             {
                 Id = id
             });
             return ServiceResult<IdentityUser>.Success(user);
         }
 
-        public async Task<ServiceResult<string>> RegisterSiginInAsync(UserRegisterModel model)
+        public async Task<ServiceResult<string>> RegisterSignInAsync(UserRegisterModel model)
         {
             var userResult = await RegisterUserAsync(model);
             if (!userResult.Succeed)

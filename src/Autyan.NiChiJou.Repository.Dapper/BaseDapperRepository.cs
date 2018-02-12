@@ -30,7 +30,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             Metadata = MetadataContext.Instance[typeof(TEntity)];
         }
 
-        public async Task<TEntity> GetByIdAsyc(TEntity entity)
+        public async Task<TEntity> GetByIdAsync(TEntity entity)
         {
             return await FirstOrDefaultAsync(entity);
         }

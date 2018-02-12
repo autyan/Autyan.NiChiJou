@@ -16,7 +16,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
         public async Task<ServiceResult<IdentityUser>> GetUserByIdAsync(long id)
         {
-            var user = await UserRepo.GetByIdAsyc(new IdentityUser {Id = id});
+            var user = await UserRepo.GetByIdAsync(new IdentityUser {Id = id});
             if (user == null)
             {
                 return ServiceResult<IdentityUser>.Failed("user not found", (int) IdentityStatus.UserNotFound);

@@ -6,7 +6,7 @@ namespace Autyan.NiChiJou.Service.Identity.Extension
     {
         public static IServiceCollection AddIdentityService(this IServiceCollection services)
         {
-            services.AddTransient<ISignInServcice, SignInService>();
+            services.AddTransient<ISignInService, SignInService>();
             services.AddTransient<ISessionService, SessionService>();
             return services;
         }

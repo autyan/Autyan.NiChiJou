@@ -11,11 +11,11 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly ISignInServcice _signInServcice;
+        private readonly ISignInService _signInService;
 
-        public AuthController(ISignInServcice signInServcice)
+        public AuthController(ISignInService signInService)
         {
-            _signInServcice = signInServcice;
+            _signInService = signInService;
         }
 
         [HttpGet]
@@ -32,7 +32,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var signInResult = await _signInServcice.BusinessSystemPasswordSignIn(model.LoginName, model.Password, model.BusinessId);
+            var signInResult = await _signInService.BusinessSystemPasswordSignIn(model.LoginName, model.Password, model.BusinessId);
             if (signInResult.Succeed) return RedirectToAction(nameof(BusinessLoginEnd), new BusinessSystemSignInModel
             {
                 SessionId = signInResult.Data.SessionId,
@@ -67,7 +67,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserRegisterViewModel model)
         {
-            var registerResult = await _signInServcice.RegisterSiginInAsync(new UserRegisterModel
+            var registerResult = await _signInService.RegisterSignInAsync(new UserRegisterModel
             {
                 LoginName = model.LoginName,
                 Password = model.Password

@@ -6,13 +6,13 @@ using Autyan.NiChiJou.Model.Identity;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
-    public interface ISignInServcice
+    public interface ISignInService
     {
         /// <summary>
         /// register new user.
         /// </summary>
         /// <param name="model">infomation that register needed</param>
-        /// <returns>registed user</returns>
+        /// <returns>registered user</returns>
         Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegisterModel model);
 
         /// <summary>
@@ -20,10 +20,10 @@ namespace Autyan.NiChiJou.Service.Identity
         /// </summary>
         /// <param name="model">infomation that register needed</param>
         /// <returns>sessionId</returns>
-        Task<ServiceResult<string>> RegisterSiginInAsync(UserRegisterModel model);
+        Task<ServiceResult<string>> RegisterSignInAsync(UserRegisterModel model);
 
         /// <summary>
-        /// use password sigin in, will get user infomation.
+        /// use password sign in, will get user infomation.
         /// </summary>
         /// <param name="loginName">user loginName</param>
         /// <param name="password">user password</param>
@@ -36,11 +36,11 @@ namespace Autyan.NiChiJou.Service.Identity
         /// <param name="loginName">user loginName</param>
         /// <param name="password">user password</param>
         /// <param name="businessCode">business that redirect to</param>
-        /// <returns>sessionId and business doman url</returns>
+        /// <returns>sessionId and business domain url</returns>
         Task<ServiceResult<BusinessSystemSignInModel>> BusinessSystemPasswordSignIn(string loginName, string password, string businessCode);
 
         /// <summary>
-        /// adjust wheater current is signedin.
+        /// adjust current user has signIn.
         /// </summary>
         /// <returns></returns>
         ServiceResult<bool> IsSignedIn(IPrincipal user);
