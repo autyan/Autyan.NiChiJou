@@ -109,7 +109,10 @@ namespace Autyan.NiChiJou.Service.Identity
         {
             if (!(user is ClaimsPrincipal)) return ServiceResult<bool>.Success(false);
             var principal = (ClaimsPrincipal) user;
-            if(!principal.Identities.Any(i => i.AuthenticationType == ResourceConfiguration.AuthenticationScheme && i.IsAuthenticated)) return ServiceResult<bool>.Success(false);
+            if(!principal.Identities.Any(i => i.AuthenticationType == ResourceConfiguration.AuthenticationScheme && i.IsAuthenticated)) 
+            {
+                return ServiceResult<bool>.Success(false);
+            }
 
             return ServiceResult<bool>.Success(true);
         }
