@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.BusinessModel.Identity;
+using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.IdentityServer.Models.Auth;
 using Autyan.NiChiJou.Service.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,9 +46,9 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpGet]
-        public IActionResult BusinessLoginEnd([FromRoute]BusinessSystemSignInModel model)
+        public IActionResult BusinessLoginEnd(BusinessSystemSignInModel model)
         {
-            Response.Cookies.Append("autyan.sessionId", model.SessionId);
+            this.CookieLoginAsync(model.SessionId);
             var targetModel = new SignInRedirectViewModel
             {
                 TargetUrl = string.IsNullOrEmpty(model.BusinessDomainUrl)
@@ -73,7 +75,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 
             if (registerResult.Succeed)
             {
-                Response.Cookies.Append("autyan.sessionId", registerResult.Data);
+                this.CookieLoginAsync(registerResult.Data);
                 return RedirectToAction("Index", "Home");
             }
             foreach (var message in registerResult.Messages)
@@ -81,6 +83,13 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
                 ModelState.AddModelError(string.Empty, message);
             }
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction(nameof(Login));
         }
     }
 }

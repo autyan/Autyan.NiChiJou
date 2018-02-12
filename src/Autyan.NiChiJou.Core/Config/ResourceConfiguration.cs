@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using Autyan.NiChiJou.Core.Extension;
 using Microsoft.Extensions.Configuration;
 
 namespace Autyan.NiChiJou.Core.Config
@@ -18,18 +18,31 @@ namespace Autyan.NiChiJou.Core.Config
         {
             _redisConfigs = _configuration.GetSection("RedisServer").GetChildren();
             _sessionConfigs = _configuration.GetSection("Session").GetChildren();
+            _authConfigs = _configuration.GetSection("Auth").GetChildren();
         }
 
         private static IEnumerable<IConfigurationSection> _redisConfigs;
 
         private static IEnumerable<IConfigurationSection> _sessionConfigs;
 
-        public static string RedisAddress => _redisConfigs.First(c => c.Key == "Address").Value;
+        private static IEnumerable<IConfigurationSection> _authConfigs;
 
-        public static string RedisInstanceName => _redisConfigs.First(c => c.Key == "InstanceName").Value;
+        public static string RedisAddress => _redisConfigs.GetValueFromSectionChildren("Address");
 
-        public static double SessionExpiration => double.Parse(_sessionConfigs.First(c => c.Key == "Expiration").Value);
+        public static string RedisInstanceName => _redisConfigs.GetValueFromSectionChildren("InstanceName");
+
+        public static double SessionExpiration => double.Parse(_sessionConfigs.GetValueFromSectionChildren("Expiration"));
 
         public static string ConnectionStrings(string name) => _configuration.GetConnectionString(name);
+
+        public static string LoginPath => _authConfigs.GetValueFromSectionChildren("LoginPath");
+
+        public static string LogoutPath => _authConfigs.GetValueFromSectionChildren("LogoutPath");
+
+        public static string RegisterPath => _authConfigs.GetValueFromSectionChildren("RegisterPath");
+
+        public static double CookieExpiration => double.Parse(_authConfigs.GetValueFromSectionChildren("CookieExpiration"));
+
+        public static string AuthenticationScheme => _authConfigs.GetValueFromSectionChildren("AuthenticationScheme");
     }
 }

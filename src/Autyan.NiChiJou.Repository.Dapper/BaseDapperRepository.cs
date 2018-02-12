@@ -142,7 +142,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
                     throw new ArgumentOutOfRangeException();
             }
 
-            builder.AppendSqlBuilder(StartSql().Select("Id").FromTable(TableName));
+            builder.Output(" INSERTED.ID ");
             return await Connection.ExecuteScalarAsync<long>(builder.End(), entity);
         }
 

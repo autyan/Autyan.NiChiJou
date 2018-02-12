@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Component;
+using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
@@ -99,6 +103,15 @@ namespace Autyan.NiChiJou.Service.Identity
             }
 
             return ServiceResult<BusinessSystemSignInModel>.Success(model);
+        }
+
+        public ServiceResult<bool> IsSignedIn(IPrincipal user)
+        {
+            if (!(user is ClaimsPrincipal)) return ServiceResult<bool>.Success(false);
+            var principal = (ClaimsPrincipal) user;
+            if(!principal.Identities.Any(i => i.AuthenticationType == ResourceConfiguration.AuthenticationScheme && i.IsAuthenticated)) return ServiceResult<bool>.Success(false);
+
+            return ServiceResult<bool>.Success(true);
         }
     }
 }

@@ -27,6 +27,8 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
 
         protected List<ISqlBuilder> Builders = new List<ISqlBuilder>();
 
+        protected string OutputColumns;
+
         private void CheckAction()
         {
             if (Action != null) throw new InvalidOperationException("action set already.");
@@ -159,11 +161,24 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
             }
         }
 
-        protected virtual void BuildInsert()
+        protected void BuildInsert()
+        {
+            ConstructInsert();
+            CompleteInsert();
+        }
+
+        protected virtual void ConstructInsert()
         {
             StrBuilder.Append("INSERT INTO ").Append(TableName)
                 .Append(" (").Append(string.Join(", ", Values.Select(v => v.Key)))
-                .Append(") VALUES (")
+                .Append(" )");
+        }
+
+        private void CompleteInsert()
+        {
+            StrBuilder.Append(TableName)
+                .Append(" (").Append(string.Join(", ", Values.Select(v => v.Key)))
+                .Append(" VALUES (")
                 .Append(string.Join(", ", Values.Where(v => !string.IsNullOrEmpty(v.Value)).Select(v => v.Value)))
                 .Append(")");
             BuildWhere();
@@ -216,6 +231,12 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
         public override string ToString()
         {
             return End();
+        }
+
+        public ISqlBuilder Output(string column)
+        {
+            OutputColumns = column;
+            return this;
         }
     }
 

@@ -26,16 +26,18 @@ namespace Autyan.NiChiJou.Service.Identity
             if(user.Id == null) return ServiceResult<SessionData>.Failed("User Id can't be null.");
 
             SessionData data;
-            var sessionStr = await Cache.GetStringAsync($"user.session.<{user.Id}>");
+            var sessionStr = await Cache.GetStringAsync($"user.sessionId.<{user.Id}>");
             if (sessionStr == null)
             {
-                var sessionId = await CreateSessionIdAsync();
+                var sessionId = CreateSessionId();
                 data = new SessionData
                 {
                     Id = sessionId,
                     UserId = user.Id.Value
                 };
-                await Cache.SetStringAsync($"user.session.<{user.Id}>", JsonConvert.SerializeObject(data),
+                await Cache.SetStringAsync($"user.sessionId.<{user.Id}>", sessionId,
+                    new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
+                await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
                     new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
             }
             else
@@ -46,18 +48,31 @@ namespace Autyan.NiChiJou.Service.Identity
             return ServiceResult<SessionData>.Success(data);
         }
 
-        private async Task<string> CreateSessionIdAsync()
+        public async Task<ServiceResult<SessionData>> GetSessionAsync(string sessionId)
         {
-            ulong currentId = 0;
-            var current = await Cache.GetAsync("sessionSequence.current");
-            if (current != null)
+            var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
+            if (string.IsNullOrWhiteSpace(sessionStr))
             {
-                currentId = BitConverter.ToUInt64(current, 0);
+                return ServiceResult<SessionData>.Failed("session not found");
+            }
+            return ServiceResult<SessionData>.Success(JsonConvert.DeserializeObject<SessionData>(sessionStr));
+        }
+
+        public async Task<ServiceResult<long>> GetSessionUserIdAsync(string sessionId)
+        {
+            var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
+            if (string.IsNullOrWhiteSpace(sessionStr))
+            {
+                return ServiceResult<long>.Failed("session not found");
             }
 
-            var next = currentId + 1;
-            await Cache.SetAsync("sessionSequence.current", BitConverter.GetBytes(next));
-            var idStr = $"autyan.session.{next}.{SeedRandom.RandomString(5)}";
+            var sessionData = JsonConvert.DeserializeObject<SessionData>(sessionStr);
+            return ServiceResult<long>.Success(sessionData.UserId);
+        }
+
+        private static string CreateSessionId()
+        {
+            var idStr = $"autyan.session.{SeedRandom.RandomString(5)}";
             return HashEncrypter.Md5Encrypt(idStr);
         }
     }

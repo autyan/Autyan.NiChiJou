@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Principal;
+using System.Threading.Tasks;
 using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
@@ -37,5 +38,11 @@ namespace Autyan.NiChiJou.Service.Identity
         /// <param name="businessCode">business that redirect to</param>
         /// <returns>sessionId and business doman url</returns>
         Task<ServiceResult<BusinessSystemSignInModel>> BusinessSystemPasswordSignIn(string loginName, string password, string businessCode);
+
+        /// <summary>
+        /// adjust wheater current is signedin.
+        /// </summary>
+        /// <returns></returns>
+        ServiceResult<bool> IsSignedIn(IPrincipal user);
     }
 }
