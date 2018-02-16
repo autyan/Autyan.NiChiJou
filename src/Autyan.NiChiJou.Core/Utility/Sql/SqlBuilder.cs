@@ -176,9 +176,7 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
 
         private void CompleteInsert()
         {
-            StrBuilder.Append(TableName)
-                .Append(" (").Append(string.Join(", ", Values.Select(v => v.Key)))
-                .Append(" VALUES (")
+            StrBuilder.Append(" VALUES (")
                 .Append(string.Join(", ", Values.Where(v => !string.IsNullOrEmpty(v.Value)).Select(v => v.Value)))
                 .Append(")");
             BuildWhere();
