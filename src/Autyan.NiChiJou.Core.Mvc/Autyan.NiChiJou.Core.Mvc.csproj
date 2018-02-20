@@ -1,21 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Middleware\" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj">
+      <Project>{DF8579C0-A791-47AB-A443-2441533535BB}</Project>
+      <Name>Autyan.NiChiJou.Repository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj" />
   </ItemGroup>
-
 </Project>
