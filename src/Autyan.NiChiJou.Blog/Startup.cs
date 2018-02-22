@@ -26,7 +26,7 @@ namespace Autyan.NiChiJou.Blog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResourceConfiguration()
-                .AddAutyanAuthentication()
+                .AddCookieAuthentication()
                 .AddDistributedRedisCache(options =>
                 {
                     options.Configuration = ResourceConfiguration.RedisAddress;

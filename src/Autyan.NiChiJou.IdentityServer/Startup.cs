@@ -6,10 +6,8 @@ using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
 using Autyan.NiChiJou.Service.Identity.Extension;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +26,7 @@ namespace Autyan.NiChiJou.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResourceConfiguration()
-                .AddAutyanAuthentication()
+                .AddCookieAuthentication()
                 .AddDistributedRedisCache(options =>
                 {
                     options.Configuration = ResourceConfiguration.RedisAddress;
@@ -40,10 +38,6 @@ namespace Autyan.NiChiJou.IdentityServer
                 .AddIdentityService()
                 .AddMvc(options =>
                 {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    options.Filters.Add(new AuthorizeFilter(policy));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 });
         }

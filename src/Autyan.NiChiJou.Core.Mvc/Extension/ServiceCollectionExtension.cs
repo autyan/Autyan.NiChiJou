@@ -6,7 +6,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddAutyanAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddCookieAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(ResourceConfiguration.AuthenticationScheme)
                 .AddCookie(ResourceConfiguration.AuthenticationScheme, options =>
