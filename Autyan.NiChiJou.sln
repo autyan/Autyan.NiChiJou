@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autyan.NiChiJou.IdentitySer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Database", "2.Database", "{3B08C60E-EACF-432A-9394-7316C7F2BD7B}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Autyan.NiChiJou.Database.Identity", "Autyan.NiChiJou.Database.Identity\Autyan.NiChiJou.Database.Identity.sqlproj", "{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,12 @@ Global
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +124,7 @@ Global
 		{DF8579C0-A791-47AB-A443-2441533535BB} = {31861046-C442-4C1C-B2CE-DC71816E0507}
 		{A3B76498-CD8B-4356-A9B1-4B1A13FC547A} = {B3C0C2D3-2D7E-4B8F-BC76-9A89F72A6927}
 		{E714EDA1-63A4-4CC4-A13B-E4B86D504549} = {7F995D7C-D748-4D1A-930D-3661FC4C88A0}
+		{47B5BEC2-4FE1-4BF4-8F05-AA7353AD0734} = {3B08C60E-EACF-432A-9394-7316C7F2BD7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F714C1-1106-4673-AB1C-D928ED8A3E31}
