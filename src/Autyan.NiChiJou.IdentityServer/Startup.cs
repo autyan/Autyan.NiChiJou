@@ -29,11 +29,12 @@ namespace Autyan.NiChiJou.IdentityServer
         {
             services.AddResourceConfiguration()
                 .AddAutyanAuthentication()
-                .AddIdentityCache(options =>
+                .AddDistributedRedisCache(options =>
                 {
                     options.Configuration = ResourceConfiguration.RedisAddress;
                     options.InstanceName = ResourceConfiguration.RedisInstanceName;
                 })
+                .AddIdentityCache()
                 .AddNiChiJouDataModel()
                 .AddDapper()
                 .AddIdentityService()

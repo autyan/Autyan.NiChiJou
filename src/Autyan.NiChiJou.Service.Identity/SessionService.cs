@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Core.Extension;
+using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Microsoft.Extensions.Caching.Distributed;
@@ -14,9 +15,9 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private static readonly Random SeedRandom = new Random();
 
-        private IDistributedCache Cache { get; }
+        private IIdentityCache Cache { get; }
 
-        public SessionService(IDistributedCache cache)
+        public SessionService(IIdentityCache cache)
         {
             Cache = cache;
         }
