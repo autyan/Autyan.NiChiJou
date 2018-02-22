@@ -30,6 +30,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = new IdentityUser
             {
                 LoginName = model.LoginName,
+                UserMemberCode = Guid.NewGuid().ToString().ToUpper(),
                 PasswordHash = passwordHash,
                 SecuritySalt = salt,
                 EmailConfirmed = false,

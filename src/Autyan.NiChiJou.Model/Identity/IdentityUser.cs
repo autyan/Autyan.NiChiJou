@@ -6,6 +6,8 @@ namespace Autyan.NiChiJou.Model.Identity
     {
         public virtual string LoginName { get; set; }
 
+        public virtual string UserMemberCode { get; set; }
+
         public virtual string Email { get; set; }
 
         public virtual bool? EmailConfirmed { get; set; }

@@ -3,15 +3,14 @@
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
 	[NickName] VARCHAR(50) NOT NULL, 
 	[AvatorUrl] VARCHAR(200) NULL, 
-	[IdentityUserId] BIGINT NOT NULL, 
+	[UserMemberCode] VARCHAR(50) NOT NULL, 
 	[Gender] TINYINT NOT NULL,
 	[CreatedAt] DATETIMEOFFSET NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,
 	[ModifiedAt] DATETIMEOFFSET NULL,
 	[ModifiedBy] BIGINT NULL
-	CONSTRAINT [FK_BlogUsers_ToLoginUser] FOREIGN KEY ([IdentityUserId]) REFERENCES [IdentityUsers]([Id])
 )
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_BlogUsers_LoginUserId] ON [dbo].[BlogUsers] ([IdentityUserId])
+CREATE NONCLUSTERED INDEX [IX_BlogUsers_LoginUserId] ON [dbo].[BlogUsers] ([UserMemberCode])

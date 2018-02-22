@@ -105,7 +105,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             return ServiceResult<string>.Success(token);
         }
 
-        public async Task<ServiceResult<string>> GetSessionByVerificationToken(string token)
+        public async Task<ServiceResult<string>> GetMemberCodeByVerificationToken(string token)
         {
             var sessionId = await Cache.GetStringAsync($"login.verificationtoken.{token}");
             if (string.IsNullOrWhiteSpace(sessionId))
@@ -120,7 +120,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             }
             await Cache.RemoveAsync($"login.verificationtoken.{token}");
 
-            return ServiceResult<string>.Success(sessionResult.Data.UserId.ToString());
+            return ServiceResult<string>.Success(sessionResult.Data.UserMemeberCode);
         }
     }
 }

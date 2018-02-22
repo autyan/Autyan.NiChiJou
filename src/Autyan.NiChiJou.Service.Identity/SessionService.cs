@@ -29,7 +29,8 @@ namespace Autyan.NiChiJou.Service.Identity
             var data = new SessionData
             {
                 Id = sessionId,
-                UserId = user.Id.Value
+                UserId = user.Id.Value,
+                UserMemeberCode = user.UserMemberCode
             };
             await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
                 new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
