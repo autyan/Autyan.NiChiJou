@@ -67,7 +67,6 @@
     <Build Include="Table\BlogPosts.sql" />
     <Build Include="Table\PostComments.sql" />
     <Build Include="Table\ActivityLogs.sql" />
-    <Build Include="Table\BusinessSystems.sql" />
     <Build Include="Sequence\EntityId.sql" />
   </ItemGroup>
   <ItemGroup>

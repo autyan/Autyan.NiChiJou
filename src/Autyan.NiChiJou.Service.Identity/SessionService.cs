@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Core.Extension;
-using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Microsoft.Extensions.Caching.Distributed;
@@ -15,36 +14,25 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private static readonly Random SeedRandom = new Random();
 
-        private IIdentityCache Cache { get; }
+        private IDistributedCache Cache { get; }
 
-        public SessionService(IIdentityCache cache)
+        public SessionService(IDistributedCache cache)
         {
             Cache = cache;
         }
 
-        public async Task<ServiceResult<SessionData>> GetOrCreateSessionAsync(IdentityUser user)
+        public async Task<ServiceResult<SessionData>> CreateSessionAsync(IdentityUser user)
         {
             if(user.Id == null) return ServiceResult<SessionData>.Failed("User Id can't be null.");
 
-            SessionData data;
-            var sessionStr = await Cache.GetStringAsync($"user.sessionId.<{user.Id}>");
-            if (sessionStr == null)
+            var sessionId = CreateSessionId();
+            var data = new SessionData
             {
-                var sessionId = CreateSessionId();
-                data = new SessionData
-                {
-                    Id = sessionId,
-                    UserId = user.Id.Value
-                };
-                await Cache.SetStringAsync($"user.sessionId.<{user.Id}>", sessionId,
-                    new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
-                await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
-                    new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
-            }
-            else
-            {
-                data = JsonConvert.DeserializeObject<SessionData>(sessionStr);
-            }
+                Id = sessionId,
+                UserId = user.Id.Value
+            };
+            await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
+                new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
 
             return ServiceResult<SessionData>.Success(data);
         }
@@ -69,6 +57,11 @@ namespace Autyan.NiChiJou.Service.Identity
 
             var sessionData = JsonConvert.DeserializeObject<SessionData>(sessionStr);
             return ServiceResult<long>.Success(sessionData.UserId);
+        }
+
+        public async Task RemoveSessionAsync(string sessionId)
+        {
+            await Cache.RemoveAsync($"user.session.<{sessionId}>");
         }
 
         private static string CreateSessionId()

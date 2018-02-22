@@ -10,7 +10,7 @@ namespace Autyan.NiChiJou.IdentityServer.Models.Auth
         [Required]
         public string Password { get; set; }
 
-        public string BusinessId { get; set; }
+        public string ReturnUrl { get; set; }
     }
 
     public class SignInRedirectViewModel

@@ -6,4 +6,11 @@
 
         public string Password { get; set; }
     }
+
+    public class LoginProcessModel
+    {
+        public string ReturnUrl { get; set; }
+
+        public string SessionId { get; set; }
+    }
 }
