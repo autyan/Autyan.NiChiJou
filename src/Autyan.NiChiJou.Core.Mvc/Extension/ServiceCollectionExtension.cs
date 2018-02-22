@@ -15,6 +15,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
                     options.LogoutPath = ResourceConfiguration.LogoutPath;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(ResourceConfiguration.CookieExpiration);
                 });
+
+            return services;
         }
     }
 }
