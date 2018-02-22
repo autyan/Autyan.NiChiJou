@@ -1,7 +1,7 @@
-﻿using System;
-using Autyan.NiChiJou.Core.Config;
+﻿using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Mvc.Attribute;
+using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
@@ -29,7 +29,7 @@ namespace Autyan.NiChiJou.IdentityServer
         {
             services.AddResourceConfiguration()
                 .AddAutyanAuthentication()
-                .AddDistributedRedisCache(options =>
+                .AddIdentityCache(options =>
                 {
                     options.Configuration = ResourceConfiguration.RedisAddress;
                     options.InstanceName = ResourceConfiguration.RedisInstanceName;

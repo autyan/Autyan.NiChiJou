@@ -31,6 +31,8 @@ namespace Autyan.NiChiJou.Core.Config
 
         public static string RedisInstanceName => _redisConfigs.GetValueFromSectionChildren("InstanceName");
 
+        public static double RedisDefaultExpiration => double.Parse(_redisConfigs.GetValueFromSectionChildren("DefaultExpiration"));
+
         public static double SessionExpiration => double.Parse(_sessionConfigs.GetValueFromSectionChildren("Expiration"));
 
         public static string ConnectionStrings(string name) => _configuration.GetConnectionString(name);

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Autyan.NiChiJou.Core.Extension
 {
-    public static class ConfigurationRootSection
+    public static class ConfigurationRootSectionExtension
     {
         public static string GetValueBySectionAndKey(this IConfigurationRoot configuration, string sectionName, string key)
         {
