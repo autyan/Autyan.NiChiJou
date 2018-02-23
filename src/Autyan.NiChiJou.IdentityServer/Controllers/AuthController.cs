@@ -84,8 +84,8 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> TokenLogin(string token, string returnUrl)
+        [Authorize(AuthenticationSchemes = "autyan.serviceToken")]
+        public async Task<IActionResult> VerifiToken(string token, string returnUrl)
         {
             var memberCode = await _signInManager.GetMemberCodeByVerificationToken(token);
             return Redirect($"{returnUrl}?member={memberCode.Data}");

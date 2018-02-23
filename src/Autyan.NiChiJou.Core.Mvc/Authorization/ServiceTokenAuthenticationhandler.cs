@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
@@ -18,7 +19,7 @@ using Microsoft.Extensions.Options;
 
 namespace Autyan.NiChiJou.Core.Mvc.Authorization
 {
-    public class ServiceTokenAuthenticationhandler : AuthenticationHandler<ServiceTokenAuthenticationOptions>
+    public class ServiceTokenAuthenticationhandler : AuthenticationHandler<ServiceTokenAuthenticationOptions>, IAuthorizationRequirement
     {
         private IMemoryCache MemoryCache { get; }
 
@@ -34,7 +35,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var authorizaHeader = ((FrameRequestHeaders) Request.Headers).HeaderAuthorization.ToString();
             if (!string.IsNullOrWhiteSpace(authorizaHeader) && authorizaHeader.StartsWith(Options.AuthenticationSchema))
             {
-                var rawAuthzHeader = authorizaHeader.Replace($"{Options.AuthenticationSchema} ", string.Empty);
+                var rawAuthzHeader = authorizaHeader.Replace(Options.AuthenticationSchema, string.Empty).Trim();
                 var autherizationHeaderArray = GetAutherizationHeaderValues(rawAuthzHeader);
                 if (autherizationHeaderArray != null)
                 {

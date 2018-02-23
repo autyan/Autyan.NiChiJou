@@ -37,19 +37,19 @@ namespace Autyan.NiChiJou.IdentityServer
                 .AddNiChiJouDataModel()
                 .AddDapper()
                 .AddIdentityService()
+                .AddMvcComponent()
+                .AddAuthentication(options => options.DefaultScheme = ResourceConfiguration.CookieAuthenticationScheme)
+                .AddCookieAuthentication()
+                .AddServiceTokenAuthentication()
+                .Services
                 .AddMvc(options =>
                 {
-                    options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    options.Filters.Add(new AuthorizeFilter(policy));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 });
-
-            services.AddAuthentication(options =>
-                    {
-                        options.DefaultAuthenticateScheme = ResourceConfiguration.ServiceTokenAuthenticationScheme;
-                        options.DefaultChallengeScheme = ResourceConfiguration.ServiceTokenAuthenticationScheme;
-                    })
-                .AddCookieAuthentication()
-                .AddServiceTokenAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

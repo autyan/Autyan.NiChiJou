@@ -1,5 +1,6 @@
 ﻿using System;
 using Autyan.NiChiJou.Core.Config;
+using Autyan.NiChiJou.Core.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,6 +30,12 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
                     options.RequestMaxAgeSeconds = ResourceConfiguration.ServiceTokenMaxAge;
                 });
             return builder;
+        }
+
+        public static IServiceCollection AddMvcComponent(this IServiceCollection services)
+        {
+            services.AddTransient<SignInManager, SignInManager>();
+            return services;
         }
     }
 }
