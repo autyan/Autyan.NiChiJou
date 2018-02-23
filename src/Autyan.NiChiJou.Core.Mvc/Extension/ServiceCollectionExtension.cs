@@ -1,22 +1,34 @@
 ﻿using System;
 using Autyan.NiChiJou.Core.Config;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Autyan.NiChiJou.Core.Mvc.Extension
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddCookieAuthentication(this IServiceCollection services)
+        public static AuthenticationBuilder AddCookieAuthentication(this AuthenticationBuilder builder)
         {
-            services.AddAuthentication(ResourceConfiguration.AuthenticationScheme)
-                .AddCookie(ResourceConfiguration.AuthenticationScheme, options =>
+            builder.AddCookie(ResourceConfiguration.CookieAuthenticationScheme, options =>
                 {
                     options.LoginPath = ResourceConfiguration.LoginPath;
                     options.LogoutPath = ResourceConfiguration.LogoutPath;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(ResourceConfiguration.CookieExpiration);
                 });
 
-            return services;
+            return builder;
+        }
+
+        public static AuthenticationBuilder AddServiceTokenAuthentication(this AuthenticationBuilder builder)
+        {
+            builder.AddServiceToken(ResourceConfiguration.ServiceTokenAuthenticationScheme,
+                options =>
+                {
+                    options.AuthenticationSchema = ResourceConfiguration.ServiceTokenAuthenticationScheme;
+                    options.AllowedApps = ResourceConfiguration.ServiceTokenAllowedApps;
+                    options.RequestMaxAgeSeconds = ResourceConfiguration.ServiceTokenMaxAge;
+                });
+            return builder;
         }
     }
 }

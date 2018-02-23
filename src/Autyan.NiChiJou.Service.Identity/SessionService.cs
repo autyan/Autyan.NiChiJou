@@ -68,7 +68,7 @@ namespace Autyan.NiChiJou.Service.Identity
         private static string CreateSessionId()
         {
             var idStr = $"autyan.session.{SeedRandom.RandomString(5)}";
-            return HashEncrypter.Md5Encrypt(idStr);
+            return HashEncrypter.Md5EncryptToBase64(idStr);
         }
     }
 }

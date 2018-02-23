@@ -67,7 +67,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var user = Controller.HttpContext.User;
             if (user == null) return false;
             var principal = user;
-            return principal.Identities.Any(i => i.AuthenticationType == ResourceConfiguration.AuthenticationScheme && i.IsAuthenticated);
+            return principal.Identities.Any(i => i.AuthenticationType == ResourceConfiguration.CookieAuthenticationScheme && i.IsAuthenticated);
         }
 
         public async Task CookieSignInAsync(string sessionId)
@@ -78,7 +78,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             };
 
             var claimsIdentity = new ClaimsIdentity(
-                claims, ResourceConfiguration.AuthenticationScheme);
+                claims, ResourceConfiguration.CookieAuthenticationScheme);
 
             var authProperties = new AuthenticationProperties
             {
@@ -88,7 +88,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             };
 
             await Controller.HttpContext.SignInAsync(
-                ResourceConfiguration.AuthenticationScheme,
+                ResourceConfiguration.CookieAuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }
@@ -96,7 +96,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
         public async Task<ServiceResult<string>> CreateLoginVerificationToken(string sessionId)
         {
             var randomValue = Guid.NewGuid().ToString();
-            var token = HashEncrypter.Md5Encrypt(randomValue);
+            var token = HashEncrypter.Md5EncryptToBase64(randomValue);
             await Cache.SetStringAsync($"login.verificationtoken.{token}", sessionId, new DistributedCacheEntryOptions
             {
                 SlidingExpiration = TimeSpan.FromMinutes(5)

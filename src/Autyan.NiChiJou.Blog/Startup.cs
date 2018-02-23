@@ -26,7 +26,7 @@ namespace Autyan.NiChiJou.Blog
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResourceConfiguration()
-                .AddCookieAuthentication()
+                .AddMemoryCache()
                 .AddDistributedRedisCache(options =>
                 {
                     options.Configuration = ResourceConfiguration.RedisAddress;
@@ -42,6 +42,9 @@ namespace Autyan.NiChiJou.Blog
                     options.Filters.Add(new AuthorizeFilter(policy));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 });
+
+            services.AddAuthentication()
+                .AddCookieAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

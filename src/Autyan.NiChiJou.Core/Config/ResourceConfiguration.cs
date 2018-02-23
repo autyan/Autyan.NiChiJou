@@ -8,6 +8,14 @@ namespace Autyan.NiChiJou.Core.Config
     {
         private static IConfiguration _configuration;
 
+        private static IEnumerable<IConfigurationSection> _redisConfigs;
+
+        private static IEnumerable<IConfigurationSection> _sessionConfigs;
+
+        private static IEnumerable<IConfigurationSection> _cookieAuthConfigs;
+
+        private static IEnumerable<IConfigurationSection> _serviceTokenAuthConfigs;
+
         public static void SetConfigurationRoot(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -18,14 +26,9 @@ namespace Autyan.NiChiJou.Core.Config
         {
             _redisConfigs = _configuration.GetSection("RedisServer").GetChildren();
             _sessionConfigs = _configuration.GetSection("Session").GetChildren();
-            _authConfigs = _configuration.GetSection("Auth").GetChildren();
+            _cookieAuthConfigs = _configuration.GetSection("Auth").GetSection("Cookie").GetChildren();
+            _serviceTokenAuthConfigs = _configuration.GetSection("Auth").GetSection("ServiceToken").GetChildren();
         }
-
-        private static IEnumerable<IConfigurationSection> _redisConfigs;
-
-        private static IEnumerable<IConfigurationSection> _sessionConfigs;
-
-        private static IEnumerable<IConfigurationSection> _authConfigs;
 
         public static string RedisAddress => _redisConfigs.GetValueFromSectionChildren("Address");
 
@@ -37,14 +40,33 @@ namespace Autyan.NiChiJou.Core.Config
 
         public static string ConnectionStrings(string name) => _configuration.GetConnectionString(name);
 
-        public static string LoginPath => _authConfigs.GetValueFromSectionChildren("LoginPath");
+        public static string LoginPath => _cookieAuthConfigs.GetValueFromSectionChildren("LoginPath");
 
-        public static string LogoutPath => _authConfigs.GetValueFromSectionChildren("LogoutPath");
+        public static string LogoutPath => _cookieAuthConfigs.GetValueFromSectionChildren("LogoutPath");
 
-        public static string RegisterPath => _authConfigs.GetValueFromSectionChildren("RegisterPath");
+        public static string RegisterPath => _cookieAuthConfigs.GetValueFromSectionChildren("RegisterPath");
 
-        public static double CookieExpiration => double.Parse(_authConfigs.GetValueFromSectionChildren("CookieExpiration"));
+        public static double CookieExpiration => double.Parse(_cookieAuthConfigs.GetValueFromSectionChildren("CookieExpiration"));
 
-        public static string AuthenticationScheme => _authConfigs.GetValueFromSectionChildren("AuthenticationScheme");
+        public static string CookieAuthenticationScheme => _cookieAuthConfigs.GetValueFromSectionChildren("Scheme");
+
+        public static string ServiceTokenAuthenticationScheme => _serviceTokenAuthConfigs.GetValueFromSectionChildren("Scheme");
+
+        public static IDictionary<string, string> ServiceTokenAllowedApps
+        {
+            get
+            {
+                var dic = new Dictionary<string, string>();
+                foreach (var app in _configuration.GetSection("Auth").GetSection("ServiceToken").GetSection("AllowedApps").GetChildren())
+                {
+                    dic.Add(app["appId"], app["appKey"]);
+                }
+
+                return dic;
+            }
+        }
+
+        public static ulong ServiceTokenMaxAge =>
+            ulong.Parse(_serviceTokenAuthConfigs.GetValueFromSectionChildren("MaxAge"));
     }
 }
