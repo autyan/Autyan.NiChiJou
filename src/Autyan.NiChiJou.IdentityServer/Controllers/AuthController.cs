@@ -84,7 +84,6 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "autyan.serviceToken")]
         public async Task<IActionResult> VerifiToken(string token, string returnUrl)
         {
             var memberCode = await _signInManager.GetMemberCodeByVerificationToken(token);
