@@ -23,6 +23,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
     {
         private IMemoryCache MemoryCache { get; }
 
+        private bool _isServiceTokenRequest;
+
         public ServiceTokenAuthenticationhandler(IOptionsMonitor<ServiceTokenAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IMemoryCache memoryCache)
             : base(options, logger, encoder, clock)
         {
@@ -35,6 +37,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var authorizaHeader = ((FrameRequestHeaders) Request.Headers).HeaderAuthorization.ToString();
             if (!string.IsNullOrWhiteSpace(authorizaHeader) && authorizaHeader.StartsWith(Options.AuthenticationSchema))
             {
+                _isServiceTokenRequest = true;
                 var rawAuthzHeader = authorizaHeader.Replace(Options.AuthenticationSchema, string.Empty).Trim();
                 var autherizationHeaderArray = GetAutherizationHeaderValues(rawAuthzHeader);
                 if (autherizationHeaderArray != null)
@@ -154,6 +157,12 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             MemoryCache.Set(nonce, requestTimeStamp, DateTimeOffset.UtcNow.AddSeconds(Options.RequestMaxAgeSeconds));
 
             return false;
+        }
+
+        protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+        {
+            if (!_isServiceTokenRequest) return Task.CompletedTask;
+            return base.HandleChallengeAsync(properties);
         }
     }
 }

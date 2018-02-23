@@ -44,10 +44,11 @@ namespace Autyan.NiChiJou.IdentityServer
                 .Services
                 .AddMvc(options =>
                 {
-                    var policy = new AuthorizationPolicyBuilder()
+                    var builder = new AuthorizationPolicyBuilder()
                         .RequireAuthenticatedUser()
-                        .Build();
-                    options.Filters.Add(new AuthorizeFilter(policy));
+                        .AddAuthenticationSchemes(ResourceConfiguration.CookieAuthenticationScheme)
+                        .AddAuthenticationSchemes(ResourceConfiguration.ServiceTokenAuthenticationScheme);
+                    options.Filters.Add(new AuthorizeFilter(builder.Build()));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 });
         }
