@@ -5,12 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Component;
-using Autyan.NiChiJou.Core.Config;
+using Autyan.NiChiJou.Core.Options;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
 
 namespace Autyan.NiChiJou.Core.Mvc.Authorization
 {
@@ -24,13 +25,17 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         public Controller Controller { get; set; }
 
+        private AutyanCookieOptions Options { get; }
+
         public SignInManager(ISignInService signInService,
             ISessionService sessionService,
-            IDistributedCache cache)
+            IDistributedCache cache,
+            IOptions<AutyanCookieOptions> options)
         {
             SignInService = signInService;
             SessionService = sessionService;
             Cache = cache;
+            Options = options.Value;
         }
 
         public async Task<ServiceResult<SignInInfomation>> RegisterUserAsync(UserRegisterModel model)
@@ -67,7 +72,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var user = Controller.HttpContext.User;
             if (user == null) return false;
             var principal = user;
-            return principal.Identities.Any(i => i.AuthenticationType == ResourceConfiguration.CookieAuthenticationScheme && i.IsAuthenticated);
+            return principal.Identities.Any(i => i.AuthenticationType == Options.Scheme && i.IsAuthenticated);
         }
 
         public async Task CookieSignInAsync(string sessionId)
@@ -75,13 +80,13 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var sessionData = await SessionService.GetSessionAsync(sessionId);
             var claims = new List<Claim>
             {
-                new Claim(ResourceConfiguration.CookieAuthenticationScheme, string.Empty),
+                new Claim(Options.Scheme, string.Empty),
                 new Claim("SessionId", sessionId),
                 new Claim(ClaimTypes.Name, sessionData.Data.UserName)
             };
 
             var claimsIdentity = new ClaimsIdentity(
-                claims, ResourceConfiguration.CookieAuthenticationScheme);
+                claims, Options.Scheme);
 
             var authProperties = new AuthenticationProperties
             {
@@ -91,7 +96,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             };
 
             await Controller.HttpContext.SignInAsync(
-                ResourceConfiguration.CookieAuthenticationScheme,
+                Options.Scheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }

@@ -61,7 +61,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                     {
                         var claims = new List<Claim>
                         {
-                            new Claim(ResourceConfiguration.ServiceTokenAuthenticationScheme, string.Empty),
+                            new Claim(Options.AuthenticationSchema, string.Empty),
                             new Claim(nameof(token.ServiceName), token.ServiceName),
                             new Claim(nameof(token.AppId), appId)
                         };

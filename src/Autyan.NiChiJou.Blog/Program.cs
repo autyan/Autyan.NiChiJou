@@ -1,7 +1,7 @@
 ﻿using System;
+using Autyan.NiChiJou.Core.Mvc.Extension;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
@@ -31,12 +31,7 @@ namespace Autyan.NiChiJou.Blog
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .ConfigureAppConfiguration((builderContext, config) => {
-                    var env = builderContext.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables();
-                })
+                //.UserAppsettings()
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();

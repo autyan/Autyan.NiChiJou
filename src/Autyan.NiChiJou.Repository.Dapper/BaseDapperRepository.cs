@@ -25,7 +25,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         protected DatabaseGeneratedOption KeyOption => Metadata.Key.Option;
 
-        protected BaseDapperRepository()
+        protected BaseDapperRepository(IDbConnectionFactory dbConnectionFactory,
+            ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
         {
             Metadata = MetadataContext.Instance[typeof(TEntity)];
         }
@@ -270,9 +271,16 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         protected IDbConnection Connection => _connection ?? (_connection = DbConnectionFactory.GetConnection(DbConnectionName.Default));
 
-        protected IDbConnectionFactory DbConnectionFactory => DapperConfiguration.Instance.DbConnectionFactory;
+        protected IDbConnectionFactory DbConnectionFactory { get; }
 
-        protected ISqlBuilderFactory SqlBuilderFactory => DapperConfiguration.Instance.SqlBuilderFactory;
+        protected ISqlBuilderFactory SqlBuilderFactory { get; }
+
+        protected BaseDapperRepository(IDbConnectionFactory dbConnectionFactory,
+            ISqlBuilderFactory sqlBuilderFactory)
+        {
+            DbConnectionFactory = dbConnectionFactory;
+            SqlBuilderFactory = sqlBuilderFactory;
+        }
 
         protected ISqlBuilder StartSql()
         {

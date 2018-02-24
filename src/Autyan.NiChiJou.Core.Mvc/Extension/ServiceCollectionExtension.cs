@@ -1,32 +1,32 @@
 ﻿using System;
-using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Core.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Autyan.NiChiJou.Core.Mvc.Extension
 {
     public static class ServiceCollectionExtension
     {
-        public static AuthenticationBuilder AddCookieAuthentication(this AuthenticationBuilder builder)
+        public static AuthenticationBuilder AddCookieAuthentication(this AuthenticationBuilder builder, IConfiguration configuration)
         {
-            builder.AddCookie(ResourceConfiguration.CookieAuthenticationScheme, options =>
-                {
-                    options.LoginPath = ResourceConfiguration.LoginPath;
-                    options.LogoutPath = ResourceConfiguration.LogoutPath;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(ResourceConfiguration.CookieExpiration);
-                });
+            builder.AddCookie(configuration["Cookie:Schema"], options =>
+            {
+                options.LoginPath = configuration["Cookie:LoginPath"];
+                options.LogoutPath = configuration["Cookie:LogoutPath"];
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(double.Parse(configuration["Cookie:Expiration"]));
+            });
 
             return builder;
         }
 
-        public static AuthenticationBuilder AddServiceTokenAuthentication(this AuthenticationBuilder builder)
+        public static AuthenticationBuilder AddServiceTokenAuthentication(this AuthenticationBuilder builder, IConfiguration configuration)
         {
-            builder.AddServiceToken(ResourceConfiguration.ServiceTokenAuthenticationScheme,
+            builder.AddServiceToken(configuration["ServiceToken:Schema"],
                 options =>
                 {
-                    options.AuthenticationSchema = ResourceConfiguration.ServiceTokenAuthenticationScheme;
-                    options.RequestMaxAgeSeconds = ResourceConfiguration.ServiceTokenMaxAge;
+                    options.AuthenticationSchema = configuration["ServiceToken:Schema"];
+                    options.RequestMaxAgeSeconds = ulong.Parse(configuration["ServiceToken:MaxAge"]);
                 });
             return builder;
         }

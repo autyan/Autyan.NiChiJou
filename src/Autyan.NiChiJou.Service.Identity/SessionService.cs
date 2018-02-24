@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
-using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Autyan.NiChiJou.Service.Identity
@@ -16,9 +16,12 @@ namespace Autyan.NiChiJou.Service.Identity
 
         private IDistributedCache Cache { get; }
 
-        public SessionService(IDistributedCache cache)
+        private IConfiguration Configuration { get; }
+
+        public SessionService(IDistributedCache cache, IConfiguration configuration)
         {
             Cache = cache;
+            Configuration = configuration;
         }
 
         public async Task<ServiceResult<SessionData>> CreateSessionAsync(IdentityUser user)
@@ -34,7 +37,7 @@ namespace Autyan.NiChiJou.Service.Identity
                 UserMemeberCode = user.UserMemberCode
             };
             await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
-                new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(ResourceConfiguration.SessionExpiration)));
+                new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(double.Parse(Configuration["Session:Expiration"]))));
 
             return ServiceResult<SessionData>.Success(data);
         }

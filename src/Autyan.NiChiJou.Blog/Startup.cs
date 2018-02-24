@@ -1,9 +1,8 @@
-﻿using Autyan.NiChiJou.Core.Config;
-using Autyan.NiChiJou.Core.Extension;
-using Autyan.NiChiJou.Core.Mvc.Attribute;
+﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
+using Autyan.NiChiJou.UnifyLogin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,22 +24,22 @@ namespace Autyan.NiChiJou.Blog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddResourceConfiguration()
-                .AddMemoryCache()
+            services.AddMemoryCache()
                 .AddDistributedRedisCache(options =>
                 {
-                    options.Configuration = ResourceConfiguration.RedisAddress;
-                    options.InstanceName = ResourceConfiguration.RedisInstanceName;
+                    options.Configuration = Configuration["DistributedCache:Server"];
+                    options.InstanceName = Configuration["DistributedCache:Instance"];
                 })
                 .AddNiChiJouDataModel()
                 .AddDapper()
-                .AddAuthentication(options => options.DefaultScheme = ResourceConfiguration.CookieAuthenticationScheme)
-                .AddCookieAuthentication().Services
+                .AddAuthentication(options => options.DefaultScheme = Configuration["Cookie:Schema"])
+                .AddCookieAuthentication(Configuration).Services
+                .AddUnifyLogin()
                 .AddMvc(options =>
                 {
                     var builder = new AuthorizationPolicyBuilder()
                         .RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(ResourceConfiguration.CookieAuthenticationScheme);
+                        .AddAuthenticationSchemes(Configuration["Cookie:Schema"]);
                     options.Filters.Add(new AuthorizeFilter(builder.Build()));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 });

@@ -1,5 +1,8 @@
 ﻿using System;
+using Autyan.NiChiJou.Core.Repository;
 using Autyan.NiChiJou.Core.Repository.Blog;
+using Autyan.NiChiJou.Core.Repository.DbConnectionFactory;
+using Autyan.NiChiJou.Core.Utility.Sql;
 using Autyan.NiChiJou.Repository.Dapper.Blog;
 using Autyan.NiChiJou.Repository.Dapper.Identity;
 using Autyan.NiChiJou.Repository.Identity;
@@ -25,13 +28,15 @@ namespace Autyan.NiChiJou.Repository.Dapper.Extension
 
         public static IServiceCollection UseDapperWithMsSql(this IServiceCollection services)
         {
-            DapperConfiguration.UseMssql();
+            services.AddScoped<ISqlBuilderFactory, MsSqlBuilderFactory>();
+            services.AddScoped<IDbConnectionFactory, MsSqlDbConnectionFactory>();
             return services;
         }
 
         public static IServiceCollection UseDapperWithMySql(this IServiceCollection services)
         {
-            DapperConfiguration.UseMySql();
+            services.AddSingleton<ISqlBuilderFactory, MySqlBuilderFactory>();
+            services.AddSingleton<IDbConnectionFactory, MySqlDbConnectionFactory>();
             return services;
         }
     }
