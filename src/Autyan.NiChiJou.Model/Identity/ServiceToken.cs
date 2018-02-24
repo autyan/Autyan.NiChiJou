@@ -10,7 +10,7 @@ namespace Autyan.NiChiJou.Model.Identity
 
         public virtual string ApiKey { get; set; }
 
-        public virtual bool IsEnabled { get; set; }
+        public virtual bool? IsEnabled { get; set; }
     }
 
     public class ServiceTokenQuery : LongKeyBaseEntityQuery

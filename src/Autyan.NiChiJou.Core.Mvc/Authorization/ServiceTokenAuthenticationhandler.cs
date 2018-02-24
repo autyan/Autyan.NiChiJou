@@ -108,7 +108,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             }
 
             tokenInfo = app.Data;
-            var sharedKey = tokenInfo.AppKey;
+            var sharedKey = tokenInfo.ApiKey;
 
             if (IsReplayRequest(nonce, requestTimeStamp))
             {
