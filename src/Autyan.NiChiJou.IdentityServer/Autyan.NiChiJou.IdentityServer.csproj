@@ -5,6 +5,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
+    <PackageReference Include="NLog" Version="4.5.0-rc06" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.5.0-rc3" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
@@ -14,5 +16,10 @@
     <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Repository.Dapper\Autyan.NiChiJou.Repository.Dapper.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

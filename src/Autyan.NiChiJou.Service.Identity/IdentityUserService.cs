@@ -2,6 +2,7 @@
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
@@ -9,9 +10,10 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         protected static IIdentityUserRepository UserRepo { get; private set; }
 
-        public IdentityUserService(IIdentityUserRepository userRepo)
+        public IdentityUserService(IIdentityUserRepository userRepo, ILogger logger)
         {
             UserRepo = userRepo;
+            Logger = logger;
         }
 
         public async Task<ServiceResult<IdentityUser>> GetUserByIdAsync(long id)
