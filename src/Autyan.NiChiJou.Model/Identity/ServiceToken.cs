@@ -8,7 +8,7 @@ namespace Autyan.NiChiJou.Model.Identity
 
         public virtual string AppId { get; set; }
 
-        public virtual string AppKey { get; set; }
+        public virtual string ApiKey { get; set; }
 
         public virtual bool IsEnabled { get; set; }
     }

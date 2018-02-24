@@ -42,7 +42,6 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            string appId;
             var authorizaHeader = ((FrameRequestHeaders) Request.Headers).HeaderAuthorization.ToString();
             if (!string.IsNullOrWhiteSpace(authorizaHeader) && authorizaHeader.StartsWith(Options.AuthenticationSchema))
             {
@@ -51,7 +50,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                 var autherizationHeaderArray = GetAutherizationHeaderValues(rawAuthzHeader);
                 if (autherizationHeaderArray != null)
                 {
-                    appId = autherizationHeaderArray[0];
+                    var appId = autherizationHeaderArray[0];
                     var incomingBase64Signature = autherizationHeaderArray[1];
                     var nonce = autherizationHeaderArray[2];
                     var requestTimeStamp = autherizationHeaderArray[3];

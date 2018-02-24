@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Mvc.Authorization;
+using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.IdentityServer.Models.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -84,7 +85,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "InternalServiceOnly")]
+        [Authorize(Policy = AuthorizePolicy.InternalServiceOnly)]
         public async Task<IActionResult> VerifiToken(string token, string returnUrl)
         {
             var memberCode = await _signInManager.GetMemberCodeByVerificationToken(token);

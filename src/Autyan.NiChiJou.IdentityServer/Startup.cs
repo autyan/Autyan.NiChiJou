@@ -3,6 +3,7 @@ using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Mvc.Extension;
+using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
 using Autyan.NiChiJou.Service.Identity.Extension;
@@ -54,7 +55,7 @@ namespace Autyan.NiChiJou.IdentityServer
                 }).Services
                 .AddAuthorization(options =>
                 {
-                    options.AddPolicy("InternalServiceOnly", policy => policy.RequireClaim(ResourceConfiguration.ServiceTokenAuthenticationScheme));
+                    options.AddPolicy(AuthorizePolicy.InternalServiceOnly, policy => policy.RequireClaim(ResourceConfiguration.ServiceTokenAuthenticationScheme));
                 });
         }
 
