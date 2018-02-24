@@ -34,17 +34,16 @@ namespace Autyan.NiChiJou.Blog
                 })
                 .AddNiChiJouDataModel()
                 .AddDapper()
+                .AddAuthentication(options => options.DefaultScheme = ResourceConfiguration.CookieAuthenticationScheme)
+                .AddCookieAuthentication().Services
                 .AddMvc(options =>
                 {
-                    var policy = new AuthorizationPolicyBuilder()
+                    var builder = new AuthorizationPolicyBuilder()
                         .RequireAuthenticatedUser()
-                        .Build();
-                    options.Filters.Add(new AuthorizeFilter(policy));
+                        .AddAuthenticationSchemes(ResourceConfiguration.CookieAuthenticationScheme);
+                    options.Filters.Add(new AuthorizeFilter(builder.Build()));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 });
-
-            services.AddAuthentication()
-                .AddCookieAuthentication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +60,7 @@ namespace Autyan.NiChiJou.Blog
             }
 
             app.UseStaticFiles()
+                .UseAuthentication()
                 .UseMvc(routes =>
                 {
                     routes.MapRoute(
