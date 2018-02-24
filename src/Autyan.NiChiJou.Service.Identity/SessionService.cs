@@ -23,7 +23,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
         public async Task<ServiceResult<SessionData>> CreateSessionAsync(IdentityUser user)
         {
-            if(user.Id == null) return ServiceResult<SessionData>.Failed("User Id can't be null.");
+            if(user.Id == null) return ServiceResult<SessionData>.Failed("User Id can't be null.", (int)SessionServiceError.UserIdIsNull);
 
             var sessionId = CreateSessionId();
             var data = new SessionData
@@ -44,7 +44,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
             if (string.IsNullOrWhiteSpace(sessionStr))
             {
-                return ServiceResult<SessionData>.Failed("session not found");
+                return ServiceResult<SessionData>.Failed("session not found", (int)SessionServiceError.SessionNotFound);
             }
             return ServiceResult<SessionData>.Success(JsonConvert.DeserializeObject<SessionData>(sessionStr));
         }
@@ -54,7 +54,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
             if (string.IsNullOrWhiteSpace(sessionStr))
             {
-                return ServiceResult<long>.Failed("session not found");
+                return ServiceResult<long>.Failed("session not found", (int)SessionServiceError.SessionNotFound);
             }
 
             var sessionData = JsonConvert.DeserializeObject<SessionData>(sessionStr);
