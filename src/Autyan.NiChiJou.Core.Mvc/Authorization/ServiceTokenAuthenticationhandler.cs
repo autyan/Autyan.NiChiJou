@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
-using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authentication;

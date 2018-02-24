@@ -1,5 +1,4 @@
-﻿using Autyan.NiChiJou.Core.Config;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace Autyan.NiChiJou.Core.Repository.DbConnectionFactory
 {

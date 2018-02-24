@@ -1,10 +1,7 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Autyan.NiChiJou.Model.Extension;
-using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Dapper;
-using Autyan.NiChiJou.Repository.Dapper.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,7 +17,6 @@ namespace RepositoryTest
             //    .AddJsonFile("appsettings.json", optional: true)
             //    .Build();
             //BaseDbConnectionFactory.SetConfigurationRoot(builder);
-            DapperConfiguration.UseMssql();
             var serviceCollection = new ServiceCollection() as IServiceCollection;
             serviceCollection.AddNiChiJouDataModel();
             MetadataContext.Instance.Initilize(AppDomain.CurrentDomain.GetAssemblies());
@@ -29,24 +25,24 @@ namespace RepositoryTest
         [TestMethod]
         public void SelectTest()
         {
-            var totalInsert = 500000;
-            var random = new Random();
-            for (var i = 0; i < totalInsert; i++)
-            {
-                var length = random.Next(4, 20);
-                var user = new IdentityUser
-                {
-                    LoginName = RandomString(random, length),
-                    PasswordHash = "userlogin",
-                    SecuritySalt = "salt",
-                    EmailConfirmed = false,
-                    PhoneNumberConfirmed = false
-                };
-                var repo = new IdentityUserRepository();
-                var queryUser = repo.FirstOrDefaultAsync(new {user.LoginName}).Result;
-                if (queryUser != null) continue;
-                var result = Task.Factory.StartNew(() => repo.InsertAsync(user)).Result.Result;
-            }
+            //var totalInsert = 500000;
+            //var random = new Random();
+            //for (var i = 0; i < totalInsert; i++)
+            //{
+            //    var length = random.Next(4, 20);
+            //    var user = new IdentityUser
+            //    {
+            //        LoginName = RandomString(random, length),
+            //        PasswordHash = "userlogin",
+            //        SecuritySalt = "salt",
+            //        EmailConfirmed = false,
+            //        PhoneNumberConfirmed = false
+            //    };
+            //    var repo = new IdentityUserRepository();
+            //    var queryUser = repo.FirstOrDefaultAsync(new {user.LoginName}).Result;
+            //    if (queryUser != null) continue;
+            //    var result = Task.Factory.StartNew(() => repo.InsertAsync(user)).Result.Result;
+            //}
         }
 
         public static string RandomString(Random random, int length)
@@ -59,9 +55,9 @@ namespace RepositoryTest
         [TestMethod]
         public void UpdateTest()
         {
-            var repo = new IdentityUserRepository();
-            var result = Task.Factory.StartNew(() => repo.UpdateByConditionAsync(new {PasswordHash = "userlogin2"}, new {IdFrom = 10})).Result.Result;
-            Console.WriteLine(result);
+            //var repo = new IdentityUserRepository();
+            //var result = Task.Factory.StartNew(() => repo.UpdateByConditionAsync(new {PasswordHash = "userlogin2"}, new {IdFrom = 10})).Result.Result;
+            //Console.WriteLine(result);
         }
     }
 }
