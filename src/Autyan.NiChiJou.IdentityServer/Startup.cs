@@ -1,10 +1,16 @@
-﻿using Autyan.NiChiJiu.Repository.Redis.Extension;
+﻿using Autyan.NiChiJou.Core.Config;
+using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Mvc.Attribute;
+using Autyan.NiChiJou.Core.Mvc.DistributedCache;
+using Autyan.NiChiJou.Core.Mvc.Extension;
+using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
 using Autyan.NiChiJou.Service.Identity.Extension;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,11 +28,34 @@ namespace Autyan.NiChiJou.IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.Filters.Add(new ViewModelValidationActionFilterAttribute()));
-            services.AddNiChiJouDataModel()
-                .AddRedis()
+            services.AddResourceConfiguration()
+                .AddDistributedRedisCache(options =>
+                {
+                    options.Configuration = ResourceConfiguration.RedisAddress;
+                    options.InstanceName = ResourceConfiguration.RedisInstanceName;
+                })
+                .AddIdentityCache()
+                .AddNiChiJouDataModel()
                 .AddDapper()
-                .AddIdentityService();
+                .AddIdentityService()
+                .AddMvcComponent()
+                .AddAuthentication(options => options.DefaultScheme = ResourceConfiguration.CookieAuthenticationScheme)
+                .AddCookieAuthentication()
+                .AddServiceTokenAuthentication()
+                .Services
+                .AddMvc(options =>
+                {
+                    var builder = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .AddAuthenticationSchemes(ResourceConfiguration.CookieAuthenticationScheme)
+                        .AddAuthenticationSchemes(ResourceConfiguration.ServiceTokenAuthenticationScheme);
+                    options.Filters.Add(new AuthorizeFilter(builder.Build()));
+                    options.Filters.Add(new ViewModelValidationActionFilterAttribute());
+                }).Services
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy(AuthorizePolicy.InternalServiceOnly, policy => policy.RequireClaim(ResourceConfiguration.ServiceTokenAuthenticationScheme));
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,14 +71,14 @@ namespace Autyan.NiChiJou.IdentityServer
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseStaticFiles()
+                .UseAuthentication()
+                .UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+                });
         }
     }
 }

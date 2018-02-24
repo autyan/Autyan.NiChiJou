@@ -6,6 +6,10 @@ namespace Autyan.NiChiJou.Model.Identity
     {
         public virtual string LoginName { get; set; }
 
+        public virtual string NickName { get; set; }
+
+        public virtual string UserMemberCode { get; set; }
+
         public virtual string Email { get; set; }
 
         public virtual bool? EmailConfirmed { get; set; }
@@ -22,6 +26,8 @@ namespace Autyan.NiChiJou.Model.Identity
     public class IdentityUserQuery : LongKeyBaseEntityQuery
     {
         public string LoginName { get; set; }
+
+        public string NickName { get; set; }
 
         public string Email { get; set; }
 

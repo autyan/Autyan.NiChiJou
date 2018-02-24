@@ -13,14 +13,13 @@ namespace Autyan.NiChiJou.Core.Service
 
         public static ServiceResult<T> Success(T data) => new ServiceResult<T>
         {
+            Succeed = true,
             Data = data
         };
 
-        public new static ServiceResult<T> Failed()
-        {
-            var result = new ServiceResult<T>();
-            return result;
-        }
+        public new static ServiceResult<T> Failed() => new ServiceResult<T>();
+
+        public static ServiceResult<T> FailedFrom(ServiceResult source) => Failed(source.Messages, source.ErrorCode);
 
         public new static ServiceResult<T> Failed(string message)
         {

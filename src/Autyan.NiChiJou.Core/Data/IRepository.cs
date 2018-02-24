@@ -5,7 +5,7 @@ namespace Autyan.NiChiJou.Core.Data
 {
     public interface IRepository<TEntity>
     {
-        Task<TEntity> GetByIdAsyc(TEntity entity);
+        Task<TEntity> GetByIdAsync(TEntity entity);
 
         Task<TEntity> FirstOrDefaultAsync(object query);
 

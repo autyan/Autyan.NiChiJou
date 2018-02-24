@@ -30,7 +30,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             Metadata = MetadataContext.Instance[typeof(TEntity)];
         }
 
-        public async Task<TEntity> GetByIdAsyc(TEntity entity)
+        public async Task<TEntity> GetByIdAsync(TEntity entity)
         {
             return await FirstOrDefaultAsync(entity);
         }
@@ -141,7 +141,9 @@ namespace Autyan.NiChiJou.Repository.Dapper
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return await Connection.ExecuteAsync(builder.End(), entity);
+
+            builder.Output(" INSERTED.ID ");
+            return await Connection.ExecuteScalarAsync<long>(builder.End(), entity);
         }
 
         private void GetSequenceInsertSql(ISqlBuilder builder)
