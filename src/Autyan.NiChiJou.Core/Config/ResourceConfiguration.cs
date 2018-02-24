@@ -16,6 +16,8 @@ namespace Autyan.NiChiJou.Core.Config
 
         private static IEnumerable<IConfigurationSection> _serviceTokenAuthConfigs;
 
+        private static IEnumerable<IConfigurationSection> _authConfigs;
+
         public static void SetConfigurationRoot(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -26,6 +28,7 @@ namespace Autyan.NiChiJou.Core.Config
         {
             _redisConfigs = _configuration.GetSection("RedisServer").GetChildren();
             _sessionConfigs = _configuration.GetSection("Session").GetChildren();
+            _authConfigs = _configuration.GetSection("Auth").GetChildren();
             _cookieAuthConfigs = _configuration.GetSection("Auth").GetSection("Cookie").GetChildren();
             _serviceTokenAuthConfigs = _configuration.GetSection("Auth").GetSection("ServiceToken").GetChildren();
         }
@@ -52,21 +55,13 @@ namespace Autyan.NiChiJou.Core.Config
 
         public static string ServiceTokenAuthenticationScheme => _serviceTokenAuthConfigs.GetValueFromSectionChildren("Scheme");
 
-        public static IDictionary<string, string> ServiceTokenAllowedApps
-        {
-            get
-            {
-                var dic = new Dictionary<string, string>();
-                foreach (var app in _configuration.GetSection("Auth").GetSection("ServiceToken").GetSection("AllowedApps").GetChildren())
-                {
-                    dic.Add(app["appId"], app["appKey"]);
-                }
+        public static string ServiceTokenAppId => _serviceTokenAuthConfigs.GetValueFromSectionChildren("AppId");
 
-                return dic;
-            }
-        }
+        public static string ServiceTokenApiKey => _serviceTokenAuthConfigs.GetValueFromSectionChildren("ApiKey");
 
         public static ulong ServiceTokenMaxAge =>
             ulong.Parse(_serviceTokenAuthConfigs.GetValueFromSectionChildren("MaxAge"));
+
+        public static string UnifyLoginServer => _authConfigs.GetValueFromSectionChildren(nameof(UnifyLoginServer));
     }
 }
