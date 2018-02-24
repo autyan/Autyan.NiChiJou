@@ -72,10 +72,12 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         public async Task CookieSignInAsync(string sessionId)
         {
+            var sessionData = await SessionService.GetSessionAsync(sessionId);
             var claims = new List<Claim>
             {
                 new Claim(ResourceConfiguration.CookieAuthenticationScheme, string.Empty),
-                new Claim("SessionId", sessionId)
+                new Claim("SessionId", sessionId),
+                new Claim(ClaimTypes.Name, sessionData.Data.UserName)
             };
 
             var claimsIdentity = new ClaimsIdentity(

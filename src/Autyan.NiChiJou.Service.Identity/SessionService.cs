@@ -30,6 +30,7 @@ namespace Autyan.NiChiJou.Service.Identity
             {
                 Id = sessionId,
                 UserId = user.Id.Value,
+                UserName = user.NickName,
                 UserMemeberCode = user.UserMemberCode
             };
             await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
