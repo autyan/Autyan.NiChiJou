@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 
 namespace Autyan.NiChiJou.Core.Mvc.Authorization
 {
@@ -8,7 +7,5 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
         public ulong RequestMaxAgeSeconds { get; set; }
 
         public string AuthenticationSchema { get; set; }
-
-        public IDictionary<string, string> AllowedApps { get; set; }
     }
 }

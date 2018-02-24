@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
+using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,12 +24,20 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
     {
         private IMemoryCache MemoryCache { get; }
 
+        private IApplicationAuthorizationService ApplicationAuthorizationService { get; }
+
         private bool _isServiceTokenRequest;
 
-        public ServiceTokenAuthenticationhandler(IOptionsMonitor<ServiceTokenAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IMemoryCache memoryCache)
+        public ServiceTokenAuthenticationhandler(IOptionsMonitor<ServiceTokenAuthenticationOptions> options,
+            ILoggerFactory logger,
+            UrlEncoder encoder,
+            ISystemClock clock,
+            IMemoryCache memoryCache,
+            IApplicationAuthorizationService applicationAuthorizationService)
             : base(options, logger, encoder, clock)
         {
             MemoryCache = memoryCache;
+            ApplicationAuthorizationService = applicationAuthorizationService;
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -103,12 +112,13 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var requestUri = req.GetEncodedUrl();
             var requestHttpMethod = req.Method;
 
-            if (!Options.AllowedApps.ContainsKey(appId))
+            var app = ApplicationAuthorizationService.FindServiceByAppId(appId).Result;
+            if (!app.Succeed)
             {
                 return false;
             }
 
-            var sharedKey = Options.AllowedApps[appId];
+            var sharedKey = app.Data.AppKey;
 
             if (IsReplayRequest(nonce, requestTimeStamp))
             {

@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>Autyan.NiChiJou.Database</Name>
+    <Name>Autyan.NiChiJou.Database.Identity</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{16130168-3962-4a49-8d9f-6c826844648d}</ProjectGuid>
+    <ProjectGuid>{47b5bec2-4fe1-4bf4-8f05-aa7353ad0734}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>Autyan.NiChiJou.Database</RootNamespace>
-    <AssemblyName>Autyan.NiChiJou.Database</AssemblyName>
+    <RootNamespace>Autyan.NiChiJou.Database.Identity</RootNamespace>
+    <AssemblyName>Autyan.NiChiJou.Database.Identity</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -57,18 +57,12 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="Table" />
     <Folder Include="Sequence" />
+    <Folder Include="Table" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Table\BlogUsers.sql" />
-    <Build Include="Table\Blogs.sql" />
-    <Build Include="Table\BlogPosts.sql" />
-    <Build Include="Table\PostComments.sql" />
-    <Build Include="Table\ActivityLogs.sql" />
     <Build Include="Sequence\EntityId.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="Autyan.NiChiJou.Database.refactorlog" />
+    <Build Include="Table\IdentityUsers.sql" />
+    <Build Include="Table\ServiceTokens.sql" />
   </ItemGroup>
 </Project>

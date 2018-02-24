@@ -26,7 +26,6 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
                 options =>
                 {
                     options.AuthenticationSchema = ResourceConfiguration.ServiceTokenAuthenticationScheme;
-                    options.AllowedApps = ResourceConfiguration.ServiceTokenAllowedApps;
                     options.RequestMaxAgeSeconds = ResourceConfiguration.ServiceTokenMaxAge;
                 });
             return builder;
