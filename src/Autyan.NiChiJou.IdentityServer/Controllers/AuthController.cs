@@ -86,10 +86,10 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 
         [HttpPost]
         [Authorize(Policy = AuthorizePolicy.InternalServiceOnly)]
-        public async Task<IActionResult> VerifiToken(string token, string returnUrl)
+        public async Task<IActionResult> VerifiToken(TokenVerificationViewMoodel model)
         {
-            var memberCode = await _signInManager.GetMemberCodeByVerificationToken(token);
-            return Redirect($"{returnUrl}?member={memberCode.Data}");
+            var memberCode = await _signInManager.GetMemberCodeByVerificationToken(model.Token);
+            return Redirect($"{model.ReturnUrl}?member={memberCode.Data}");
         }
 
         [HttpPost]

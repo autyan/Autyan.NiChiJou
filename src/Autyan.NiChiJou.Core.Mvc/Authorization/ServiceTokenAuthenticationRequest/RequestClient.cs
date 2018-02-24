@@ -45,16 +45,13 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
                 request.BeginGetResponse(ReadCallBack, new HttpResponseAsyncResult(request, handler));
         }
 
-        public Task<string> StartRequestAsync(string api, string method, HttpRequestParamters paramter, bool needAuthtication = false)
+        public Task<string> StartRequestAsync(string api, string method, HttpRequestParamters paramter)
         {
             var request = (HttpWebRequest)WebRequest.Create(api);
             request.Method = method;
             request.Accept = "application/json";
             request.ContentType = "application/x-www-form-urlencoded";
-            if (needAuthtication)
-            {
-                AddAuthenticationHead(new Uri(api), method, paramter);
-            }
+            AddAuthenticationHead(new Uri(api), method, paramter);
             foreach (var headerString in paramter.HeaderStrings)
                 request.Headers.Add(headerString.Key, headerString.Value);
             if (paramter.BodyParamters != null)

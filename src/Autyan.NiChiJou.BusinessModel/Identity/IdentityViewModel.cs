@@ -13,4 +13,11 @@
 
         public string SessionId { get; set; }
     }
+
+    public class TokenVerificationViewMoodel
+    {
+        public string Token { get; set; }
+
+        public string ReturnUrl { get; set; }
+    }
 }

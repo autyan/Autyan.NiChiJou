@@ -1,6 +1,4 @@
-﻿using Autyan.NiChiJou.Core.Config;
-using Autyan.NiChiJou.Core.Extension;
-using Autyan.NiChiJou.Core.Mvc.Attribute;
+﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.IdentityServer.Consts;
@@ -28,33 +26,32 @@ namespace Autyan.NiChiJou.IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddResourceConfiguration()
-                .AddDistributedRedisCache(options =>
+            services.AddDistributedRedisCache(options =>
                 {
-                    options.Configuration = ResourceConfiguration.RedisAddress;
-                    options.InstanceName = ResourceConfiguration.RedisInstanceName;
+                    options.Configuration = Configuration["DistributedCache:Server"];
+                    options.InstanceName = Configuration["DistributedCache:Instance"];
                 })
-                .AddIdentityCache()
+                .AddIdentityCache(Configuration)
                 .AddNiChiJouDataModel()
                 .AddDapper()
                 .AddIdentityService()
                 .AddMvcComponent()
-                .AddAuthentication(options => options.DefaultScheme = ResourceConfiguration.CookieAuthenticationScheme)
-                .AddCookieAuthentication()
-                .AddServiceTokenAuthentication()
+                .AddAuthentication(options => options.DefaultScheme = Configuration["Cookie:Schema"])
+                .AddCookieAuthentication(Configuration)
+                .AddServiceTokenAuthentication(Configuration)
                 .Services
                 .AddMvc(options =>
                 {
                     var builder = new AuthorizationPolicyBuilder()
                         .RequireAuthenticatedUser()
-                        .AddAuthenticationSchemes(ResourceConfiguration.CookieAuthenticationScheme)
-                        .AddAuthenticationSchemes(ResourceConfiguration.ServiceTokenAuthenticationScheme);
+                        .AddAuthenticationSchemes(Configuration["Cookie:Schema"])
+                        .AddAuthenticationSchemes(Configuration["ServiceToken:Schema"]);
                     options.Filters.Add(new AuthorizeFilter(builder.Build()));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
                 }).Services
                 .AddAuthorization(options =>
                 {
-                    options.AddPolicy(AuthorizePolicy.InternalServiceOnly, policy => policy.RequireClaim(ResourceConfiguration.ServiceTokenAuthenticationScheme));
+                    options.AddPolicy(AuthorizePolicy.InternalServiceOnly, policy => policy.RequireClaim(Configuration["ServiceToken:Schema"]));
                 });
         }
 

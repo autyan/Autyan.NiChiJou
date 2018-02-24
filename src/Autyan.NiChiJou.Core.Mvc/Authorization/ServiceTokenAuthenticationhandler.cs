@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
-using Autyan.NiChiJou.Core.Config;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authentication;
@@ -61,7 +60,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                     {
                         var claims = new List<Claim>
                         {
-                            new Claim(ResourceConfiguration.ServiceTokenAuthenticationScheme, string.Empty),
+                            new Claim(Options.AuthenticationSchema, string.Empty),
                             new Claim(nameof(token.ServiceName), token.ServiceName),
                             new Claim(nameof(token.AppId), appId)
                         };

@@ -122,8 +122,7 @@ namespace Autyan.NiChiJou.Core.Service
 
         public static ServiceResult Failed()
         {
-            var result = new ServiceResult();
-            return result;
+            return new ServiceResult();
         }
 
         public static ServiceResult Failed(string message)
