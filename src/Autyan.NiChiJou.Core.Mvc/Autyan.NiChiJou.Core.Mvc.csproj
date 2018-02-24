@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Authorization\Requirement\" />
     <Folder Include="Middleware\" />
   </ItemGroup>
 </Project>

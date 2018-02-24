@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
+using Autyan.NiChiJou.Core.Config;
+using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +26,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         private IApplicationAuthorizationService ApplicationAuthorizationService { get; }
 
-        private bool _isServiceTokenRequest;
+        private bool IsServiceTokenRequest { get; set; }
 
         public ServiceTokenAuthenticationhandler(IOptionsMonitor<ServiceTokenAuthenticationOptions> options,
             ILoggerFactory logger,
@@ -46,7 +46,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var authorizaHeader = ((FrameRequestHeaders) Request.Headers).HeaderAuthorization.ToString();
             if (!string.IsNullOrWhiteSpace(authorizaHeader) && authorizaHeader.StartsWith(Options.AuthenticationSchema))
             {
-                _isServiceTokenRequest = true;
+                IsServiceTokenRequest = true;
                 var rawAuthzHeader = authorizaHeader.Replace(Options.AuthenticationSchema, string.Empty).Trim();
                 var autherizationHeaderArray = GetAutherizationHeaderValues(rawAuthzHeader);
                 if (autherizationHeaderArray != null)
@@ -56,46 +56,35 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                     var nonce = autherizationHeaderArray[2];
                     var requestTimeStamp = autherizationHeaderArray[3];
 
-                    var isValid = IsValidRequest(Request, appId, incomingBase64Signature, nonce, requestTimeStamp);
+                    var isValid = IsValidRequest(Request, appId, incomingBase64Signature, nonce, requestTimeStamp, out var token);
 
                     if (isValid)
                     {
-                        var currentPrincipal = new GenericPrincipal(new GenericIdentity(appId), null);
-                        Thread.CurrentPrincipal = currentPrincipal;
-                        if (Context != null)
+                        var claims = new List<Claim>
                         {
-                            Context.User = currentPrincipal;
-                        }
+                            new Claim(ResourceConfiguration.ServiceTokenAuthenticationScheme, string.Empty),
+                            new Claim(nameof(token.ServiceName), token.ServiceName),
+                            new Claim(nameof(token.AppId), appId)
+                        };
+                        var claimsIdentity = new ClaimsIdentity(claims, Options.AuthenticationSchema);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            AllowRefresh = false,
+                            IsPersistent = false,
+                            IssuedUtc = DateTimeOffset.UtcNow
+                        };
+                        return Task.FromResult(
+                            AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), authProperties,
+                                Options.AuthenticationSchema)));
                     }
-                    else
-                    {
-                        return Task.FromResult(AuthenticateResult.Fail("Invalid Signature"));
-                    }
+
+                    return Task.FromResult(AuthenticateResult.Fail("Invalid Signature"));
                 }
-                else
-                {
-                    return Task.FromResult(AuthenticateResult.Fail("Invalid Head"));
-                }
-            }
-            else
-            {
-                return Task.FromResult(AuthenticateResult.Fail("Invalid Schema"));
+
+                return Task.FromResult(AuthenticateResult.Fail("Invalid Head"));
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim(nameof(appId), appId)
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, Options.AuthenticationSchema);
-            var authProperties = new AuthenticationProperties
-            {
-                AllowRefresh = false,
-                IsPersistent = false,
-                IssuedUtc = DateTimeOffset.UtcNow
-            };
-            return Task.FromResult(
-                AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), authProperties,
-                    Options.AuthenticationSchema)));
+            return Task.FromResult(AuthenticateResult.Fail("Invalid Schema"));
         }
 
         private static string[] GetAutherizationHeaderValues(string rawAuthzHeader)
@@ -106,8 +95,9 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             return credArray.Length == 4 ? credArray : null;
         }
 
-        private bool IsValidRequest(HttpRequest req, string appId, string incomingBase64Signature, string nonce, string requestTimeStamp)
+        private bool IsValidRequest(HttpRequest req, string appId, string incomingBase64Signature, string nonce, string requestTimeStamp, out ServiceToken tokenInfo)
         {
+            tokenInfo = null;
             var requestContentBase64String = "";
             var requestUri = req.GetEncodedUrl();
             var requestHttpMethod = req.Method;
@@ -118,7 +108,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                 return false;
             }
 
-            var sharedKey = app.Data.AppKey;
+            tokenInfo = app.Data;
+            var sharedKey = tokenInfo.AppKey;
 
             if (IsReplayRequest(nonce, requestTimeStamp))
             {
@@ -171,7 +162,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         protected override Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            if (!_isServiceTokenRequest) return Task.CompletedTask;
+            if (!IsServiceTokenRequest) return Task.CompletedTask;
             return base.HandleChallengeAsync(properties);
         }
     }

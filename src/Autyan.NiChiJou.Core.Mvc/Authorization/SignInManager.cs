@@ -74,6 +74,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
         {
             var claims = new List<Claim>
             {
+                new Claim(ResourceConfiguration.CookieAuthenticationScheme, string.Empty),
                 new Claim("SessionId", sessionId)
             };
 

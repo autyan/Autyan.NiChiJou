@@ -51,6 +51,10 @@ namespace Autyan.NiChiJou.IdentityServer
                         .AddAuthenticationSchemes(ResourceConfiguration.ServiceTokenAuthenticationScheme);
                     options.Filters.Add(new AuthorizeFilter(builder.Build()));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
+                }).Services
+                .AddAuthorization(options =>
+                {
+                    options.AddPolicy("InternalServiceOnly", policy => policy.RequireClaim(ResourceConfiguration.ServiceTokenAuthenticationScheme));
                 });
         }
 

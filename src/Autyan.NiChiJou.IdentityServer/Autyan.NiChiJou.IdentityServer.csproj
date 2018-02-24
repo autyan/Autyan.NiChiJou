@@ -18,6 +18,9 @@
     <ProjectReference Include="..\Autyan.NiChiJou.Service.Identity\Autyan.NiChiJou.Service.Identity.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
