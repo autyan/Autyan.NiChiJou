@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using Autyan.NiChiJou.Core.Mvc.Authorization;
+using Autyan.NiChiJou.Core.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,9 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
                 options.LogoutPath = configuration["Cookie:LogoutPath"];
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(double.Parse(configuration["Cookie:Expiration"]));
             });
+
+            builder.Services.AddOptions()
+            .Configure<AutyanCookieOptions>(configuration.GetSection("Cookie"));
 
             return builder;
         }

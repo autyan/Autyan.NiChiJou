@@ -115,7 +115,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                 authProperties);
         }
 
-        public async Task<ServiceResult<string>> CreateLoginVerificationToken(string sessionId = null)
+        public async Task<ServiceResult<string>> CreateLoginVerificationTokenAsync(string sessionId = null)
         {
             var randomValue = Guid.NewGuid().ToString();
             var token = HashEncrypter.Md5EncryptToBase64(randomValue);

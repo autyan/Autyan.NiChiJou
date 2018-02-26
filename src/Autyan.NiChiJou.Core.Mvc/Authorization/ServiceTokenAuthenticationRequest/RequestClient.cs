@@ -136,7 +136,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
             using (var hmacshA256 = new HMACSHA256(key))
             {
                 var base64String = Convert.ToBase64String(hmacshA256.ComputeHash(bytes));
-                paramter.AddHeader(nameof(Authorization), $"cpx {_appId}:{base64String}:{nonce}:{requestTimeStamp}");
+                paramter.AddHeader(nameof(Authorization), $"autyan.serviceToken {_appId}:{base64String}:{nonce}:{requestTimeStamp}");
             }
         }
     }

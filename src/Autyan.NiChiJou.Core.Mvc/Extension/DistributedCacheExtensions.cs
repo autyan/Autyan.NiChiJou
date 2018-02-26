@@ -25,7 +25,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
             }
         }
 
-        public static async Task SetSerializedAsync(this IDistributedCache cache, string key, object target, DistributedCacheEntryOptions options = null)
+        public static async Task SetSerializedAsync(this IDistributedCache cache, string key, object target, DistributedCacheEntryOptions options)
         {
             var strValue = JsonConvert.SerializeObject(target);
             await cache.SetStringAsync(key, strValue, options);

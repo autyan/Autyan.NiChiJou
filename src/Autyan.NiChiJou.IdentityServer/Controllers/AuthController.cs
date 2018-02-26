@@ -48,17 +48,19 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            var token = await SignInManager.CreateLoginVerificationTokenAsync(signInResult.Data.SessionId);
             return Redirect(
-                $"http://{model.ReturnUrl}?token={SignInManager.CreateLoginVerificationToken(signInResult.Data.SessionId)}");
+                $"http://{model.ReturnUrl}?token={await SignInManager.CreateLoginVerificationTokenAsync(token.Data)}");
         }
 
         [AllowAnonymous]
-        public IActionResult UnifySignIn(string returnUrl)
+        public async Task<IActionResult> UnifySignIn(string returnUrl)
         {
             if (SignInManager.IsSignedIn())
             {
+                var token = await SignInManager.CreateLoginVerificationTokenAsync();
                 return Redirect(
-                    $"http://{returnUrl}?token={SignInManager.CreateLoginVerificationToken()}");
+                    $"{returnUrl}?token={token.Data}");
             }
 
             return RedirectToAction(nameof(Login));

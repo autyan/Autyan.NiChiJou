@@ -1,7 +1,6 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Mvc.Extension;
-using Autyan.NiChiJou.Core.Options;
 using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
@@ -54,8 +53,6 @@ namespace Autyan.NiChiJou.IdentityServer
                 {
                     options.AddPolicy(AuthorizePolicy.InternalServiceOnly, policy => policy.RequireClaim(Configuration["ServiceToken:Schema"]));
                 });
-
-            AddOptions(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,12 +76,6 @@ namespace Autyan.NiChiJou.IdentityServer
                         name: "default",
                         template: "{controller=Home}/{action=Index}/{id?}");
                 });
-        }
-
-        public void AddOptions(IServiceCollection services)
-        {
-            services.AddOptions();
-            services.Configure<AutyanCookieOptions>(Configuration.GetSection("Cookie"));
         }
     }
 }

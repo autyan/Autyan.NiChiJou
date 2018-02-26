@@ -34,7 +34,7 @@ namespace Autyan.NiChiJou.Service.Identity
             if (service == null)
             {
                 service = await ServiceTokenRepo.FirstOrDefaultAsync(new { ServiceName = name });
-                await Cache.SetSerializedAsync($"autyan.serviceToken.name:{name}", service);
+                await Cache.SetSerializedAsync($"autyan.serviceToken.name:{name}", service, new DistributedCacheEntryOptions());
             }
 
             if (service == null)
@@ -52,7 +52,7 @@ namespace Autyan.NiChiJou.Service.Identity
             if (service == null)
             {
                 service = await ServiceTokenRepo.FirstOrDefaultAsync(new { AppId = appId });
-                await Cache.SetSerializedAsync($"autyan.serviceToken.appId:{appId}", service);
+                await Cache.SetSerializedAsync($"autyan.serviceToken.appId:{appId}", service, new DistributedCacheEntryOptions());
             }
 
             if (service == null)

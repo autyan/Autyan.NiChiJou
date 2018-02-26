@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.IdentityServer.Consts;
+using Autyan.NiChiJou.IdentityServer.Models.Membershhip;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
             MembershipService = membershipService;
         }
 
-        public async Task<IActionResult> MemberInfo(string sessionId)
+        public async Task<IActionResult> MemberInfo(SessionMemberViewModel model)
         {
-            var membership = await MembershipService.FindMemberBySessionIdAsync(sessionId);
+            var membership = await MembershipService.FindMemberBySessionIdAsync(model.SessionId);
             return Json(membership);
         }
     }

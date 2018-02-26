@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.UnifyLogin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autyan.NiChiJou.Blog.Controllers
@@ -13,6 +14,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
             LoginAction = action;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> MemberLogin(string token)
         {
             var loginSucceed = await LoginAction.VerifySecurityToken(token);

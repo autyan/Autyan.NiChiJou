@@ -34,7 +34,10 @@ namespace Autyan.NiChiJou.UnifyLogin
             var request = CreateRequest();
             var requestParamters = new HttpRequestParamters
             {
-                BodyParamters = new { SessionId = sessionId }
+                BodyParamters = new
+                {
+                    SessionId = sessionId
+                }
             };
             var memberInfo = await request.StartRequestAsync(Options.MemberAccessAddress, RequestClient.HttpMethodPost, requestParamters);
             UnifyLoginMember member;
