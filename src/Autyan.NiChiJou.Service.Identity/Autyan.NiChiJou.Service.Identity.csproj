@@ -6,7 +6,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Autyan.NiChiJou.BusinessModel\Autyan.NiChiJou.BusinessModel.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Core.Mvc\Autyan.NiChiJou.Core.Mvc.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />

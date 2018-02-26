@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
+using Autyan.NiChiJou.Service.DTO.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
@@ -12,12 +13,13 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private IIdentityUserRepository UserRepo { get; }
 
-        public SignInService(IIdentityUserRepository userRepository)
+        public SignInService(IIdentityUserRepository userRepository,
+            ILoggerFactory loggerFactory): base(loggerFactory)
         {
             UserRepo = userRepository;
         }
 
-        public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegisterModel model)
+        public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegistration model)
         {
             var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)

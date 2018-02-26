@@ -28,11 +28,11 @@ namespace Autyan.NiChiJou.UnifyLogin
             ApiManager = apiManager;
         }
 
-        public async Task<bool> VerifySecurityTOken(string token, string accessUrl)
+        public async Task<bool> VerifySecurityToken(string token, string accessUrl)
         {
-            var memberCode = await ApiManager.VerifyTokenAsync(token, accessUrl);
-            if (string.IsNullOrWhiteSpace(memberCode)) return false;
-            var member = await ApiManager.GetMemberInfoAsync(memberCode);
+            var sessionId = await ApiManager.VerifyTokenAsync(token, accessUrl);
+            if (string.IsNullOrWhiteSpace(sessionId)) return false;
+            var member = await ApiManager.GetMemberInfoAsync(sessionId);
             if (member == null) return false;
             Member = member;
             return true;

@@ -6,6 +6,7 @@ using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Autyan.NiChiJou.Service.Identity
@@ -18,7 +19,9 @@ namespace Autyan.NiChiJou.Service.Identity
 
         private IConfiguration Configuration { get; }
 
-        public SessionService(IDistributedCache cache, IConfiguration configuration)
+        public SessionService(IDistributedCache cache,
+            IConfiguration configuration,
+            ILoggerFactory loggerFactory): base(loggerFactory)
         {
             Cache = cache;
             Configuration = configuration;
