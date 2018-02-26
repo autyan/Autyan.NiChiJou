@@ -43,7 +43,7 @@ namespace Autyan.NiChiJou.UnifyLogin
             if(Member == null) throw new ArgumentNullException(nameof(Member));
             var claims = new List<Claim>
             {
-                new Claim(Options.Scheme, string.Empty),
+                new Claim(Options.Schema, string.Empty),
                 new Claim(nameof(Member.MemberCode), Member.MemberCode),
                 new Claim(ClaimTypes.Name, Member.NikeName)
             };
@@ -53,7 +53,7 @@ namespace Autyan.NiChiJou.UnifyLogin
             }
 
             var claimsIdentity = new ClaimsIdentity(
-                claims, Options.Scheme);
+                claims, Options.Schema);
 
             var authProperties = new AuthenticationProperties
             {
@@ -62,7 +62,7 @@ namespace Autyan.NiChiJou.UnifyLogin
                 IssuedUtc = DateTimeOffset.UtcNow
             };
 
-            await HttpContextAccessor.HttpContext.SignInAsync(Options.Scheme,
+            await HttpContextAccessor.HttpContext.SignInAsync(Options.Schema,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }

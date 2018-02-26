@@ -21,7 +21,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.GetByIdAsync(new IdentityUser {Id = id});
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed("user not found", (int) IdentityStatus.UserNotFound);
+                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
             }
 
             return ServiceResult<IdentityUser>.Success(user);

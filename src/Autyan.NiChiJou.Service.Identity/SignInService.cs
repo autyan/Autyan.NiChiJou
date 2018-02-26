@@ -24,7 +24,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)
             {
-                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.LoginNameExists);
+                return ServiceResult<IdentityUser>.Failed(IdentityStatus.LoginNameExists);
             }
 
             var salt = Guid.NewGuid().ToString().ToLower();
@@ -52,12 +52,12 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.FirstOrDefaultAsync(new { LoginName = loginName });
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.UserNotFound);
+                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
             }
 
             var computedHash = HashEncrypter.Sha256Encrypt(password, user.SecuritySalt);
             return computedHash != user.PasswordHash
-                ? ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.InvalidPassword)
+                ? ServiceResult<IdentityUser>.Failed(IdentityStatus.InvalidPassword)
                 : ServiceResult<IdentityUser>.Success(user);
         }
     }

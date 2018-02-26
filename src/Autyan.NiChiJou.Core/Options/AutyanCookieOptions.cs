@@ -8,7 +8,7 @@
 
         public string RegisterPath { get; set; }
 
-        public string Scheme { get; set; }
+        public string Schema { get; set; }
 
         public double Expiration { get; set; }
     }

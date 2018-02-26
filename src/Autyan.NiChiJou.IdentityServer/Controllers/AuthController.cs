@@ -11,11 +11,12 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly SignInManager _signInManager;
+        private SignInManager SignInManager { get; }
 
         public AuthController(SignInManager signInService)
         {
-            _signInManager = signInService;
+            SignInManager = signInService;
+            SignInManager.Controller = this;
         }
 
         [HttpGet]
@@ -32,7 +33,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var signInResult = await _signInManager.PasswordSignInAsync(model.LoginName, model.Password);
+            var signInResult = await SignInManager.PasswordSignInAsync(model.LoginName, model.Password);
             if (!signInResult.Succeed)
             {
                 foreach (var message in signInResult.Messages)
@@ -48,16 +49,16 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
             }
 
             return Redirect(
-                $"http://{model.ReturnUrl}?token={_signInManager.CreateLoginVerificationToken(signInResult.Data.SessionId)}");
+                $"http://{model.ReturnUrl}?token={SignInManager.CreateLoginVerificationToken(signInResult.Data.SessionId)}");
         }
 
         [AllowAnonymous]
         public IActionResult UnifySignIn(string returnUrl)
         {
-            if (_signInManager.IsSignedIn())
+            if (SignInManager.IsSignedIn())
             {
                 return Redirect(
-                    $"http://{returnUrl}?token={_signInManager.CreateLoginVerificationToken()}");
+                    $"http://{returnUrl}?token={SignInManager.CreateLoginVerificationToken()}");
             }
 
             return RedirectToAction(nameof(Login));
@@ -71,7 +72,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(UserRegisterViewModel model)
         {
-            var registerResult = await _signInManager.RegisterUserAsync(new UserRegistration
+            var registerResult = await SignInManager.RegisterUserAsync(new UserRegistration
             {
                 LoginName = model.LoginName,
                 Password = model.Password
@@ -79,7 +80,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 
             if (registerResult.Succeed)
             {
-                await _signInManager.PasswordSignInAsync(model.LoginName, model.Password);
+                await SignInManager.PasswordSignInAsync(model.LoginName, model.Password);
                 return RedirectToAction("Index", "Home");
             }
             foreach (var message in registerResult.Messages)
@@ -93,7 +94,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         [Authorize(Policy = AuthorizePolicy.InternalServiceOnly)]
         public async Task<IActionResult> VerifiToken(TokenVerificationViewMoodel model)
         {
-            var signInResult = await _signInManager.GetSessionIdByVerificationTokenAsync(model.Token);
+            var signInResult = await SignInManager.GetSessionIdByVerificationTokenAsync(model.Token);
             return Json(signInResult.Data);
         }
 

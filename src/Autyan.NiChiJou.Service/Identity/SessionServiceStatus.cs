@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Service.Identity
 {
-    public enum SessionServiceError
+    public enum SessionServiceStatus
     {
         [Description("User Id Is Null!")]
         UserIdIsNull = 1001,

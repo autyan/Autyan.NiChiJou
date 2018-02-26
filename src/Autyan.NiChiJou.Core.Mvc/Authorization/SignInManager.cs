@@ -79,7 +79,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var user = Controller.HttpContext.User;
             if (user == null) return false;
             var principal = user;
-            return principal.Identities.Any(i => i.AuthenticationType == Options.Scheme && i.IsAuthenticated);
+            return principal.Identities.Any(i => i.AuthenticationType == Options.Schema && i.IsAuthenticated);
         }
 
         private string GetCurrentUserSessionId()
@@ -94,13 +94,13 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             var sessionData = await SessionService.GetSessionAsync(sessionId);
             var claims = new List<Claim>
             {
-                new Claim(Options.Scheme, string.Empty),
+                new Claim(Options.Schema, string.Empty),
                 new Claim("SessionId", sessionId),
                 new Claim(ClaimTypes.Name, sessionData.Data.UserName)
             };
 
             var claimsIdentity = new ClaimsIdentity(
-                claims, Options.Scheme);
+                claims, Options.Schema);
 
             var authProperties = new AuthenticationProperties
             {
@@ -110,7 +110,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             };
 
             await Controller.HttpContext.SignInAsync(
-                Options.Scheme,
+                Options.Schema,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }

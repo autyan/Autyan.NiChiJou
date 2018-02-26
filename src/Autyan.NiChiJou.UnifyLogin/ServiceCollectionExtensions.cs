@@ -12,6 +12,9 @@ namespace Autyan.NiChiJou.UnifyLogin
                 .AddSingleton<LoginAction, LoginAction>()
                 .AddAuthentication(options => options.DefaultScheme = configuration["Cookie:Schema"])
                 .AddCookieAuthentication(configuration);
+
+            services.AddOptions();
+            services.Configure<UnifyLoginOptions>(configuration.GetSection("Cookie"));
             return services;
         }
     }
