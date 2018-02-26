@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Autyan.NiChiJou.UnifyLogin
 {
-    public class UnifyLogin
+    public class LoginAction
     {
         private IHttpContextAccessor HttpContextAccessor { get; }
 
@@ -19,7 +19,7 @@ namespace Autyan.NiChiJou.UnifyLogin
 
         private UnifyLoginMember Member { get; set; }
 
-        public UnifyLogin(IHttpContextAccessor httpContextAccessor,
+        public LoginAction(IHttpContextAccessor httpContextAccessor,
             IOptions<AutyanCookieOptions> options,
             LoginApiManager apiManager)
         {
@@ -28,9 +28,9 @@ namespace Autyan.NiChiJou.UnifyLogin
             ApiManager = apiManager;
         }
 
-        public async Task<bool> VerifySecurityToken(string token, string accessUrl)
+        public async Task<bool> VerifySecurityToken(string token)
         {
-            var sessionId = await ApiManager.VerifyTokenAsync(token, accessUrl);
+            var sessionId = await ApiManager.VerifyTokenAsync(token);
             if (string.IsNullOrWhiteSpace(sessionId)) return false;
             var member = await ApiManager.GetMemberInfoAsync(sessionId);
             if (member == null) return false;

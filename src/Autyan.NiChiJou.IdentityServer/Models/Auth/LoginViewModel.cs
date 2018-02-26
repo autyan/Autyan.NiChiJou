@@ -35,7 +35,5 @@ namespace Autyan.NiChiJou.IdentityServer.Models.Auth
     public class TokenVerificationViewMoodel
     {
         public string Token { get; set; }
-
-        public string ReturnUrl { get; set; }
     }
 }

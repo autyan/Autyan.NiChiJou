@@ -15,15 +15,14 @@ namespace Autyan.NiChiJou.UnifyLogin
             Options = options.Value;
         }
 
-        public async Task<string> VerifyTokenAsync(string token, string accessUrl)
+        public async Task<string> VerifyTokenAsync(string token)
         {
             var request = CreateRequest();
             var requestParamters = new HttpRequestParamters
             {
                 BodyParamters = new
                 {
-                    Token = token,
-                    ReturnUrl = accessUrl
+                    Token = token
                 }
             };
 
