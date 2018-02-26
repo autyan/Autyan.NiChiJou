@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -12,9 +13,9 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
 {
     public class RequestClient
     {
-        public static string HttpMethodPost = "POST";
+        public const string HttpMethodPost = "POST";
 
-        public static string HttpMethodGet = "GET";
+        public const string HttpMethodGet = "GET";
 
         private readonly string _appId;
 
@@ -28,17 +29,21 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
 
         public void StartRequest(string api, string method, HttpRequestParamters paramter, HttpResponseHandler handler)
         {
+            api = AppendUrl(api, paramter);
             var request = (HttpWebRequest)WebRequest.Create(api);
             request.Method = method;
             request.Accept = "application/json";
             request.ContentType = "application/x-www-form-urlencoded";
             AddAuthenticationHead(new Uri(api), method, paramter);
             foreach (var headerString in paramter.HeaderStrings)
-                request.Headers[headerString.Key] = headerString.Value;
-            if (paramter.BodyParamters != null)
             {
-                var urlEncodedContent = paramter.BodyParamters is string ? paramter.BodyParamters.ToString()
-                    : new FormUrlEncodedContent(paramter.BodyParamters.ToKeyValue()).ReadAsStringAsync().Result;
+                request.Headers[headerString.Key] = headerString.Value;
+            }
+            PostQueryParamters(request, method, paramter);
+            if (paramter.QueryParamters != null)
+            {
+                var urlEncodedContent = paramter.QueryParamters is string ? paramter.QueryParamters.ToString()
+                    : new FormUrlEncodedContent(paramter.QueryParamters.ToKeyValue()).ReadAsStringAsync().Result;
                 request.BeginGetRequestStream(PostCallBack, new HttpRequestAsyncState(request, urlEncodedContent, handler));
             }
             else
@@ -47,22 +52,36 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
 
         public Task<string> StartRequestAsync(string api, string method, HttpRequestParamters paramter)
         {
+            api = AppendUrl(api, paramter);
             var request = (HttpWebRequest)WebRequest.Create(api);
             request.Method = method;
             request.Accept = "application/json";
             request.ContentType = "application/x-www-form-urlencoded";
             AddAuthenticationHead(new Uri(api), method, paramter);
             foreach (var headerString in paramter.HeaderStrings)
-                request.Headers.Add(headerString.Key, headerString.Value);
-            if (paramter.BodyParamters != null)
             {
-                var s = paramter.BodyParamters is string ? paramter.BodyParamters.ToString()
-                    : new FormUrlEncodedContent(paramter.BodyParamters.ToKeyValue()).ReadAsStringAsync().Result;
-                var requestStream = request.GetRequestStream();
-                var bytes = Encoding.UTF8.GetBytes(s);
-                requestStream.Write(bytes, 0, bytes.Length);
+                request.Headers.Add(headerString.Key, headerString.Value);
             }
+            PostQueryParamters(request, method, paramter);
+
             return Task.Factory.FromAsync(request.BeginGetResponse, asyncResult => request.EndGetResponse(asyncResult), null).ContinueWith(t => ReadStreamFromResponse(t.Result));
+        }
+
+        private static string AppendUrl(string api, HttpRequestParamters paramter)
+        {
+            var queryParamters = paramter.QueryParamters.ToKeyValue();
+            var queryString = string.Join("$", queryParamters.Select(d => $"{d.Key}={HttpUtility.UrlEncode(d.Value)}").ToArray());
+            return $"{api}?{queryString}";
+        }
+
+        private static void PostQueryParamters(HttpWebRequest request, string method, HttpRequestParamters paramter)
+        {
+            if (method == HttpMethodGet) return;
+            var s = paramter.QueryParamters is string ? paramter.QueryParamters.ToString()
+                : new FormUrlEncodedContent(paramter.QueryParamters.ToKeyValue()).ReadAsStringAsync().Result;
+            var requestStream = request.GetRequestStream();
+            var bytes = Encoding.UTF8.GetBytes(s);
+            requestStream.Write(bytes, 0, bytes.Length);
         }
 
         private static void PostCallBack(IAsyncResult asynchronousResult)
@@ -119,17 +138,19 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
 
         private void AddAuthenticationHead(Uri apiUrl, string method, HttpRequestParamters paramter)
         {
-            var requestContentBase64String = string.Empty;
             var requestUri = HttpUtility.UrlEncode(apiUrl.ToString().ToLower());
             var requestHttpMethod = method;
             var requestTimeStamp = Convert.ToUInt64((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds).ToString();
             var nonce = Guid.NewGuid().ToString("N");
-            if (paramter.BodyParamters != null)
+            var requestBody = string.Empty;
+            if (paramter.QueryParamters != null && method != HttpMethodGet)
             {
-                requestContentBase64String = Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(paramter.BodyParamters is string
-                    ? paramter.BodyParamters.ToString()
-                    : new FormUrlEncodedContent(paramter.BodyParamters.ToKeyValue()).ReadAsStringAsync().Result)));
+                requestBody = paramter.QueryParamters is string
+                    ? paramter.QueryParamters.ToString()
+                    : new FormUrlEncodedContent(paramter.QueryParamters.ToKeyValue()).ReadAsStringAsync().Result;
             }
+
+            var requestContentBase64String = Convert.ToBase64String(MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(requestBody)));
             var s = _appId + requestHttpMethod + requestUri + requestTimeStamp + nonce + requestContentBase64String;
             var key = Convert.FromBase64String(_apiKey);
             var bytes = Encoding.UTF8.GetBytes(s);

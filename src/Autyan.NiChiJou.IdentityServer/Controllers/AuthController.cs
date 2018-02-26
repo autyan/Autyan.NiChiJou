@@ -92,12 +92,11 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
             return View(model);
         }
 
-        [HttpPost]
         [Authorize(Policy = AuthorizePolicy.InternalServiceOnly)]
         public async Task<IActionResult> VerifiToken(TokenVerificationViewMoodel model)
         {
             var signInResult = await SignInManager.GetSessionIdByVerificationTokenAsync(model.Token);
-            return Json(signInResult.Data);
+            return Content(signInResult.Data);
         }
 
         [HttpPost]

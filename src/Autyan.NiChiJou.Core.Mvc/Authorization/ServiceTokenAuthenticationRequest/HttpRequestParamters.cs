@@ -6,7 +6,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
     {
         public Dictionary<string, string> HeaderStrings { get; }
 
-        public object BodyParamters { get; set; }
+        public object QueryParamters { get; set; }
 
         public HttpRequestParamters()
         {

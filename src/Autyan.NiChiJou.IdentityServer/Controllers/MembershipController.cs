@@ -20,7 +20,7 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         public async Task<IActionResult> MemberInfo(SessionMemberViewModel model)
         {
             var membership = await MembershipService.FindMemberBySessionIdAsync(model.SessionId);
-            return Json(membership);
+            return Json(membership.Data);
         }
     }
 }

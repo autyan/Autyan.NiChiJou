@@ -20,13 +20,13 @@ namespace Autyan.NiChiJou.UnifyLogin
             var request = CreateRequest();
             var requestParamters = new HttpRequestParamters
             {
-                BodyParamters = new
+                QueryParamters = new
                 {
                     Token = token
                 }
             };
 
-            return await request.StartRequestAsync(Options.VerifyTokenAddress, RequestClient.HttpMethodPost, requestParamters);
+            return await request.StartRequestAsync(Options.VerifyTokenAddress, RequestClient.HttpMethodGet, requestParamters);
         }
 
         public async Task<UnifyLoginMember> GetMemberInfoAsync(string sessionId)
@@ -34,12 +34,12 @@ namespace Autyan.NiChiJou.UnifyLogin
             var request = CreateRequest();
             var requestParamters = new HttpRequestParamters
             {
-                BodyParamters = new
+                QueryParamters = new
                 {
                     SessionId = sessionId
                 }
             };
-            var memberInfo = await request.StartRequestAsync(Options.MemberAccessAddress, RequestClient.HttpMethodPost, requestParamters);
+            var memberInfo = await request.StartRequestAsync(Options.MemberAccessAddress, RequestClient.HttpMethodGet, requestParamters);
             UnifyLoginMember member;
             try
             {
