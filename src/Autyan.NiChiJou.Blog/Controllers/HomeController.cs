@@ -5,7 +5,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
 {
     public class HomeController : Controller
     {
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();

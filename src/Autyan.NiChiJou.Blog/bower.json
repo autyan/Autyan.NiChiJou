@@ -1,0 +1,8 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "jquery-validation": "1.17.0",
+    "select2": "4.0.5"
+  }
+}
