@@ -22,10 +22,10 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.GetByIdAsync(new IdentityUser {Id = id});
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
+                return Failed<IdentityUser>(IdentityStatus.UserNotFound);
             }
 
-            return ServiceResult<IdentityUser>.Success(user);
+            return Success(user);
         }
 
     }

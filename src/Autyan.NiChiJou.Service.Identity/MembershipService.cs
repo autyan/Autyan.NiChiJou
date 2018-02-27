@@ -20,10 +20,10 @@ namespace Autyan.NiChiJou.Service.Identity
             var session = await SessionService.GetSessionAsync(sessionId);
             if (!session.Succeed)
             {
-                return ServiceResult<Membership>.FailedFrom(session);
+                return FailedFrom<Membership>(session);
             }
 
-            return ServiceResult<Membership>.Success(new Membership
+            return Success(new Membership
             {
                 MemberCode = session.Data.UserMemeberCode,
                 NikeName = session.Data.UserName

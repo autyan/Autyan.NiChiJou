@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using Autyan.NiChiJou.Core.Mvc.Authorization;
+using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +39,20 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
         public static IServiceCollection AddMvcComponent(this IServiceCollection services)
         {
             services.AddTransient<SignInManager, SignInManager>();
+            return services;
+        }
+
+        public static IServiceCollection AddIdentityCache(this IServiceCollection services, IConfiguration configuration)
+        {
+            if (services == null)
+                throw new ArgumentNullException(nameof(services));
+            services.AddOptions();
+            services.Configure(new Action<IdentityCacheOptions>(options =>
+            {
+                options.Configuration = configuration["IdentityCache:Server"];
+                options.InstanceName = configuration["IdentityCache:Instance"];
+            }));
+            services.Add(ServiceDescriptor.Singleton<IIdentityCache, IdentityCache>());
             return services;
         }
     }

@@ -1,5 +1,4 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
-using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.Model.Extension;

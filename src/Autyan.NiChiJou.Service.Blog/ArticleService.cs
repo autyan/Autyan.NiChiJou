@@ -32,10 +32,10 @@ namespace Autyan.NiChiJou.Service.Blog
             var article = await ArticleRepo.FirstOrDefaultAsync(new { Id = id });
             if (article == null)
             {
-                return ServiceResult<Article>.Failed(ArticleStatus.ArticleNotFound);
+                return Failed<Article>(ArticleStatus.ArticleNotFound);
             }
 
-            return ServiceResult<Article>.Success(article);
+            return Success(article);
         }
     }
 }
