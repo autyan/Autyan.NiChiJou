@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Autyan.NiChiJou.Service.Identity
+namespace Autyan.NiChiJou.Service.Identity.ServiceStatusCode
 {
     public enum IdentityStatus
     {

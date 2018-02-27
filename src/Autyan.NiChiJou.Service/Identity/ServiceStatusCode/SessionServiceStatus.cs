@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Autyan.NiChiJou.Service.Identity
+namespace Autyan.NiChiJou.Service.Identity.ServiceStatusCode
 {
     public enum SessionServiceStatus
     {
@@ -8,6 +8,6 @@ namespace Autyan.NiChiJou.Service.Identity
         UserIdIsNull = 1001,
 
         [Description("Session Not Found!")]
-        SessionNotFound = 2001
+        SessionNotFound = 2000
     }
 }

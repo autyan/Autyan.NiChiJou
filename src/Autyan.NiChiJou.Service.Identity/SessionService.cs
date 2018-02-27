@@ -4,6 +4,7 @@ using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
+using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

@@ -2,6 +2,7 @@
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
+using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
