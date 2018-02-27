@@ -21,17 +21,14 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login()
         {
-            return View(new LoginViewModel
-            {
-                ReturnUrl = returnUrl
-            });
+            return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, [FromQuery]UnifySignInViewModel unifySignIn)
         {
             var signInResult = await SignInManager.PasswordSignInAsync(model.LoginName, model.Password);
             if (!signInResult.Succeed)
@@ -43,27 +40,20 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
                 return View(model);
             }
 
-            if (string.IsNullOrWhiteSpace(model.ReturnUrl))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            var token = await SignInManager.CreateLoginVerificationTokenAsync(signInResult.Data.SessionId);
-            return Redirect(
-                $"http://{model.ReturnUrl}?token={await SignInManager.CreateLoginVerificationTokenAsync(token.Data)}");
+            return await SignInManager.SignInRedirectAsync(unifySignIn.ReturnUrl, unifySignIn.SubSystem, signInResult.Data.SessionId);
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> UnifySignIn(string returnUrl)
+        public async Task<IActionResult> UnifySignIn(UnifySignInViewModel model)
         {
             if (SignInManager.IsSignedIn())
             {
                 var token = await SignInManager.CreateLoginVerificationTokenAsync();
                 return Redirect(
-                    $"{returnUrl}?token={token.Data}");
+                    $"{model.ReturnUrl}?token={token.Data}");
             }
 
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction(nameof(Login), model);
         }
 
         [HttpGet]

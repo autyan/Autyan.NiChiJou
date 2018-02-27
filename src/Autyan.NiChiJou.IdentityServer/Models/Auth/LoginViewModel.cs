@@ -9,8 +9,6 @@ namespace Autyan.NiChiJou.IdentityServer.Models.Auth
 
         [Required]
         public string Password { get; set; }
-
-        public string ReturnUrl { get; set; }
     }
 
     public class SignInRedirectViewModel
@@ -35,5 +33,12 @@ namespace Autyan.NiChiJou.IdentityServer.Models.Auth
     public class TokenVerificationViewMoodel
     {
         public string Token { get; set; }
+    }
+
+    public class UnifySignInViewModel
+    {
+        public string ReturnUrl { get; set; }
+
+        public string SubSystem { get; set; }
     }
 }

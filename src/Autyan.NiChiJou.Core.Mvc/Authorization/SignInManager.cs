@@ -149,5 +149,22 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
             return ServiceResult<string>.Success(sessionResult.Data.Id);
         }
+
+        public async Task<IActionResult> SignInRedirectAsync(string returnUrl, string subSystem, string sessionId = null)
+        {
+            if (string.IsNullOrWhiteSpace(subSystem))
+            {
+                if (string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    return Controller.RedirectToAction("Index", "Home");
+                }
+
+                return Controller.Redirect(returnUrl);
+            }
+
+            var token = await CreateLoginVerificationTokenAsync(sessionId);
+            return Controller.Redirect(
+                $"{returnUrl}?token={token.Data}");
+        }
     }
 }
