@@ -26,7 +26,7 @@ namespace Autyan.NiChiJou.UnifyLogin
                 }
             };
 
-            return await request.StartRequestAsync(Options.VerifyTokenAddress, RequestClient.HttpMethodGet, requestParamters);
+            return await request.GetStringAsync(Options.VerifyTokenAddress, requestParamters);
         }
 
         public async Task<UnifyLoginMember> GetMemberInfoAsync(string sessionId)
@@ -39,7 +39,7 @@ namespace Autyan.NiChiJou.UnifyLogin
                     SessionId = sessionId
                 }
             };
-            var memberInfo = await request.StartRequestAsync(Options.MemberAccessAddress, RequestClient.HttpMethodGet, requestParamters);
+            var memberInfo = await request.GetStringAsync(Options.MemberAccessAddress, requestParamters);
             UnifyLoginMember member;
             try
             {

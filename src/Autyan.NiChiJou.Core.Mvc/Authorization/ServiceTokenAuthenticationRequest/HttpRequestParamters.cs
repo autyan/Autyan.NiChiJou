@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 
 namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationRequest
 {
@@ -7,6 +8,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationReque
         public Dictionary<string, string> HeaderStrings { get; }
 
         public object QueryParamters { get; set; }
+
+        public HttpContent PostParamters { get; set; }
 
         public HttpRequestParamters()
         {
