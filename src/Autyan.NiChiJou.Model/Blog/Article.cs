@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Model.Blog
 {
-    public class BlogPost : LongKeyBaseEntity
+    public class Article : LongKeyBaseEntity
     {
         public virtual string Title { get; set; }
 
@@ -15,7 +15,7 @@ namespace Autyan.NiChiJou.Model.Blog
         public virtual Blog Blog { get; set; }
     }
 
-    public class BlogPostQuery : LongKeyBaseEntityQuery
+    public class ArticleQuery : LongKeyBaseEntityQuery
     {
         public string Title { get; set; }
 

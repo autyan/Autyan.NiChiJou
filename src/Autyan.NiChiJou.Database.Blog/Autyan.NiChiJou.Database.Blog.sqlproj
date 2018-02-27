@@ -63,9 +63,9 @@
   <ItemGroup>
     <Build Include="Sequence\EntityId.sql" />
     <Build Include="Table\ActivityLogs.sql" />
-    <Build Include="Table\BlogPosts.sql" />
+    <Build Include="Table\Article.sql" />
     <Build Include="Table\Blogs.sql" />
     <Build Include="Table\BlogUsers.sql" />
-    <Build Include="Table\PostComments.sql" />
+    <Build Include="Table\ArticleComments.sql" />
   </ItemGroup>
 </Project>

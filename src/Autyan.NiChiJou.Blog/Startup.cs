@@ -1,6 +1,7 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
+using Autyan.NiChiJou.Service.Blog.Extension;
 using Autyan.NiChiJou.UnifyLogin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +32,7 @@ namespace Autyan.NiChiJou.Blog
                 })
                 .AddNiChiJouDataModel()
                 .AddDapper()
+                .AddBlogService()
                 .AddUnifyLogin(Configuration)
                 .AddMvc(options =>
                 {

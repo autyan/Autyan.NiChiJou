@@ -2,7 +2,7 @@
 
 namespace Autyan.NiChiJou.Model.Blog
 {
-    public class PostComment : LongKeyBaseEntity
+    public class ArticleComment : LongKeyBaseEntity
     {
         public virtual string Content { get; set; }
 
@@ -12,7 +12,7 @@ namespace Autyan.NiChiJou.Model.Blog
 
         public virtual long? PostId { get; set; }
 
-        public virtual BlogPost BlogPost { get; set; }
+        public virtual Article Article { get; set; }
 
         public virtual long? ToComment { get; set; }
     }
