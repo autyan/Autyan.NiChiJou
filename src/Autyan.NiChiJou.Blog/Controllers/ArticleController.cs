@@ -15,9 +15,8 @@ namespace Autyan.NiChiJou.Blog.Controllers
             ArticleService = articleService;
         }
 
-        [HttpGet]
-        [Route("/Article/{id}")]
-        public async Task<IActionResult> GetAsync(ulong id)
+        [HttpGet("Article/Posts/{id}")]
+        public async Task<IActionResult> GetArticleAsync(ulong id)
         {
             var article = await ArticleService.FindArticleAsync(id);
             if (article.Succeed)
@@ -29,8 +28,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [HttpPost]
-        [Route("/Article")]
-        public async Task<IActionResult> PostAsync(ArticleEditorViewModel model)
+        public async Task<IActionResult> Editor([FromBody]ArticleEditorViewModel model)
         {
             var result = await ArticleService.CreateOrUpdateAsync(new ArticleEdit
             {
@@ -41,7 +39,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
 
             if (result.Succeed)
             {
-                return RedirectToAction(nameof(GetAsync), new {id = result.Data});
+                return RedirectToAction(nameof(GetArticleAsync), new {id = result.Data});
             }
 
             return Redirect("/");

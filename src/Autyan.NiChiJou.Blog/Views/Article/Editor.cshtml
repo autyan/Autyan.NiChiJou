@@ -1,29 +1,26 @@
-﻿
+﻿@model ArticleEditorViewModel
 @{
     ViewData["Title"] = "Create Post";
 }
 
 <div class="col-lg-12" style="margin-top: 10px;">
-    <form method="post">
+    <form asp-action="Editor" method="post">
+        <input asp-for="Id" type="hidden"/>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Create Post</h4>
             </div>
             <div class="panel-body">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="input-group">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></div>
-                            <input class="form-control" placeholder="Blog Title">
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <textarea id="biyoriEditor" style="height: 550px;"></textarea>
-                    </li>
-                </ul>
+                <div class="input-group">
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-book" aria-hidden="true"></span></div>
+                    <input asp-for="Title" class="form-control" placeholder="Blog Title">
+                </div>
+            </div>
+            <div class="panel-body">
+                <textarea asp-for="Content" id="biyoriEditor" style="height: 550px; width: 100%;"></textarea>
             </div>
             <div class="panel-footer" style="Height: 55px;">
-                <input class="btn btn-default" type="submit" value="Submit" style="float: right;" />
+                <input class="btn btn-default" type="submit" value="Submit" style="float: right;"/>
             </div>
         </div>
     </form>

@@ -7,7 +7,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog
 {
     public class ArticleCommentRepository : LongKeyDapperRepository<ArticleComment>, IArticleCommentRepository
     {
-        protected ArticleCommentRepository(IDbConnectionFactory dbConnectionFactory, ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
+        public ArticleCommentRepository(IDbConnectionFactory dbConnectionFactory, ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
         {
         }
     }

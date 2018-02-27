@@ -6,7 +6,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog
 {
     public class BlogRepository : LongKeyDapperRepository<Model.Blog.Blog>, IBlogRepository
     {
-        protected BlogRepository(IDbConnectionFactory dbConnectionFactory, ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
+        public BlogRepository(IDbConnectionFactory dbConnectionFactory, ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
         {
         }
     }
