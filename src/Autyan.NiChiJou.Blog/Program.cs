@@ -1,5 +1,4 @@
 ﻿using System;
-using Autyan.NiChiJou.Core.Mvc.Extension;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
