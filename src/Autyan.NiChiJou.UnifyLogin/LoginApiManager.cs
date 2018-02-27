@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Autyan.NiChiJou.BusinessModel.Identity;
+﻿using System;
+using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Mvc.Authorization.ServiceTokenAuthenticationRequest;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -15,30 +15,41 @@ namespace Autyan.NiChiJou.UnifyLogin
             Options = options.Value;
         }
 
-        public async Task<string> VerifyTokenAsync(string token, string accessUrl)
+        public async Task<string> VerifyTokenAsync(string token)
         {
             var request = CreateRequest();
             var requestParamters = new HttpRequestParamters
             {
-                BodyParamters = new TokenVerificationViewMoodel
+                QueryParamters = new
                 {
-                    Token = token,
-                    ReturnUrl = accessUrl
+                    Token = token
                 }
             };
 
-            return await request.StartRequestAsync(Options.VerifyTokenAddress, RequestClient.HttpMethodPost, requestParamters);
+            return await request.GetStringAsync(Options.VerifyTokenAddress, requestParamters);
         }
 
-        public async Task<UnifyLoginMember> GetMemberInfoAsync(string memberCode)
+        public async Task<UnifyLoginMember> GetMemberInfoAsync(string sessionId)
         {
             var request = CreateRequest();
             var requestParamters = new HttpRequestParamters
             {
-                BodyParamters = new { memberCode }
+                QueryParamters = new
+                {
+                    SessionId = sessionId
+                }
             };
-            var memberInfo = await request.StartRequestAsync(Options.MemberAccessAddress, RequestClient.HttpMethodPost, requestParamters);
-            return JsonConvert.DeserializeObject<UnifyLoginMember>(memberInfo);
+            var memberInfo = await request.GetStringAsync(Options.MemberAccessAddress, requestParamters);
+            UnifyLoginMember member;
+            try
+            {
+                member = JsonConvert.DeserializeObject<UnifyLoginMember>(memberInfo);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return member;
         }
 
         private RequestClient CreateRequest() => new RequestClient(Options.AppId, Options.ApiKey);

@@ -8,6 +8,8 @@ namespace Autyan.NiChiJou.Service.Identity.Extension
         {
             services.AddTransient<ISignInService, SignInService>();
             services.AddTransient<ISessionService, SessionService>();
+            services.AddTransient<IMembershipService, MembershipService>();
+            services.AddTransient<IIdentityUserService, IdentityUserService>();
             services.AddTransient<IApplicationAuthorizationService, ApplicationAuthorizationService>();
             return services;
         }

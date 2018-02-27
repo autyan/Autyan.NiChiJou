@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
+using Autyan.NiChiJou.Service.DTO.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
@@ -12,17 +13,18 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private IIdentityUserRepository UserRepo { get; }
 
-        public SignInService(IIdentityUserRepository userRepository)
+        public SignInService(IIdentityUserRepository userRepository,
+            ILoggerFactory loggerFactory): base(loggerFactory)
         {
             UserRepo = userRepository;
         }
 
-        public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegisterModel model)
+        public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegistration model)
         {
             var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)
             {
-                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.LoginNameExists);
+                return ServiceResult<IdentityUser>.Failed(IdentityStatus.LoginNameExists);
             }
 
             var salt = Guid.NewGuid().ToString().ToLower();
@@ -50,12 +52,12 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.FirstOrDefaultAsync(new { LoginName = loginName });
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.UserNotFound);
+                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
             }
 
             var computedHash = HashEncrypter.Sha256Encrypt(password, user.SecuritySalt);
             return computedHash != user.PasswordHash
-                ? ServiceResult<IdentityUser>.Failed("LoginName exists!", (int)IdentityStatus.InvalidPassword)
+                ? ServiceResult<IdentityUser>.Failed(IdentityStatus.InvalidPassword)
                 : ServiceResult<IdentityUser>.Success(user);
         }
     }

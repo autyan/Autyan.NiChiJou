@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Autyan.NiChiJou.Core.Extension;
 
 namespace Autyan.NiChiJou.Core.Service
 {
@@ -18,8 +20,6 @@ namespace Autyan.NiChiJou.Core.Service
         };
 
         public new static ServiceResult<T> Failed() => new ServiceResult<T>();
-
-        public static ServiceResult<T> FailedFrom(ServiceResult source) => Failed(source.Messages, source.ErrorCode);
 
         public new static ServiceResult<T> Failed(string message)
         {
@@ -83,6 +83,18 @@ namespace Autyan.NiChiJou.Core.Service
             return result;
         }
 
+        public new static ServiceResult<T> Failed(Enum value)
+        {
+            var result = Failed();
+            result.ErrorCode = Convert.ToInt32(value);
+            var hasMessage = value.TryGetDescription(out var message);
+            if (hasMessage)
+            {
+                result.ErrorMessages.Add(message);
+            }
+            return result;
+        }
+
         public static ServiceResult<T> Failed(IEnumerable<string> messages, int errorCode, T data)
         {
             var result = Failed();
@@ -91,6 +103,8 @@ namespace Autyan.NiChiJou.Core.Service
             result.Data = data;
             return result;
         }
+
+        public new static ServiceResult<T> FailedFrom(ServiceResult source) => Failed(source.Messages, source.ErrorCode);
 
         public void WarpData(T data)
         {
@@ -161,6 +175,20 @@ namespace Autyan.NiChiJou.Core.Service
             result.ErrorCode = errorCode;
             return result;
         }
+
+        public static ServiceResult Failed(Enum value)
+        {
+            var result = Failed();
+            result.ErrorCode = Convert.ToInt32(value);
+            var hasMessage = value.TryGetDescription(out var message);
+            if (hasMessage)
+            {
+                result.ErrorMessages.Add(message);
+            }
+            return result;
+        }
+
+        public static ServiceResult FailedFrom(ServiceResult source) => Failed(source.Messages, source.ErrorCode);
 
         public void AddMessage(string message)
         {

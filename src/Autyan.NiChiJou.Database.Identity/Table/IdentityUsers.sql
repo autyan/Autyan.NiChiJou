@@ -2,6 +2,7 @@
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
 	[LoginName] NVARCHAR(50) NOT NULL, 
+	[NickName] NVARCHAR(50) NOT NULL, 
 	[UserMemberCode] NVARCHAR(50) NOT NULL,
 	[Email] NVARCHAR(50) NULL, 
 	[EmailConfirmed] BIT NOT NULL, 

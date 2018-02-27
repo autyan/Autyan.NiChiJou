@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Web;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Service.Identity;
@@ -97,7 +98,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
         {
             tokenInfo = null;
             var requestContentBase64String = "";
-            var requestUri = req.GetEncodedUrl();
+            var requestUri = HttpUtility.UrlEncode(req.GetEncodedUrl().ToLower());
             var requestHttpMethod = req.Method;
 
             var app = ApplicationAuthorizationService.FindServiceByAppId(appId).Result;

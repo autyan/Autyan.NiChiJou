@@ -1,11 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Autyan.NiChiJou.UnifyLogin;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Autyan.NiChiJou.Blog.Controllers
 {
     public class AuthController : Controller
     {
-        public IActionResult MemberLogin(string memberCode)
+        private LoginAction LoginAction { get; }
+
+        public AuthController(LoginAction action)
         {
+            LoginAction = action;
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> MemberLogin(string token)
+        {
+            var loginSucceed = await LoginAction.VerifySecurityToken(token);
+            if (loginSucceed)
+            {
+                await LoginAction.CookieLogin(null);
+            }
             return Redirect("/");
         }
     }

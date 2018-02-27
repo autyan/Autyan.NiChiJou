@@ -10,10 +10,10 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         protected static IIdentityUserRepository UserRepo { get; private set; }
 
-        public IdentityUserService(IIdentityUserRepository userRepo, ILogger logger)
+        public IdentityUserService(IIdentityUserRepository userRepo,
+            ILoggerFactory loggerFactory) : base(loggerFactory)
         {
             UserRepo = userRepo;
-            Logger = logger;
         }
 
         public async Task<ServiceResult<IdentityUser>> GetUserByIdAsync(long id)
@@ -21,7 +21,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.GetByIdAsync(new IdentityUser {Id = id});
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed("user not found", (int) IdentityStatus.UserNotFound);
+                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
             }
 
             return ServiceResult<IdentityUser>.Success(user);

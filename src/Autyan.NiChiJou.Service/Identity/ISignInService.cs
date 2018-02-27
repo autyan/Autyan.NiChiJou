@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Autyan.NiChiJou.BusinessModel.Identity;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
+using Autyan.NiChiJou.Service.DTO.Identity;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
@@ -12,7 +12,7 @@ namespace Autyan.NiChiJou.Service.Identity
         /// </summary>
         /// <param name="model">infomation that register needed</param>
         /// <returns>registered user</returns>
-        Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegisterModel model);
+        Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegistration model);
 
         /// <summary>
         /// use password sign in, will get user infomation.

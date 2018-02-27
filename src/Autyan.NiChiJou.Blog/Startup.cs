@@ -1,5 +1,4 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
-using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
 using Autyan.NiChiJou.UnifyLogin;
@@ -32,9 +31,7 @@ namespace Autyan.NiChiJou.Blog
                 })
                 .AddNiChiJouDataModel()
                 .AddDapper()
-                .AddAuthentication(options => options.DefaultScheme = Configuration["Cookie:Schema"])
-                .AddCookieAuthentication(Configuration).Services
-                .AddUnifyLogin()
+                .AddUnifyLogin(Configuration)
                 .AddMvc(options =>
                 {
                     var builder = new AuthorizationPolicyBuilder()
