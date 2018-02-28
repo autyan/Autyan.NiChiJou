@@ -4,7 +4,7 @@ namespace Autyan.NiChiJou.Core.Context
 {
     public interface IIdentityContext<T> where T : class, new()
     {
-        T Ientity { get; }
+        T Identity { get; }
 
         Task SetIdentityAsync(string key, T identity);
     }

@@ -42,7 +42,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
         public static IServiceCollection AddMvcComponent(this IServiceCollection services)
         {
             services.AddTransient<SignInManager, SignInManager>();
-            services.TryAdd(ServiceDescriptor.Transient(typeof(IIdentityContext<>), typeof(SessionIdentityContext<>)));
+            services.TryAdd(ServiceDescriptor.Scoped(typeof(IIdentityContext<>), typeof(SessionIdentityContext<>)));
             return services;
         }
 

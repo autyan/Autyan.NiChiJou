@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Blog.Models;
+using Autyan.NiChiJou.Core.Context;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Service.Blog;
+using Autyan.NiChiJou.Service.DTO.Blog;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autyan.NiChiJou.Blog.Controllers
@@ -10,9 +12,13 @@ namespace Autyan.NiChiJou.Blog.Controllers
     {
         private IArticleService ArticleService { get; }
 
-        public ArticleController(IArticleService articleService)
+        private IIdentityContext<BlogIdentity> IdentityContext { get; }
+
+        public ArticleController(IArticleService articleService,
+            IIdentityContext<BlogIdentity> identityContext)
         {
             ArticleService = articleService;
+            IdentityContext = identityContext;
         }
 
         [HttpGet("Article/Posts/{id:long}")]
@@ -34,7 +40,8 @@ namespace Autyan.NiChiJou.Blog.Controllers
             {
                 Id = model.Id,
                 Title = model.Title,
-                Content = model.Content
+                Content = model.Content,
+                BlogId = IdentityContext.Identity.BlogId
             });
 
             if (result.Succeed)
@@ -46,6 +53,13 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [HttpGet]
-        public IActionResult Editor() => View();
+        public IActionResult Editor()
+        {
+            if (IdentityContext.Identity.BlogId == null)
+            {
+
+            }
+            return View();
+        }
     }
 }

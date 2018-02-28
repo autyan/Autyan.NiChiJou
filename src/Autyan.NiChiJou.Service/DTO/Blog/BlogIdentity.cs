@@ -4,7 +4,7 @@
     {
         public string MemberCode { get; set; }
 
-        public string NikeName { get; set; }
+        public string NickName { get; set; }
 
         public long? BlogId { get; set; }
 

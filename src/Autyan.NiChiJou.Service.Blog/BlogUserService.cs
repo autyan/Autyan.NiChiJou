@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Transactions;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Blog;
@@ -37,10 +38,20 @@ namespace Autyan.NiChiJou.Service.Blog
                 MemberCode = memberCode
             };
 
-            var createResult = await BlogUserRepo.InsertAsync(blogUser);
-            if (createResult <= 0)
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
+                var blogUserId = await BlogUserRepo.InsertAsync(blogUser);
+                var blogId = await BlogRepo.InsertAsync(new Model.Blog.Blog
+                {
+                    BlogName = $"{blogUser.NickName}'s Blog",
+                    BlogUserId = blogUser.Id
+                });
+                if (blogUserId <= 0 || blogId <= 0)
+                {
+                    return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
+                }
+
+                scope.Complete();
             }
 
             return Success(blogUser);
@@ -65,7 +76,7 @@ namespace Autyan.NiChiJou.Service.Blog
             return Success(new BlogIdentity
             {
                 UserId = user.Id,
-                NikeName = user.NickName,
+                NickName = user.NickName,
                 MemberCode = user.MemberCode,
                 BlogId = blog?.Id,
                 BlogName = blog?.BlogName

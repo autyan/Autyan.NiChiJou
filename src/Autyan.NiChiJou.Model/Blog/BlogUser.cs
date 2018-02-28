@@ -11,7 +11,7 @@ namespace Autyan.NiChiJou.Model.Blog
 
         public virtual string MemberCode { get; set; }
 
-        public virtual Gender Gender { get; set; }
+        public virtual Gender? Gender { get; set; }
     }
 
     public class BlogUserQuery : LongKeyBaseEntityQuery

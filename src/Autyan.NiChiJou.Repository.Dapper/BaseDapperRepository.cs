@@ -144,8 +144,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
                     throw new ArgumentOutOfRangeException();
             }
             builder.Output(" INSERTED.ID ");
-            var execurePar = ParseExecuteParameters(entity);
-            return await Connection.ExecuteScalarAsync<long>(builder.End(), execurePar);
+            var executePar = ParseExecuteParameters(entity);
+            return await Connection.ExecuteScalarAsync<long>(builder.End(), executePar);
         }
 
         private void GetSequenceInsertSql(ISqlBuilder builder)
@@ -273,17 +273,18 @@ namespace Autyan.NiChiJou.Repository.Dapper
             builder.WhereAnd($"{queryParamter.Name} = @{paramterPrefix}{queryParamter.Name}");
         }
 
-
-
         protected DynamicParameters ParseExecuteParameters(object executePar)
         {
             var dyParamters = new DynamicParameters();
-            foreach (var par in GetObjectValues(executePar))
+            foreach (var par in GetObjectValues(executePar, ignoreNullValues:false))
             {
                 var propInfo = Metadata.Properties.FirstOrDefault(prop => prop.Name == par.Key);
                 if (propInfo != null && propInfo.PropertyInfo.PropertyType == typeof(string))
                 {
-                    dyParamters.Add(par.Key, new DbString { Value = par.Value.ToString(), Length = propInfo.MaxLength });
+                    dyParamters.Add(par.Key, new DbString
+                    {
+                        Value = par.Value?.ToString(), Length = propInfo.MaxLength
+                    });
                 }
                 else
                 {
