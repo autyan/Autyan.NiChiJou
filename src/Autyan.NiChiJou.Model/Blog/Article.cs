@@ -8,7 +8,7 @@ namespace Autyan.NiChiJou.Model.Blog
 
         public virtual string Extract { get; set; }
 
-        public virtual byte[] Content { get; set; }
+        public virtual string Content { get; set; }
 
         public virtual long? BlogId { get; set; }
 

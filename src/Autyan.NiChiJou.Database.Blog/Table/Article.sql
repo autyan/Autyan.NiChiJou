@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[Article]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
-	[Title] VARCHAR(100) NOT NULL, 
-	[Extract] VARCHAR(200) NULL, 
-	[Content] NTEXT NOT NULL, 
+	[Title] NVARCHAR(100) NOT NULL, 
+	[Extract] NVARCHAR(200) NULL, 
+	[Content] NVARCHAR(MAX) NOT NULL, 
 	[BlogId] BIGINT NOT NULL, 
 	[CreatedAt] DATETIMEOFFSET NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,

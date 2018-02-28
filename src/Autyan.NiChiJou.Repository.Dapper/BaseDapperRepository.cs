@@ -23,7 +23,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         protected IEnumerable<string> Columns => Metadata.Columns;
 
-        protected DatabaseGeneratedOption KeyOption => Metadata.Key.Option;
+        protected DatabaseGeneratedOption KeyOption => Metadata.KeyOption;
 
         protected BaseDapperRepository(IDbConnectionFactory dbConnectionFactory,
             ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
@@ -79,7 +79,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
             builder.WhereAnd("Id = @Id");
             entity.ModifiedAt = DateTimeOffset.Now;
 
-            return await Connection.ExecuteAsync(builder.End(), entity);
+            var execurePar = ParseExecuteParameters(entity);
+            return await Connection.ExecuteAsync(builder.End(), execurePar);
         }
 
         public virtual async Task<int> UpdateByConditionAsync(object updateParamters, object condition)
@@ -142,9 +143,9 @@ namespace Autyan.NiChiJou.Repository.Dapper
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
             builder.Output(" INSERTED.ID ");
-            return await Connection.ExecuteScalarAsync<long>(builder.End(), entity);
+            var execurePar = ParseExecuteParameters(entity);
+            return await Connection.ExecuteScalarAsync<long>(builder.End(), execurePar);
         }
 
         private void GetSequenceInsertSql(ISqlBuilder builder)
@@ -228,7 +229,15 @@ namespace Autyan.NiChiJou.Repository.Dapper
             var updateDic = new Dictionary<string, object>();
             foreach (var property in GetProperties(paramters.GetType()))
             {
-                updateDic.Add(property.Name, property.GetValue(paramters));
+                var propInfo = Metadata.Properties.FirstOrDefault(prop => prop.Name == property.Name);
+                if (propInfo != null && propInfo.PropertyInfo.PropertyType == typeof(string))
+                {
+                    updateDic.Add(property.Name, new DbString { Value = property.GetValue(paramters).ToString(), Length = propInfo.MaxLength });
+                }
+                else
+                {
+                    updateDic.Add(property.Name, property.GetValue(paramters));
+                }
             }
 
             return updateDic;
@@ -262,6 +271,27 @@ namespace Autyan.NiChiJou.Repository.Dapper
             }
 
             builder.WhereAnd($"{queryParamter.Name} = @{paramterPrefix}{queryParamter.Name}");
+        }
+
+
+
+        protected DynamicParameters ParseExecuteParameters(object executePar)
+        {
+            var dyParamters = new DynamicParameters();
+            foreach (var par in GetObjectValues(executePar))
+            {
+                var propInfo = Metadata.Properties.FirstOrDefault(prop => prop.Name == par.Key);
+                if (propInfo != null && propInfo.PropertyInfo.PropertyType == typeof(string))
+                {
+                    dyParamters.Add(par.Key, new DbString { Value = par.Value.ToString(), Length = propInfo.MaxLength });
+                }
+                else
+                {
+                    dyParamters.Add(par.Key, par.Value);
+                }
+            }
+
+            return dyParamters;
         }
     }
 

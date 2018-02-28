@@ -3,7 +3,6 @@ using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Service.Blog.ServiceStatusCode;
-using Autyan.NiChiJou.Service.DTO.Blog;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Blog
@@ -22,12 +21,12 @@ namespace Autyan.NiChiJou.Service.Blog
             CommentRepo = articleCommentRepository;
         }
 
-        public Task<ServiceResult<ulong>> CreateOrUpdateAsync(ArticleEdit edit)
+        public Task<ServiceResult<ulong>> CreateOrUpdateAsync(Article article)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<ServiceResult<Article>> FindArticleAsync(ulong id)
+        public async Task<ServiceResult<Article>> FindArticleAsync(long id)
         {
             var article = await ArticleRepo.FirstOrDefaultAsync(new { Id = id });
             if (article == null)

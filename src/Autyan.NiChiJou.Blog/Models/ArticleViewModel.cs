@@ -6,12 +6,12 @@
 
     public class ArticleEditorViewModel
     {
-        public ulong? Id { get; set; }
+        public long? Id { get; set; }
 
         public string Title { get; set; }
 
         public string Content { get; set; }
 
-        public ulong? BlogId { get; set; }
+        public long? BlogId { get; set; }
     }
 }
