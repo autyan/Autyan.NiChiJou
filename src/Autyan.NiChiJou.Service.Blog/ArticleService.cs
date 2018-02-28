@@ -21,9 +21,24 @@ namespace Autyan.NiChiJou.Service.Blog
             CommentRepo = articleCommentRepository;
         }
 
-        public Task<ServiceResult<ulong>> CreateOrUpdateAsync(Article article)
+        public async Task<ServiceResult<Article>> CreateOrUpdateAsync(Article article)
         {
-            throw new System.NotImplementedException();
+            long executeResult;
+            if (article.Id == null)
+            {
+                executeResult = await ArticleRepo.InsertAsync(article);
+            }
+            else
+            {
+                executeResult = await ArticleRepo.UpdateByIdAsync(article);
+            }
+
+            if (executeResult <= 0)
+            {
+                return Failed<Article>("create or update failed");
+            }
+
+            return Success(article);
         }
 
         public async Task<ServiceResult<Article>> FindArticleAsync(long id)
