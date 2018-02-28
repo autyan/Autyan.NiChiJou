@@ -9,7 +9,7 @@ namespace Autyan.NiChiJou.Model.Blog
 
         public virtual string AvatorUrl { get; set; }
 
-        public virtual string UserMemberCode { get; set; }
+        public virtual string MemberCode { get; set; }
 
         public virtual Gender Gender { get; set; }
     }
@@ -20,7 +20,7 @@ namespace Autyan.NiChiJou.Model.Blog
 
         public string AvatorUrl { get; set; }
 
-        public string UserMemberCode { get; set; }
+        public string MemberCode { get; set; }
 
         public Gender Gender { get; set; }
     }

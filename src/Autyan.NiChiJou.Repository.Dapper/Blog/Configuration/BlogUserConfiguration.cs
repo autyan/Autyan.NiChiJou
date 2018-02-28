@@ -8,7 +8,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog.Configuration
         {
             this["NickName"].HasMaxLength(50);
             this["AvatorUrl"].HasMaxLength(200);
-            this["UserMemberCode"].HasMaxLength(50);
+            this["MemberCode"].HasMaxLength(50);
         }
     }
 }

@@ -9,8 +9,4 @@
     <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\Blog\" />
-  </ItemGroup>
-
 </Project>

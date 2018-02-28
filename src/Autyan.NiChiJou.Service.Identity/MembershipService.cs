@@ -25,7 +25,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
             return Success(new Membership
             {
-                MemberCode = session.Data.UserMemeberCode,
+                MemberCode = session.Data.MemeberCode,
                 NikeName = session.Data.UserName
             });
         }

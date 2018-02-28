@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace Autyan.NiChiJou.UnifyLogin
 {
-    public class LoginAction
+    public class Passport
     {
         private IHttpContextAccessor HttpContextAccessor { get; }
 
@@ -17,9 +17,9 @@ namespace Autyan.NiChiJou.UnifyLogin
 
         private LoginApiManager ApiManager { get; }
 
-        private UnifyLoginMember Member { get; set; }
+        public UnifyLoginMember Member { get; set; }
 
-        public LoginAction(IHttpContextAccessor httpContextAccessor,
+        public Passport(IHttpContextAccessor httpContextAccessor,
             IOptions<AutyanCookieOptions> options,
             LoginApiManager apiManager)
         {

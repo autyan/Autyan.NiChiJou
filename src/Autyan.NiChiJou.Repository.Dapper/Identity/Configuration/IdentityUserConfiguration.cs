@@ -8,7 +8,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Identity.Configuration
         {
             this["LoginName"].HasMaxLength(50);
             this["NickName"].HasMaxLength(50);
-            this["UserMemberCode"].HasMaxLength(50);
+            this["MemberCode"].HasMaxLength(50);
             this["Email"].HasMaxLength(50);
             this["PhoneNumber"].HasMaxLength(50);
             this["PasswordHash"].HasMaxLength(200);

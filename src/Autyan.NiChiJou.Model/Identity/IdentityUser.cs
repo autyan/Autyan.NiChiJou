@@ -8,7 +8,7 @@ namespace Autyan.NiChiJou.Model.Identity
 
         public virtual string NickName { get; set; }
 
-        public virtual string UserMemberCode { get; set; }
+        public virtual string MemberCode { get; set; }
 
         public virtual string Email { get; set; }
 
