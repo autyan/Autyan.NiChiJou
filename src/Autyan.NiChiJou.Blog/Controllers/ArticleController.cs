@@ -34,12 +34,13 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editor([FromBody]ArticleEditorViewModel model)
+        public async Task<IActionResult> Editor(ArticleEditorViewModel model)
         {
             var result = await ArticleService.CreateOrUpdateAsync(new Article
             {
                 Id = model.Id,
                 Title = model.Title,
+                Extract = model.Extract,
                 Content = model.Content,
                 BlogId = IdentityContext.Identity.BlogId
             });
@@ -53,8 +54,22 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [HttpGet]
-        public IActionResult Editor()
+        [Route("Article/Editor/{id:long}")]
+        public async Task<IActionResult> Editor(long? id)
         {
+            if (id != null)
+            {
+                var article = await ArticleService.FindArticleAsync(id.Value);
+                if (article.Succeed)
+                {
+                    return View(new ArticleEditorViewModel
+                    {
+                        Id = id.Value,
+                        Title = article.Data.Title,
+                        Content = article.Data.Content
+                    });
+                }
+            }
             if (IdentityContext.Identity.BlogId == null)
             {
 

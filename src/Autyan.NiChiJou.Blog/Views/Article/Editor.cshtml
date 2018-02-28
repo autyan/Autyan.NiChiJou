@@ -4,8 +4,9 @@
 }
 
 <div class="col-lg-12" style="margin-top: 10px;">
-    <form asp-action="Editor" method="post">
+    <form asp-action="Editor" method="post" id="articleEditor">
         <input asp-for="Id" type="hidden"/>
+        <input asp-for="Extract" type="hidden"/>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Create Post</h4>

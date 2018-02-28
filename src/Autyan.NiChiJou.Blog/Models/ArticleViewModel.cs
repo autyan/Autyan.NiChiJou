@@ -10,8 +10,8 @@
 
         public string Title { get; set; }
 
-        public string Content { get; set; }
+        public string Extract { get; set; }
 
-        public long? BlogId { get; set; }
+        public string Content { get; set; }
     }
 }
