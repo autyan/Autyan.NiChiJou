@@ -28,7 +28,7 @@ namespace Autyan.NiChiJou.UnifyLogin
             ApiManager = apiManager;
         }
 
-        public async Task<bool> VerifySecurityToken(string token)
+        public async Task<bool> VerifySecurityTokenAsync(string token)
         {
             var sessionId = await ApiManager.VerifyTokenAsync(token);
             if (string.IsNullOrWhiteSpace(sessionId)) return false;
@@ -65,6 +65,11 @@ namespace Autyan.NiChiJou.UnifyLogin
             await HttpContextAccessor.HttpContext.SignInAsync(Options.Schema,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+        }
+
+        public async Task CookieLogoutAsync()
+        {
+            await HttpContextAccessor.HttpContext.SignOutAsync(Options.Schema);
         }
     }
 }

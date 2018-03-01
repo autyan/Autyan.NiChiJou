@@ -90,9 +90,24 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl)
         {
             await HttpContext.SignOutAsync();
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MemberLogout(string returnUrl)
+        {
+            await HttpContext.SignOutAsync();
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction(nameof(Login));
         }
     }

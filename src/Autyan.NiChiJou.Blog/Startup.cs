@@ -56,7 +56,8 @@ namespace Autyan.NiChiJou.Blog
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error")
+                    .UseStatusCodePagesWithRedirects("/Error/{0}");
             }
 
             app.UseStaticFiles()

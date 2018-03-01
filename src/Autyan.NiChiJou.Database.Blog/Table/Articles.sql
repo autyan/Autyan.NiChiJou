@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Article]
+﻿CREATE TABLE [dbo].[Articles]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
 	[Title] NVARCHAR(100) NOT NULL, 
@@ -14,8 +14,8 @@
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Article_BlogId] ON [dbo].[Article] ([BlogId])
+CREATE NONCLUSTERED INDEX [IX_Articles_BlogId] ON [dbo].[Articles] ([BlogId])
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Article_Title] ON [dbo].[Article] ([Title])
+CREATE NONCLUSTERED INDEX [IX_Articles_Title] ON [dbo].[Articles] ([Title])

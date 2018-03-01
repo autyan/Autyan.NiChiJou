@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Context;
@@ -12,7 +14,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
     {
         private IDistributedCache Cache { get; }
 
-        private IHttpContextAccessor HttpContextAccessor { get; }
+        private HttpContext Context { get; }
 
         private T _identity;
 
@@ -21,12 +23,15 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
         public T Identity => _identity ??
                             (_identity = Cache.GetDeserializedAsync<T>($"SessionIdContext.<{typeof(T).FullName}>.<{Key}>").Result ?? new T());
 
+        public ClaimsPrincipal User { get; }
+
         public SessionIdentityContext(IDistributedCache cache,
             IHttpContextAccessor httpContextAccessor)
         {
             Cache = cache;
-            HttpContextAccessor = httpContextAccessor;
-            Key = HttpContextAccessor.HttpContext.Request.Cookies["SessionIdContext"];
+            Context = httpContextAccessor.HttpContext;
+            Key = Context.Request.Cookies["SessionIdContext"];
+            User = Context.User;
         }
 
         public async Task SetIdentityAsync(string key,T identity)
@@ -36,7 +41,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
                 throw new ArgumentNullException(nameof(identity));
             }
             var keyMd5 = HashEncrypter.Md5EncryptToBase64(key);
-            HttpContextAccessor.HttpContext.Response.Cookies.Append("SessionIdContext", keyMd5);
+            Context.Response.Cookies.Append("SessionIdContext", keyMd5);
             await Cache.SetSerializedAsync($"SessionIdContext.<{typeof(T).FullName}>.<{keyMd5}>", identity, new DistributedCacheEntryOptions());
             _identity = identity;
         }

@@ -9,7 +9,7 @@
 	[CreatedBy] BIGINT NOT NULL,
 	[ModifiedAt] DATETIMEOFFSET NULL,
 	[ModifiedBy] BIGINT NULL
-	CONSTRAINT [FK_PostComments_ToArticle] FOREIGN KEY ([PostId]) REFERENCES [Article]([Id]), 
+	CONSTRAINT [FK_PostComments_ToArticle] FOREIGN KEY ([PostId]) REFERENCES [Articles]([Id]), 
 	CONSTRAINT [FK_PostComments_ToBlogUser] FOREIGN KEY ([BlogUserId]) REFERENCES [BlogUsers]([Id])
 )
 

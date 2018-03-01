@@ -4,6 +4,7 @@ using Autyan.NiChiJou.Core.Context;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Service.Blog;
 using Autyan.NiChiJou.Service.DTO.Blog;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autyan.NiChiJou.Blog.Controllers
@@ -54,6 +55,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("Article/Editor/{id:long}")]
         public async Task<IActionResult> Editor(long? id)
         {
@@ -69,12 +71,18 @@ namespace Autyan.NiChiJou.Blog.Controllers
                         Content = article.Data.Content
                     });
                 }
-            }
-            if (IdentityContext.Identity.BlogId == null)
-            {
 
+                return NotFound();
             }
             return View();
         }
+
+        [HttpGet]
+        [Route("Article/Editor")]
+        public IActionResult Editor()
+        {
+            return View();
+        }
+
     }
 }
