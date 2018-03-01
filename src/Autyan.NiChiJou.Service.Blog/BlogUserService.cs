@@ -82,5 +82,16 @@ namespace Autyan.NiChiJou.Service.Blog
                 BlogName = blog?.BlogName
             });
         }
+
+        public async Task<ServiceResult<BlogUser>> FindBlogUserByIdAsync(long id)
+        {
+            var user = await BlogUserRepo.FirstOrDefaultAsync(new BlogUserQuery {Id = id});
+            if (user == null)
+            {
+                return Failed<BlogUser>(BlogUserStatus.BlogUserNotExists);
+            }
+
+            return Success(user);
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using System.Transactions;
+using Autyan.NiChiJou.Core.Data;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Repository.Blog;
@@ -13,31 +15,64 @@ namespace Autyan.NiChiJou.Service.Blog
 
         private IArticleCommentRepository CommentRepo { get; }
 
+        private IArticleContentRepository ContentRepo { get; }
+
         public ArticleService(ILoggerFactory loggerFactory,
             IArticleRepository articleRepository,
-            IArticleCommentRepository articleCommentRepository) : base(loggerFactory)
+            IArticleCommentRepository articleCommentRepository,
+            IArticleContentRepository articleContentRepository) : base(loggerFactory)
         {
             ArticleRepo = articleRepository;
             CommentRepo = articleCommentRepository;
+            ContentRepo = articleContentRepository;
         }
 
-        public async Task<ServiceResult<Article>> CreateOrUpdateAsync(Article article)
+        public async Task<ServiceResult<Article>> CreateArticleAsync(Article article, string content)
         {
-            long executeResult;
-            if (article.Id == null)
+            if (article.Id != null) return Failed<Article>("article exists!");
+            using (var scope = new TransactionScope())
             {
-                executeResult = await ArticleRepo.InsertAsync(article);
+                var create = await ArticleRepo.InsertAsync(article);
+                if (create <= 0)
+                {
+                    return Failed<Article>("create article failed");
+                }
+                create = await ContentRepo.InsertAsync(new ArticleContent
+                {
+                    ArticleId = create,
+                    Content = content
+                });
+                if (create <= 0)
+                {
+                    return Failed<Article>("create articleContent failed");
+                }
+                scope.Complete();
             }
-            else
-            {
-                executeResult = await ArticleRepo.UpdateByIdAsync(article);
-            }
+            return Success(article);
+        }
 
-            if (executeResult <= 0)
-            {
-                return Failed<Article>("create or update failed");
-            }
+        public async Task<ServiceResult<Article>> UpdateArticleAsync(Article article, string content)
+        {
+            if (article.Id == null) return Failed<Article>("articleId is null");
 
+            using (var scope = new TransactionScope())
+            {
+                var create = await ArticleRepo.UpdateByIdAsync(article);
+                if (create <= 0)
+                {
+                    return Failed<Article>("update article failed");
+                }
+                create = await ContentRepo.UpdateByConditionAsync(new ArticleContent
+                {
+                    ArticleId = create,
+                    Content = content
+                }, new { ArticleId = article.Id });
+                if (create <= 0)
+                {
+                    return Failed<Article>("update articleContent failed");
+                }
+                scope.Complete();
+            }
             return Success(article);
         }
 
@@ -50,6 +85,18 @@ namespace Autyan.NiChiJou.Service.Blog
             }
 
             return Success(article);
+        }
+
+        public async Task<ServiceResult<PagedResult<Article>>> GetPagedArticleAsync(ArticleQuery query)
+        {
+            var result = await ArticleRepo.PagingQueryAsync(query);
+            return Success(result);
+        }
+
+        public async Task<ServiceResult<string>> LoadArticleContent(long id)
+        {
+            var content = await ContentRepo.FirstOrDefaultAsync(new { ArticleId = id });
+            return Success(content?.Content);
         }
     }
 }

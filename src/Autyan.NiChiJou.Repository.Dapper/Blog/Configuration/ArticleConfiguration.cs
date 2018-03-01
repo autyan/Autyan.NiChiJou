@@ -8,7 +8,6 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog.Configuration
         {
             this["Title"].HasMaxLength(100);
             this["Extract"].HasMaxLength(200);
-            this["Content"].HasMaxLength(-1);
         }
     }
 }

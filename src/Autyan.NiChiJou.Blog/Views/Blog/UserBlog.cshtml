@@ -1,0 +1,14 @@
+﻿@using Autyan.NiChiJou.Service.DTO.Blog
+@model BlogIndex
+
+@{
+    ViewBag.Title = Model.BlogName;
+    Layout = "_Layout";
+}
+
+<div>
+    <div class="col-md-3">
+        @await Component.InvokeAsync("BlogUserGeneral", Model.BlogUserId)
+    </div>
+    <div class="col-md-8 col-md-offset-1"></div>
+</div>

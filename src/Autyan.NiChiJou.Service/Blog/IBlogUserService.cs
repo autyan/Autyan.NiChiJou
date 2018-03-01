@@ -12,5 +12,7 @@ namespace Autyan.NiChiJou.Service.Blog
         Task<ServiceResult<BlogUser>> FindBlogUserByMemberCodeAsync(string memberCode);
 
         Task<ServiceResult<BlogIdentity>> CreateBlogIdentityAsync(BlogUser user);
+
+        Task<ServiceResult<BlogUser>> FindBlogUserByIdAsync(long id);
     }
 }

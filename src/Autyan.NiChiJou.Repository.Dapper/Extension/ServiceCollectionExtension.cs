@@ -26,6 +26,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Extension
             services.AddScoped<IBlogRepository, BlogRepository>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IArticleCommentRepository, ArticleCommentRepository>();
+            services.AddScoped<IArticleContentRepository, ArticleContentRepository>();
             return services;
         }
 

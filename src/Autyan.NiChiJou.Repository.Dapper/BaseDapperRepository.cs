@@ -47,7 +47,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = BuildQuerySql(query);
 
-            return await Connection.QueryAsync<TEntity>(builder.End(), query);
+            var queryResult = await Connection.QueryMultipleAsync(builder.End(), query);
+            return queryResult.Read<TEntity>();
         }
 
         public virtual async Task<int> DeleteByIdAsync(TEntity entity)
@@ -112,15 +113,34 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             if (query.Take == null) throw new ArgumentNullException(nameof(query.Take));
             var queryBuilder = BuildQuerySql(query);
+            return await PagingQueryAsync<TEntity>(queryBuilder, query);
+        }
+
+        public virtual async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(object columnObject, IPagedQuery query)
+        {
+            if (query.Take == null) throw new ArgumentNullException(nameof(query.Take));
+            var columns = GetProperties(columnObject.GetType()).Select(p => p.Name).ToArray();
+            return await PagingQueryAsync<TSelect>(columns, query);
+        }
+
+        public async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(IEnumerable<string> columns, IPagedQuery query)
+        {
+            if (query.Take == null) throw new ArgumentNullException(nameof(query.Take));
+            var queryBuilder = BuildDynamicQuerySql(columns, query);
+            return await PagingQueryAsync<TSelect>(queryBuilder, query);
+        }
+
+        private async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(ISqlBuilder queryBuilder, IPagedQuery query)
+        {
             queryBuilder.Skip(query.Skip).Take(query.Take);
-            var results = await Connection.QueryAsync<TEntity>(queryBuilder.End(), query);
+            var results = await Connection.QueryMultipleAsync(queryBuilder.End(), query);
 
             var countBuilder = BuildCountSql(query);
             var count = await Connection.QueryAsync<int>(countBuilder.End(), query);
 
-            return new PagedResult<TEntity>
+            return new PagedResult<TSelect>
             {
-                Results = results,
+                Results = results.Read<TSelect>(),
                 TotalCount = count.Single()
             };
         }
@@ -181,7 +201,10 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             builder.SelectCount().FromTable(TableName);
-            AppendWhere(builder, condition);
+            if (condition != null)
+            {
+                AppendWhere(builder, condition);
+            }
             var result = await Connection.QueryAsync<int>(builder.End(), condition);
             return result.Single();
         }
@@ -196,6 +219,15 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             builder.Select(string.Join(",", Columns)).FromTable(TableName);
+            AppendWhere(builder, query);
+
+            return builder;
+        }
+
+        protected virtual ISqlBuilder BuildDynamicQuerySql(IEnumerable<string> columns, object query)
+        {
+            var builder = StartSql();
+            builder.Select(string.Join(",", columns)).FromTable(TableName);
             AppendWhere(builder, query);
 
             return builder;

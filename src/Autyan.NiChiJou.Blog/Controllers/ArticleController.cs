@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Blog.Models;
 using Autyan.NiChiJou.Core.Context;
+using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Service.Blog;
 using Autyan.NiChiJou.Service.DTO.Blog;
@@ -37,14 +38,27 @@ namespace Autyan.NiChiJou.Blog.Controllers
         [HttpPost]
         public async Task<IActionResult> Editor(ArticleEditorViewModel model)
         {
-            var result = await ArticleService.CreateOrUpdateAsync(new Article
+            ServiceResult<Article> result;
+            if (model.Id == null)
             {
-                Id = model.Id,
-                Title = model.Title,
-                Extract = model.Extract,
-                Content = model.Content,
-                BlogId = IdentityContext.Identity.BlogId
-            });
+                result = await ArticleService.CreateArticleAsync(new Article
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    Extract = model.Extract,
+                    BlogId = IdentityContext.Identity.BlogId
+                }, model.Content);
+            }
+            else
+            {
+                result = await ArticleService.UpdateArticleAsync(new Article
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    Extract = model.Extract,
+                    BlogId = IdentityContext.Identity.BlogId
+                }, model.Content);
+            }
 
             if (result.Succeed)
             {
@@ -62,14 +76,16 @@ namespace Autyan.NiChiJou.Blog.Controllers
             if (id != null)
             {
                 var article = await ArticleService.FindArticleAsync(id.Value);
-                if (article.Succeed)
+                if (article.Succeed && article.Data.Id != null)
                 {
-                    return View(new ArticleEditorViewModel
+                    var model = new ArticleEditorViewModel
                     {
                         Id = id.Value,
-                        Title = article.Data.Title,
-                        Content = article.Data.Content
-                    });
+                        Title = article.Data.Title
+                    };
+                    var content = await ArticleService.LoadArticleContent(article.Data.Id.Value);
+                    model.Content = content.Data;
+                    return View(model);
                 }
 
                 return NotFound();
