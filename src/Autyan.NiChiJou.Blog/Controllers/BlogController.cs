@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Autyan.NiChiJou.Blog.Models;
 using Autyan.NiChiJou.Service.Blog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [Route("Blog/{blogName}")]
-        public async Task<IActionResult> UserBlog(string blogName)
+        public async Task<IActionResult> UserBlog(string blogName, PagedQueryViewModel model)
         {
             var blogIndex = await BlogService.LoadBlogByNameAsync(blogName);
             if (!blogIndex.Succeed)
@@ -24,6 +25,12 @@ namespace Autyan.NiChiJou.Blog.Controllers
                 return NotFound();
             }
 
+            if (model.Take == null)
+            {
+                model.Take = 5;
+            }
+            blogIndex.Data.Skip = model.Skip;
+            blogIndex.Data.Take = model.Take;
             return View(blogIndex.Data);
         }
     }

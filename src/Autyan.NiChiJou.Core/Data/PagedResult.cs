@@ -8,8 +8,8 @@ namespace Autyan.NiChiJou.Core.Data
 
         public int TotalCount { get; set; }
 
-        public int Index { get; set; }
+        public int? Skip { get; set; }
 
-        public int PageSize { get; set; }
+        public int? Take { get; set; }
     }
 }

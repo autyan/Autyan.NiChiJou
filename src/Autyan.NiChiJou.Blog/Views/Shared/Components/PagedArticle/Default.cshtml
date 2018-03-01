@@ -1,5 +1,6 @@
 ﻿@using Autyan.NiChiJou.Core.Data
 @model PagedResult<Autyan.NiChiJou.DTO.Blog.ArticlePreview>
+@addTagHelper *, Autyan.NiChiJou.Core.Mvc
 @{
     ViewData["Title"] = "Default";
 }
@@ -21,7 +22,15 @@
                 <label>commented at:</label>@(articlePreview.LastCommentedAt?.LocalDateTime )
             </div>
         </div>
-        <hr/>
+        <hr />
     }
+    <nav style="margin: auto;" aria-label="Page navigation" autyan-pagination
+         autyan-pagination-skip="@Model.Skip"
+         autyan-pagination-take="@Model.Take"
+         autyan-pagination-totalItem="@Model.TotalCount"
+         autyan-pagination-controller="Blog"
+         autyan-pagination-action="UserBlog"
+         autyan-pagination-routeValue="@ViewData["BlogName"]"
+         autyan-pagination-width="800"></nav>
 }
 

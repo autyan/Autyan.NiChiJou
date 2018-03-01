@@ -7,5 +7,9 @@
         public long? BlogId { get; set; }
 
         public string BlogName { get; set; }
+
+        public int? Skip { get; set; }
+
+        public int? Take { get; set; }
     }
 }

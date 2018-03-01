@@ -11,8 +11,8 @@
         @await Component.InvokeAsync("PagedArticle", new PagedArticleQueryViewModel
         {
             BlogId = Model.BlogId,
-            Index = 1,
-            PageSize = 10
+            Skip = Model.Skip,
+            Take = Model.Take
         })
     </div>
     <div class="col-lg-2 col-md-offset-1">

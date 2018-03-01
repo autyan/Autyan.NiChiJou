@@ -11,12 +11,8 @@
         public string Content { get; set; }
     }
 
-    public class PagedArticleQueryViewModel
+    public class PagedArticleQueryViewModel : PagedQueryViewModel
     {
         public long? BlogId { get; set; }
-
-        public int Index { get; set; }
-
-        public int PageSize { get; set; }
     }
 }
