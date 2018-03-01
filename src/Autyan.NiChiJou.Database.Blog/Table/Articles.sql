@@ -9,7 +9,6 @@
 	[CreatedBy] BIGINT NOT NULL,
 	[ModifiedAt] DATETIMEOFFSET NULL,
 	[ModifiedBy] BIGINT NULL
-	CONSTRAINT [FK_BlogPosts_ToBlog] FOREIGN KEY ([BlogId]) REFERENCES [Blogs]([Id])
 )
 
 GO
