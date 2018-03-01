@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Options;
 using Autyan.NiChiJou.Core.Service;
-using Autyan.NiChiJou.Service.DTO.Identity;
+using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.Service.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;

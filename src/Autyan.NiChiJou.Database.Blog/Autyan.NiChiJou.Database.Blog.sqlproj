@@ -67,5 +67,6 @@
     <Build Include="Table\Blogs.sql" />
     <Build Include="Table\BlogUsers.sql" />
     <Build Include="Table\ArticleComments.sql" />
+    <Build Include="Table\ArticleContents.sql" />
   </ItemGroup>
 </Project>

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
-using Autyan.NiChiJou.Service.DTO.Identity;
 using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
 using Microsoft.Extensions.Logging;
 

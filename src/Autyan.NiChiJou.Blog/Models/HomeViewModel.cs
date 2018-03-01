@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Autyan.NiChiJou.Service.DTO.Blog;
+using Autyan.NiChiJou.DTO.Blog;
 
 namespace Autyan.NiChiJou.Blog.Models
 {

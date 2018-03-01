@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Service.Blog.ServiceStatusCode;
-using Autyan.NiChiJou.Service.DTO.Blog;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Blog

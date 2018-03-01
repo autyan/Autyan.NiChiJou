@@ -1,13 +1,27 @@
 ﻿@using Autyan.NiChiJou.Core.Data
-@using Autyan.NiChiJou.Model.Blog
-@model PagedResult<Article>
+@model PagedResult<Autyan.NiChiJou.DTO.Blog.ArticlePreview>
 @{
     ViewData["Title"] = "Default";
 }
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        
-    </div>
-</div>
+@{
+    foreach (var articlePreview in Model.Results)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    <a asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">@articlePreview.Title</a>
+                </h4>
+            </div>
+            <div class="panel-body">@articlePreview.Extract</div>
+            <div class="panel-footer">
+                <label>reads:</label>@articlePreview.Reads
+                <label>read at:</label>@(articlePreview.LastReadAt?.LocalDateTime)
+                <label>comments:</label>@articlePreview.Comments
+                <label>commented at:</label>@(articlePreview.LastCommentedAt?.LocalDateTime )
+            </div>
+        </div>
+        <hr/>
+    }
+}
 

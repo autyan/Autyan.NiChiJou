@@ -7,5 +7,9 @@ namespace Autyan.NiChiJou.Core.Data
         public IEnumerable<TEntity> Results { get; set; }
 
         public int TotalCount { get; set; }
+
+        public int Index { get; set; }
+
+        public int PageSize { get; set; }
     }
 }

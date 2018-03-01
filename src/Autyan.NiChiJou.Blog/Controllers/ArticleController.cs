@@ -2,9 +2,9 @@
 using Autyan.NiChiJou.Blog.Models;
 using Autyan.NiChiJou.Core.Context;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Service.Blog;
-using Autyan.NiChiJou.Service.DTO.Blog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

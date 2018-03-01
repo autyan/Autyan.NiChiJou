@@ -2,6 +2,7 @@
 using System.Transactions;
 using Autyan.NiChiJou.Core.Data;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Service.Blog.ServiceStatusCode;
@@ -87,9 +88,9 @@ namespace Autyan.NiChiJou.Service.Blog
             return Success(article);
         }
 
-        public async Task<ServiceResult<PagedResult<Article>>> GetPagedArticleAsync(ArticleQuery query)
+        public async Task<ServiceResult<PagedResult<ArticlePreview>>> GetPagedArticleAsync(ArticleQuery query)
         {
-            var result = await ArticleRepo.PagingQueryAsync(query);
+            var result = await ArticleRepo.QueryPagedArticlePreviewAsync(query);
             return Success(result);
         }
 

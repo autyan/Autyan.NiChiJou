@@ -1,4 +1,4 @@
-﻿namespace Autyan.NiChiJou.Service.DTO.Identity
+﻿namespace Autyan.NiChiJou.DTO.Identity
 {
     public class Membership
     {

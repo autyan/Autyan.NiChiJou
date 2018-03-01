@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Autyan.NiChiJou.Service.DTO.Blog
+namespace Autyan.NiChiJou.DTO.Blog
 {
     public class BlogPeek
     {

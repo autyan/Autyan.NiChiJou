@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Service;
-using Autyan.NiChiJou.Service.DTO.Blog;
+using Autyan.NiChiJou.DTO.Blog;
 
 namespace Autyan.NiChiJou.Service.Blog
 {

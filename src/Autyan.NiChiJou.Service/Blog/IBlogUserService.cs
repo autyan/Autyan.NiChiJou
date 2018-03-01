@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Model.Blog;
-using Autyan.NiChiJou.Service.DTO.Blog;
 
 namespace Autyan.NiChiJou.Service.Blog
 {

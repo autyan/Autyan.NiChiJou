@@ -47,8 +47,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = BuildQuerySql(query);
 
-            var queryResult = await Connection.QueryMultipleAsync(builder.End(), query);
-            return queryResult.Read<TEntity>();
+            return await Connection.QueryAsync<TEntity>(builder.End(), query);
         }
 
         public virtual async Task<int> DeleteByIdAsync(TEntity entity)
@@ -133,14 +132,14 @@ namespace Autyan.NiChiJou.Repository.Dapper
         private async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(ISqlBuilder queryBuilder, IPagedQuery query)
         {
             queryBuilder.Skip(query.Skip).Take(query.Take);
-            var results = await Connection.QueryMultipleAsync(queryBuilder.End(), query);
+            var results = await Connection.QueryAsync<TSelect>(queryBuilder.End(), query);
 
             var countBuilder = BuildCountSql(query);
             var count = await Connection.QueryAsync<int>(countBuilder.End(), query);
 
             return new PagedResult<TSelect>
             {
-                Results = results.Read<TSelect>(),
+                Results = results,
                 TotalCount = count.Single()
             };
         }
@@ -281,6 +280,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
             {
                 paramterPrefix = string.Empty;
             }
+
+            if (queryParamter.Name == "Take" || queryParamter.Name == "Skip") return;
             if (queryParamter.Name.EndsWith("Range") && queryParamter.PropertyType.IsArray)
             {
                 var fieldName = queryParamter.Name.RemoveTail("Range");

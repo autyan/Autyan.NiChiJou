@@ -1,6 +1,4 @@
-﻿using System.Web;
-
-namespace Autyan.NiChiJou.Service.DTO.Blog
+﻿namespace Autyan.NiChiJou.DTO.Blog
 {
     public class BlogIdentity
     {
@@ -13,7 +11,5 @@ namespace Autyan.NiChiJou.Service.DTO.Blog
         public string BlogName { get; set; }
 
         public long? UserId { get; set; }
-
-        public string UrlEncoedBlogName => HttpUtility.UrlEncode(BlogName);
     }
 }

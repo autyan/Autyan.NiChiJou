@@ -1,4 +1,4 @@
-﻿namespace Autyan.NiChiJou.Service.DTO.Blog
+﻿namespace Autyan.NiChiJou.DTO.Blog
 {
     public class BlogIndex
     {

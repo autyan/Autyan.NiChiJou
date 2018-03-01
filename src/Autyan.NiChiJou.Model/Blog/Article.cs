@@ -1,4 +1,5 @@
-﻿using Autyan.NiChiJou.Core.Data;
+﻿using System;
+using Autyan.NiChiJou.Core.Data;
 
 namespace Autyan.NiChiJou.Model.Blog
 {
@@ -13,6 +14,8 @@ namespace Autyan.NiChiJou.Model.Blog
         public virtual long? Reads { get; set; }
 
         public virtual long? Comments { get; set; }
+
+        public virtual DateTimeOffset? LastReadAt { get; set; }
 
         public virtual Blog Blog { get; set; }
     }

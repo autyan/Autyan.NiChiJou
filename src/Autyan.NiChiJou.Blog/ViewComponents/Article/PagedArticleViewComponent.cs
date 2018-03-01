@@ -20,10 +20,11 @@ namespace Autyan.NiChiJou.Blog.ViewComponents.Article
             var pagedArticlePreviews = await ArticleService.GetPagedArticleAsync(new ArticleQuery
             {
                 BlogId = model.BlogId,
-                Skip = (model.Page - 1) * model.PageSize,
+                Skip = (model.Index - 1) * model.PageSize,
                 Take = model.PageSize
             });
-
+            pagedArticlePreviews.Data.Index = model.Index;
+            pagedArticlePreviews.Data.PageSize = model.PageSize;
             return View(pagedArticlePreviews.Data);
         }
     }
