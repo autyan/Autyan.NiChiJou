@@ -14,6 +14,8 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public long? BlogId { get; set; }
 
+        public string BlogName { get; set; }
+
         public long? Reads { get; set; }
 
         public long? Comments { get; set; }
@@ -21,5 +23,9 @@ namespace Autyan.NiChiJou.DTO.Blog
         public DateTimeOffset? LastReadAt { get; set; }
 
         public DateTimeOffset? LastCommentedAt { get; set; }
+
+        public DateTimeOffset? PostedAt { get; set; }
+
+        public DateTimeOffset? UpdatedAt { get; set; }
     }
 }

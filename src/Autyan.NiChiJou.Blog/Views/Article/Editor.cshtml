@@ -9,7 +9,16 @@
         <input asp-for="Extract" type="hidden"/>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>Create Post</h4>
+                @{
+                    if (Model?.Id == null)
+                    {
+                        <h4>Post Article</h4>
+                    }
+                    else
+                    {
+                        <h4>Edit Article</h4>
+                    }
+                }
             </div>
             <div class="panel-body">
                 <div class="input-group">

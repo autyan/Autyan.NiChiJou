@@ -12,7 +12,13 @@
         {
             BlogId = Model.BlogId,
             Skip = Model.Skip,
-            Take = Model.Take
+            Take = Model.Take,
+            Route = new RouteViewModel
+            {
+                Controller = "Blog",
+                RouteValue = Model.BlogName
+            },
+            RenderPager = true
         })
     </div>
     <div class="col-lg-2 col-md-offset-1">

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Autyan.NiChiJou.Blog.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Autyan.NiChiJou.Blog.Controllers
@@ -8,7 +9,12 @@ namespace Autyan.NiChiJou.Blog.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            return View();
+            var model = new PagedArticleQueryViewModel
+            {
+                Skip = 0,
+                Take = 10
+            };
+            return View(model);
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Autyan.NiChiJou.Core.Mvc.TagHelpers
         [HtmlAttributeName(AutyanPaginationWidthAttributeName)]
         public double Width { get; set; } = 102;
 
-        public int PagerCount
+        public int RenderPagerCount
         {
             get
             {
@@ -94,30 +94,30 @@ namespace Autyan.NiChiJou.Core.Mvc.TagHelpers
                 : "<li class=\"disabled\"><a href=\"#\" aria-label=\"Head\"><span aria-hidden=\"true\">&laquo;</span></a></li>");
 
             //append pagers before currentPage
-            var beforeIndexCount = PageIndex - PagerCount / 2;
+            var beforeIndexCount = PageIndex - RenderPagerCount / 2;
             var startIndex = beforeIndexCount <= 1 ? 1 : beforeIndexCount;
             var currentIndex = startIndex;
             while (currentIndex < PageIndex)
             {
-                _tageBuilder.Append($"<li><a href=\"{LinkHrefWithQueryParamters(startIndex)}\">{startIndex}</a></li>");
+                _tageBuilder.Append($"<li><a href=\"{LinkHrefWithQueryParamters(currentIndex)}\">{currentIndex}</a></li>");
                 currentIndex += 1;
             }
 
             //append currentPager
             _tageBuilder.Append($"<li class=\"active\"><a href=\"{LinkHrefWithQueryParamters(PageIndex)}\">{PageIndex}</a></li>");
-            startIndex += 1;
+            currentIndex += 1;
 
             //append pagers after currentPage
-            var finalPage = (startIndex + PagerCount) > TotalPage ? TotalPage : PagerCount;
+            var finalPage = (startIndex + RenderPagerCount) > TotalPage ? TotalPage : RenderPagerCount;
             while (currentIndex < finalPage)
             {
-                _tageBuilder.Append($"<li><a href=\"{LinkHrefWithQueryParamters(startIndex)}\">{startIndex}</a></li>");
+                _tageBuilder.Append($"<li><a href=\"{LinkHrefWithQueryParamters(currentIndex)}\">{currentIndex}</a></li>");
                 currentIndex += 1;
             }
 
             _tageBuilder.Append(IsFinalPager
                 ? "<li class=\"disabled\"><a href=\"#\" aria-label=\"End\"><span aria-hidden=\"true\">&raquo;</span></a></li>"
-                : $"<li href=\"{LinkHref}?skip={(PageIndex - 1) * Take}&take={Take}\"><a href=\"#\" aria-label=\"End\"><span aria-hidden=\"true\">&raquo;</span></a></li>");
+                : $"<li href=\"{LinkHref}?skip={(TotalPage - 1) * Take}&take={Take}\"><a href=\"#\" aria-label=\"End\"><span aria-hidden=\"true\">&raquo;</span></a></li>");
 
             _tageBuilder.Append("</ul>");
 
@@ -137,7 +137,7 @@ namespace Autyan.NiChiJou.Core.Mvc.TagHelpers
                     var builder = new StringBuilder();
                     if (Controller == null)
                     {
-                        builder.Append(string.Empty);
+                        builder.Append("/");
                         _linkHref = builder.ToString();
                         return _linkHref;
                     }
