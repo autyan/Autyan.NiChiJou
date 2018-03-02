@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Transactions;
 using Autyan.NiChiJou.Core.Data;
 using Autyan.NiChiJou.Core.Service;
@@ -31,7 +32,7 @@ namespace Autyan.NiChiJou.Service.Blog
         public async Task<ServiceResult<Article>> CreateArticleAsync(Article article, string content)
         {
             if (article.Id != null) return Failed<Article>("article exists!");
-            using (var scope = new TransactionScope())
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var create = await ArticleRepo.InsertAsync(article);
                 if (create <= 0)
@@ -56,7 +57,7 @@ namespace Autyan.NiChiJou.Service.Blog
         {
             if (article.Id == null) return Failed<Article>("articleId is null");
 
-            using (var scope = new TransactionScope())
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var create = await ArticleRepo.UpdateByIdAsync(article);
                 if (create <= 0)
@@ -94,10 +95,40 @@ namespace Autyan.NiChiJou.Service.Blog
             return Success(result);
         }
 
-        public async Task<ServiceResult<string>> LoadArticleContent(long id)
+        public async Task<ServiceResult<string>> LoadArticleContentAsync(long id)
         {
             var content = await ContentRepo.FirstOrDefaultAsync(new { ArticleId = id });
             return Success(content?.Content);
+        }
+
+        public async Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id)
+        {
+            var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery { Id = id });
+            if (article == null)
+            {
+                return Failed<ArticleDetail>(ArticleStatus.ArticleNotFound);
+            }
+
+            var content = await ContentRepo.FirstOrDefaultAsync(new ArticleContentQuery {ArticleId = id});
+            if (content == null)
+            {
+                return Failed<ArticleDetail>("Article Content Lost!");
+            }
+
+            var comments = await CommentRepo.QueryAsync(new {PostId = id});
+
+            article.Reads += 1;
+            article.LastReadAt = DateTimeOffset.Now;
+            await ArticleRepo.UpdateByIdAsync(article);
+
+            return Success(new ArticleDetail
+            {
+                Id = article.Id,
+                BlogId = article.BlogId,
+                Title = article.Title,
+                Content = content.Content,
+                Comments = comments
+            });
         }
     }
 }

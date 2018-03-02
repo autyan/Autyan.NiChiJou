@@ -34,3 +34,15 @@
         display: none;
     }
 }
+
+label.tag {
+    margin-right: 5px;
+}
+
+span.tag {
+    padding-right: 5px;
+}
+
+div.comContent {
+    margin-left: 15px;
+}

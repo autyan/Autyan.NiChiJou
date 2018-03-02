@@ -8,17 +8,22 @@
     foreach (var articlePreview in Model.PagedResult.Results)
     {
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-body">
                 <h4>
                     <a asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">@articlePreview.Title</a>
                 </h4>
+                <hr />
+                @articlePreview.Extract
             </div>
-            <div class="panel-body">@articlePreview.Extract</div>
             <div class="panel-footer">
-                <label>reads:</label>@articlePreview.Reads
-                <label>read at:</label>@(articlePreview.LastReadAt?.LocalDateTime)
-                <label>comments:</label>@articlePreview.Comments
-                <label>commented at:</label>@(articlePreview.LastCommentedAt?.LocalDateTime )
+                <span class="glyphicon glyphicon-user tag" aria-hidden="true"></span>
+                <span class="tag">
+                    <a href="/Blog/@Html.UrlEncoder.Encode(articlePreview.BlogName)">@articlePreview.Author</a>
+                </span>
+                <span class="glyphicon glyphicon-calendar tag" aria-hidden="true"></span><span class="tag">@articlePreview.PostedAt?.LocalDateTime</span>
+                <span class="glyphicon glyphicon-eye-open tag" aria-hidden="true"></span><span class="tag">@articlePreview.Reads</span>
+                <span class="glyphicon glyphicon-comment tag" aria-hidden="true"></span><span class="tag">@articlePreview.Comments</span>
+                <a style="float: right;" asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">Read More >>></a>
             </div>
         </div>
         <hr />
