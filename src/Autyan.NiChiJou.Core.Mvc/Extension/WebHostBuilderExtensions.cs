@@ -7,11 +7,12 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
     {
         public static IWebHostBuilder UserHostSettings(this IWebHostBuilder builder)
         {
-            builder.ConfigureAppConfiguration((builderContext, config) =>
-            {
-                config.AddJsonFile("hosting.json", optional: true)
-                    .AddEnvironmentVariables();
-            });
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("hosting.json", optional: true)
+                .Build();
+
+            builder.UseConfiguration(config);
+
             return builder;
         }
     }
