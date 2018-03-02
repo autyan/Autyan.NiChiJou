@@ -1,5 +1,4 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
-using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.Model.Extension;
@@ -8,6 +7,7 @@ using Autyan.NiChiJou.Service.Identity.Extension;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -69,6 +69,10 @@ namespace Autyan.NiChiJou.IdentityServer
             }
 
             app.UseStaticFiles()
+                .UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                })
                 .UseAuthentication()
                 .UseMvc(routes =>
                 {

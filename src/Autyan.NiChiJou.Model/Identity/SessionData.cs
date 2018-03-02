@@ -8,6 +8,6 @@
 
         public string UserName { get; set; }
 
-        public string UserMemeberCode { get; set; }
+        public string MemeberCode { get; set; }
     }
 }

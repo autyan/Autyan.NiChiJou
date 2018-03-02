@@ -1,0 +1,43 @@
+﻿@model PagedArticlePreviewViewModel
+@addTagHelper *, Autyan.NiChiJou.Core.Mvc
+@{
+    ViewData["Title"] = "Default";
+}
+
+@{
+    foreach (var articlePreview in Model.PagedResult.Results)
+    {
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>
+                    <a asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">@articlePreview.Title</a>
+                </h4>
+                <hr />
+                @articlePreview.Extract
+            </div>
+            <div class="panel-footer">
+                <span class="glyphicon glyphicon-user tag" aria-hidden="true"></span>
+                <span class="tag">
+                    <a href="/Blog/@Html.UrlEncoder.Encode(articlePreview.BlogName)">@articlePreview.Author</a>
+                </span>
+                <span class="glyphicon glyphicon-calendar tag" aria-hidden="true"></span><span class="tag">@articlePreview.PostedAt?.LocalDateTime</span>
+                <span class="glyphicon glyphicon-eye-open tag" aria-hidden="true"></span><span class="tag">@articlePreview.Reads</span>
+                <span class="glyphicon glyphicon-comment tag" aria-hidden="true"></span><span class="tag">@articlePreview.Comments</span>
+                <a style="float: right;" asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">Read More >>></a>
+            </div>
+        </div>
+        <hr />
+    }
+    if (Model.RenderPager)
+    {
+        <nav style="margin: auto;" aria-label="Page navigation" autyan-pagination
+             autyan-pagination-skip="@Model.PagedResult.Skip"
+             autyan-pagination-take="@Model.PagedResult.Take"
+             autyan-pagination-totalItem="@Model.PagedResult.TotalCount"
+             autyan-pagination-controller="@Model.Route.Controller"
+             autyan-pagination-action="@Model.Route.Action"
+             autyan-pagination-routeValue="@Model.Route.RouteValue"
+             autyan-pagination-width="800"></nav>
+    }
+}
+

@@ -21,6 +21,10 @@ namespace Autyan.NiChiJou.Core.Data
 
         Task<PagedResult<TEntity>> PagingQueryAsync(IPagedQuery query);
 
+        Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(object columnObject, IPagedQuery query);
+
+        Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(IEnumerable<string> columns, IPagedQuery query);
+
         Task<long> InsertAsync(TEntity entity);
 
         Task<int> GetCountAsync(object condition);

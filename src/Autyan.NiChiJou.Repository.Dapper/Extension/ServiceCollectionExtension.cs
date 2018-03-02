@@ -1,8 +1,8 @@
 ﻿using System;
 using Autyan.NiChiJou.Core.Repository;
-using Autyan.NiChiJou.Core.Repository.Blog;
 using Autyan.NiChiJou.Core.Repository.DbConnectionFactory;
 using Autyan.NiChiJou.Core.Utility.Sql;
+using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Repository.Dapper.Blog;
 using Autyan.NiChiJou.Repository.Dapper.Identity;
 using Autyan.NiChiJou.Repository.Identity;
@@ -18,18 +18,22 @@ namespace Autyan.NiChiJou.Repository.Dapper.Extension
             MetadataContext.Instance.Initilize(AppDomain.CurrentDomain.GetAssemblies());
 
             //default database use mssql
-            UseDapperWithMsSql(services);
+            UseDapperWithMySql(services);
 
             services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();
-            services.AddScoped<IBlogUserRepository, BlogUserRepository>();
             services.AddScoped<IServiceTokenRepository, ServiceTokenRepository>();
+            services.AddScoped<IBlogUserRepository, BlogUserRepository>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<IArticleCommentRepository, ArticleCommentRepository>();
+            services.AddScoped<IArticleContentRepository, ArticleContentRepository>();
             return services;
         }
 
         public static IServiceCollection UseDapperWithMsSql(this IServiceCollection services)
         {
-            services.AddScoped<ISqlBuilderFactory, MsSqlBuilderFactory>();
-            services.AddScoped<IDbConnectionFactory, MsSqlDbConnectionFactory>();
+            services.AddSingleton<ISqlBuilderFactory, MsSqlBuilderFactory>();
+            services.AddSingleton<IDbConnectionFactory, MsSqlDbConnectionFactory>();
             return services;
         }
 

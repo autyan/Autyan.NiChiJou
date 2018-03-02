@@ -2,6 +2,7 @@
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
+using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
@@ -21,10 +22,10 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.GetByIdAsync(new IdentityUser {Id = id});
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
+                return Failed<IdentityUser>(IdentityStatus.UserNotFound);
             }
 
-            return ServiceResult<IdentityUser>.Success(user);
+            return Success(user);
         }
 
     }

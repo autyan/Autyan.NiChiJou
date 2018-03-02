@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
-using Autyan.NiChiJou.Service.DTO.Identity;
+using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
@@ -24,7 +25,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)
             {
-                return ServiceResult<IdentityUser>.Failed(IdentityStatus.LoginNameExists);
+                return Failed<IdentityUser>(IdentityStatus.LoginNameExists);
             }
 
             var salt = Guid.NewGuid().ToString().ToLower();
@@ -32,7 +33,7 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = new IdentityUser
             {
                 LoginName = model.LoginName,
-                UserMemberCode = Guid.NewGuid().ToString().ToUpper(),
+                MemberCode = Guid.NewGuid().ToString().ToUpper(),
                 NickName = model.LoginName,
                 PasswordHash = passwordHash,
                 SecuritySalt = salt,
@@ -44,7 +45,7 @@ namespace Autyan.NiChiJou.Service.Identity
             {
                 Id = id
             });
-            return ServiceResult<IdentityUser>.Success(user);
+            return Success(user);
         }
 
         public async Task<ServiceResult<IdentityUser>> PasswordSignInAsync(string loginName, string password)
@@ -52,13 +53,13 @@ namespace Autyan.NiChiJou.Service.Identity
             var user = await UserRepo.FirstOrDefaultAsync(new { LoginName = loginName });
             if (user == null)
             {
-                return ServiceResult<IdentityUser>.Failed(IdentityStatus.UserNotFound);
+                return Failed<IdentityUser>(IdentityStatus.UserNotFound);
             }
 
             var computedHash = HashEncrypter.Sha256Encrypt(password, user.SecuritySalt);
             return computedHash != user.PasswordHash
-                ? ServiceResult<IdentityUser>.Failed(IdentityStatus.InvalidPassword)
-                : ServiceResult<IdentityUser>.Success(user);
+                ? Failed<IdentityUser>(IdentityStatus.InvalidPassword)
+                : Success(user);
         }
     }
 }

@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Authorization\Requirement\" />
+    <Folder Include="Component\" />
     <Folder Include="Middleware\" />
   </ItemGroup>
 </Project>

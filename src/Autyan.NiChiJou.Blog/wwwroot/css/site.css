@@ -6,6 +6,7 @@
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
+    padding-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -32,4 +33,16 @@
     .carousel-caption {
         display: none;
     }
+}
+
+label.tag {
+    margin-right: 5px;
+}
+
+span.tag {
+    padding-right: 5px;
+}
+
+div.comContent {
+    margin-left: 15px;
 }

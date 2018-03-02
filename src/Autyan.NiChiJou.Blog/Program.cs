@@ -31,7 +31,7 @@ namespace Autyan.NiChiJou.Blog
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                //.UserAppsettings()
+                .UserHostSettings()
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();

@@ -1,10 +1,13 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
+using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
+using Autyan.NiChiJou.Service.Blog.Extension;
 using Autyan.NiChiJou.UnifyLogin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +34,8 @@ namespace Autyan.NiChiJou.Blog
                 })
                 .AddNiChiJouDataModel()
                 .AddDapper()
+                .AddMvcComponent()
+                .AddBlogService()
                 .AddUnifyLogin(Configuration)
                 .AddMvc(options =>
                 {
@@ -52,10 +57,15 @@ namespace Autyan.NiChiJou.Blog
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error")
+                    .UseStatusCodePagesWithRedirects("/Error/{0}");
             }
 
             app.UseStaticFiles()
+                .UseForwardedHeaders(new ForwardedHeadersOptions
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                })
                 .UseAuthentication()
                 .UseMvc(routes =>
                 {

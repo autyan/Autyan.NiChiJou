@@ -23,7 +23,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         protected IEnumerable<string> Columns => Metadata.Columns;
 
-        protected DatabaseGeneratedOption KeyOption => Metadata.Key.Option;
+        protected DatabaseGeneratedOption KeyOption => Metadata.KeyOption;
 
         protected BaseDapperRepository(IDbConnectionFactory dbConnectionFactory,
             ISqlBuilderFactory sqlBuilderFactory) : base(dbConnectionFactory, sqlBuilderFactory)
@@ -79,7 +79,8 @@ namespace Autyan.NiChiJou.Repository.Dapper
             builder.WhereAnd("Id = @Id");
             entity.ModifiedAt = DateTimeOffset.Now;
 
-            return await Connection.ExecuteAsync(builder.End(), entity);
+            var execurePar = ParseExecuteParameters(entity);
+            return await Connection.ExecuteAsync(builder.End(), execurePar);
         }
 
         public virtual async Task<int> UpdateByConditionAsync(object updateParamters, object condition)
@@ -111,13 +112,32 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             if (query.Take == null) throw new ArgumentNullException(nameof(query.Take));
             var queryBuilder = BuildQuerySql(query);
+            return await PagingQueryAsync<TEntity>(queryBuilder, query);
+        }
+
+        public virtual async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(object columnObject, IPagedQuery query)
+        {
+            if (query.Take == null) throw new ArgumentNullException(nameof(query.Take));
+            var columns = GetProperties(columnObject.GetType()).Select(p => p.Name).ToArray();
+            return await PagingQueryAsync<TSelect>(columns, query);
+        }
+
+        public async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(IEnumerable<string> columns, IPagedQuery query)
+        {
+            if (query.Take == null) throw new ArgumentNullException(nameof(query.Take));
+            var queryBuilder = BuildDynamicQuerySql(columns, query);
+            return await PagingQueryAsync<TSelect>(queryBuilder, query);
+        }
+
+        private async Task<PagedResult<TSelect>> PagingQueryAsync<TSelect>(ISqlBuilder queryBuilder, IPagedQuery query)
+        {
             queryBuilder.Skip(query.Skip).Take(query.Take);
-            var results = await Connection.QueryAsync<TEntity>(queryBuilder.End(), query);
+            var results = await Connection.QueryAsync<TSelect>(queryBuilder.End(), query);
 
             var countBuilder = BuildCountSql(query);
             var count = await Connection.QueryAsync<int>(countBuilder.End(), query);
 
-            return new PagedResult<TEntity>
+            return new PagedResult<TSelect>
             {
                 Results = results,
                 TotalCount = count.Single()
@@ -142,9 +162,9 @@ namespace Autyan.NiChiJou.Repository.Dapper
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
             builder.Output(" INSERTED.ID ");
-            return await Connection.ExecuteScalarAsync<long>(builder.End(), entity);
+            var executePar = ParseExecuteParameters(entity);
+            return await Connection.ExecuteScalarAsync<long>(builder.End(), executePar);
         }
 
         private void GetSequenceInsertSql(ISqlBuilder builder)
@@ -180,7 +200,10 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             builder.SelectCount().FromTable(TableName);
-            AppendWhere(builder, condition);
+            if (condition != null)
+            {
+                AppendWhere(builder, condition);
+            }
             var result = await Connection.QueryAsync<int>(builder.End(), condition);
             return result.Single();
         }
@@ -195,6 +218,15 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             builder.Select(string.Join(",", Columns)).FromTable(TableName);
+            AppendWhere(builder, query);
+
+            return builder;
+        }
+
+        protected virtual ISqlBuilder BuildDynamicQuerySql(IEnumerable<string> columns, object query)
+        {
+            var builder = StartSql();
+            builder.Select(string.Join(",", columns)).FromTable(TableName);
             AppendWhere(builder, query);
 
             return builder;
@@ -228,7 +260,15 @@ namespace Autyan.NiChiJou.Repository.Dapper
             var updateDic = new Dictionary<string, object>();
             foreach (var property in GetProperties(paramters.GetType()))
             {
-                updateDic.Add(property.Name, property.GetValue(paramters));
+                var propInfo = Metadata.Properties.FirstOrDefault(prop => prop.Name == property.Name);
+                if (propInfo != null && propInfo.PropertyInfo.PropertyType == typeof(string))
+                {
+                    updateDic.Add(property.Name, new DbString { Value = property.GetValue(paramters).ToString(), Length = propInfo.MaxLength });
+                }
+                else
+                {
+                    updateDic.Add(property.Name, property.GetValue(paramters));
+                }
             }
 
             return updateDic;
@@ -240,6 +280,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             {
                 paramterPrefix = string.Empty;
             }
+            
             if (queryParamter.Name.EndsWith("Range") && queryParamter.PropertyType.IsArray)
             {
                 var fieldName = queryParamter.Name.RemoveTail("Range");
@@ -262,6 +303,28 @@ namespace Autyan.NiChiJou.Repository.Dapper
             }
 
             builder.WhereAnd($"{queryParamter.Name} = @{paramterPrefix}{queryParamter.Name}");
+        }
+
+        protected DynamicParameters ParseExecuteParameters(object executePar)
+        {
+            var dyParamters = new DynamicParameters();
+            foreach (var par in GetObjectValues(executePar, ignoreNullValues:false))
+            {
+                var propInfo = Metadata.Properties.FirstOrDefault(prop => prop.Name == par.Key);
+                if (propInfo != null && propInfo.PropertyInfo.PropertyType == typeof(string))
+                {
+                    dyParamters.Add(par.Key, new DbString
+                    {
+                        Value = par.Value?.ToString(), Length = propInfo.MaxLength
+                    });
+                }
+                else
+                {
+                    dyParamters.Add(par.Key, par.Value);
+                }
+            }
+
+            return dyParamters;
         }
     }
 
@@ -293,11 +356,13 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             if (ParamtersCache.ContainsKey(type)) return ParamtersCache[type];
 
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => !IgnorePropertyNames.Contains(p.Name.ToUpper())).ToList();
             ParamtersCache[type] = properties;
 
             return properties;
         }
+
+        private static readonly string[] IgnorePropertyNames = new[] {"TAKE", "SKIP", "ASC", "DESC"};
 
         protected static IDictionary<string, object> GetObjectValues(object obj, string keyPrefix = null, bool ignoreNullValues = true)
         {
