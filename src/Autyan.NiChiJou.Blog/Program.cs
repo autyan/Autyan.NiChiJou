@@ -1,4 +1,5 @@
 ﻿using System;
+using Autyan.NiChiJou.Core.Mvc.Extension;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
@@ -30,7 +31,7 @@ namespace Autyan.NiChiJou.Blog
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                //.UserAppsettings()
+                .UserHostSettings()
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
