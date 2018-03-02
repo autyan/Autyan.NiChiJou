@@ -24,15 +24,16 @@ namespace Autyan.NiChiJou.Blog.Controllers
         }
 
         [HttpGet("Article/Posts/{id:long}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetArticleAsync(long id)
         {
-            var article = await ArticleService.FindArticleAsync(id);
+            var article = await ArticleService.ReadArticleDetailByIdAsync(id);
             if (article.Succeed)
             {
-
+                return View(nameof(Article), article.Data);
             }
 
-            return Redirect("/");
+            return NotFound();
         }
 
         [HttpPost]
@@ -62,7 +63,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
 
             if (result.Succeed)
             {
-                return RedirectToAction(nameof(GetArticleAsync), new {id = result.Data});
+                return Redirect($"/Article/Posts/{result.Data.Id}");
             }
 
             return Redirect("/");
@@ -83,7 +84,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
                         Id = id.Value,
                         Title = article.Data.Title
                     };
-                    var content = await ArticleService.LoadArticleContent(article.Data.Id.Value);
+                    var content = await ArticleService.LoadArticleContentAsync(article.Data.Id.Value);
                     model.Content = content.Data;
                     return View(model);
                 }

@@ -6,9 +6,7 @@ namespace Autyan.NiChiJou.Model.Blog
     {
         public virtual string Content { get; set; }
 
-        public virtual long? BlogUserId { get; set; }
-
-        public virtual BlogUser BlogUser { get; set; }
+        public virtual string CommentedBy { get; set; }
 
         public virtual long? PostId { get; set; }
 

@@ -23,5 +23,9 @@ namespace Autyan.NiChiJou.Core.Data
         public int? Take { get; set; }
 
         public int? Skip { get; set; }
+
+        public string[] Asc { get; set; }
+
+        public string[] Desc { get; set; }
     }
 }

@@ -14,7 +14,9 @@ namespace Autyan.NiChiJou.Service.Blog
 
         Task<ServiceResult<Article>> FindArticleAsync(long id);
 
-        Task<ServiceResult<string>> LoadArticleContent(long id);
+        Task<ServiceResult<string>> LoadArticleContentAsync(long id);
+
+        Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id);
 
         Task<ServiceResult<PagedResult<ArticlePreview>>> GetPagedArticleAsync(ArticleQuery query);
     }

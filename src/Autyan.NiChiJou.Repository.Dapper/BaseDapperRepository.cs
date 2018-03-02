@@ -280,8 +280,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             {
                 paramterPrefix = string.Empty;
             }
-
-            if (queryParamter.Name == "Take" || queryParamter.Name == "Skip") return;
+            
             if (queryParamter.Name.EndsWith("Range") && queryParamter.PropertyType.IsArray)
             {
                 var fieldName = queryParamter.Name.RemoveTail("Range");
@@ -357,11 +356,13 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             if (ParamtersCache.ContainsKey(type)) return ParamtersCache[type];
 
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => !IgnorePropertyNames.Contains(p.Name.ToUpper())).ToList();
             ParamtersCache[type] = properties;
 
             return properties;
         }
+
+        private static readonly string[] IgnorePropertyNames = new[] {"TAKE", "SKIP", "ASC", "DESC"};
 
         protected static IDictionary<string, object> GetObjectValues(object obj, string keyPrefix = null, bool ignoreNullValues = true)
         {

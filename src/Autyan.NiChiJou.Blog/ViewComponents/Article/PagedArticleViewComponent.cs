@@ -21,12 +21,18 @@ namespace Autyan.NiChiJou.Blog.ViewComponents.Article
             {
                 BlogId = model.BlogId,
                 Skip = model.Skip,
-                Take = model.Take
+                Take = model.Take,
+                Desc = new[] {"CreatedAt"}
             });
             pagedArticlePreviews.Data.Skip = model.Skip;
             pagedArticlePreviews.Data.Take = model.Take;
-            ViewData["BlogId"] = model.BlogId;
-            return View(pagedArticlePreviews.Data);
+            var viewModel = new PagedArticlePreviewViewModel
+            {
+                PagedResult = pagedArticlePreviews.Data,
+                Route = model.Route,
+                RenderPager = model.RenderPager
+            };
+            return View(viewModel);
         }
     }
 }
