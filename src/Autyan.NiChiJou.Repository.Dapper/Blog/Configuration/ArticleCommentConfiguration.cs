@@ -7,6 +7,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog.Configuration
         public ArticleCommentConfiguration()
         {
             this["Content"].HasMaxLength(4000);
+            this["CommentedBy"].HasMaxLength(200);
         }
     }
 }
