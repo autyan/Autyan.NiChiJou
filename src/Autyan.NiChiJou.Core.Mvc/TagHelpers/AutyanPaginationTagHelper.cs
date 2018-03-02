@@ -137,7 +137,7 @@ namespace Autyan.NiChiJou.Core.Mvc.TagHelpers
                     var builder = new StringBuilder();
                     if (Controller == null)
                     {
-                        builder.Append(string.Empty);
+                        builder.Append("/");
                         _linkHref = builder.ToString();
                         return _linkHref;
                     }

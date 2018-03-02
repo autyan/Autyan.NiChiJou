@@ -1,5 +1,13 @@
-﻿@{
+﻿@model PagedArticleQueryViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 
+<div class="col-lg-12">
+    @await Component.InvokeAsync("PagedArticle", new PagedArticleQueryViewModel
+    {
+        Skip = Model.Skip,
+        Take = Model.Take
+    })
+</div>

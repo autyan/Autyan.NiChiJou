@@ -25,8 +25,13 @@ namespace Autyan.NiChiJou.Blog.ViewComponents.Article
             });
             pagedArticlePreviews.Data.Skip = model.Skip;
             pagedArticlePreviews.Data.Take = model.Take;
-            ViewData["BlogId"] = model.BlogId;
-            return View(pagedArticlePreviews.Data);
+            var viewModel = new PagedArticlePreviewViewModel
+            {
+                PagedResult = pagedArticlePreviews.Data,
+                Route = model.Route,
+                RenderPager = model.RenderPager
+            };
+            return View(viewModel);
         }
     }
 }
