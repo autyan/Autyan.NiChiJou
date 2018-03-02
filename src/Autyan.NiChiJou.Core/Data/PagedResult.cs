@@ -7,5 +7,9 @@ namespace Autyan.NiChiJou.Core.Data
         public IEnumerable<TEntity> Results { get; set; }
 
         public int TotalCount { get; set; }
+
+        public int? Skip { get; set; }
+
+        public int? Take { get; set; }
     }
 }

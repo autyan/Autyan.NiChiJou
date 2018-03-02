@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Service;
-using Autyan.NiChiJou.Service.DTO.Identity;
+using Autyan.NiChiJou.DTO.Identity;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
@@ -20,12 +20,12 @@ namespace Autyan.NiChiJou.Service.Identity
             var session = await SessionService.GetSessionAsync(sessionId);
             if (!session.Succeed)
             {
-                return ServiceResult<Membership>.FailedFrom(session);
+                return FailedFrom<Membership>(session);
             }
 
-            return ServiceResult<Membership>.Success(new Membership
+            return Success(new Membership
             {
-                MemberCode = session.Data.UserMemeberCode,
+                MemberCode = session.Data.MemeberCode,
                 NikeName = session.Data.UserName
             });
         }

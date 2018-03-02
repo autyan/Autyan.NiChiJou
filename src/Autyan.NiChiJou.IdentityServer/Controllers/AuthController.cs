@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Mvc.Authorization;
+using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.IdentityServer.Models.Auth;
-using Autyan.NiChiJou.Service.DTO.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -90,9 +90,24 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl)
         {
             await HttpContext.SignOutAsync();
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MemberLogout(string returnUrl)
+        {
+            await HttpContext.SignOutAsync();
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             return RedirectToAction(nameof(Login));
         }
     }

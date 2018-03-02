@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Service;
+using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.Model.Identity;
-using Autyan.NiChiJou.Service.DTO.Identity;
 
 namespace Autyan.NiChiJou.Service.Identity
 {

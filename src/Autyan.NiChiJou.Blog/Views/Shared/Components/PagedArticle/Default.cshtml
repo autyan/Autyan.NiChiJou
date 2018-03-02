@@ -1,0 +1,36 @@
+﻿@using Autyan.NiChiJou.Core.Data
+@model PagedResult<Autyan.NiChiJou.DTO.Blog.ArticlePreview>
+@addTagHelper *, Autyan.NiChiJou.Core.Mvc
+@{
+    ViewData["Title"] = "Default";
+}
+
+@{
+    foreach (var articlePreview in Model.Results)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    <a asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">@articlePreview.Title</a>
+                </h4>
+            </div>
+            <div class="panel-body">@articlePreview.Extract</div>
+            <div class="panel-footer">
+                <label>reads:</label>@articlePreview.Reads
+                <label>read at:</label>@(articlePreview.LastReadAt?.LocalDateTime)
+                <label>comments:</label>@articlePreview.Comments
+                <label>commented at:</label>@(articlePreview.LastCommentedAt?.LocalDateTime )
+            </div>
+        </div>
+        <hr />
+    }
+    <nav style="margin: auto;" aria-label="Page navigation" autyan-pagination
+         autyan-pagination-skip="@Model.Skip"
+         autyan-pagination-take="@Model.Take"
+         autyan-pagination-totalItem="@Model.TotalCount"
+         autyan-pagination-controller="Blog"
+         autyan-pagination-action="UserBlog"
+         autyan-pagination-routeValue="@ViewData["BlogName"]"
+         autyan-pagination-width="800"></nav>
+}
+

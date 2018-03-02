@@ -1,0 +1,21 @@
+﻿@using Autyan.NiChiJou.DTO.Blog
+@model BlogIndex
+
+@{
+    ViewBag.Title = Model.BlogName;
+    Layout = "_Layout";
+}
+
+<div class="col-lg-12">
+    <div class="col-lg-9">
+        @await Component.InvokeAsync("PagedArticle", new PagedArticleQueryViewModel
+        {
+            BlogId = Model.BlogId,
+            Skip = Model.Skip,
+            Take = Model.Take
+        })
+    </div>
+    <div class="col-lg-2 col-md-offset-1">
+        @await Component.InvokeAsync("BlogUserGeneral", Model.BlogUserId)
+    </div>
+</div>

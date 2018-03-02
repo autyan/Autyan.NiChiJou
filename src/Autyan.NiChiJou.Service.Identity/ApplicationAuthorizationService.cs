@@ -5,17 +5,19 @@ using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
 {
-    public class ApplicationAuthorizationService : IApplicationAuthorizationService
+    public class ApplicationAuthorizationService : BaseService, IApplicationAuthorizationService
     {
         private IServiceTokenRepository ServiceTokenRepo { get; }
 
         private IDistributedCache Cache { get; }
 
-        public ApplicationAuthorizationService(IServiceTokenRepository serviceTokenRepo,
-            IDistributedCache cache)
+        public ApplicationAuthorizationService(ILoggerFactory loggerFactory,
+            IServiceTokenRepository serviceTokenRepo,
+            IDistributedCache cache) : base(loggerFactory)
         {
             ServiceTokenRepo = serviceTokenRepo;
             Cache = cache;
@@ -24,7 +26,7 @@ namespace Autyan.NiChiJou.Service.Identity
         public async Task<ServiceResult<IEnumerable<ServiceToken>>> GetServiceAsync(ServiceTokenQuery query)
         {
             var services = await ServiceTokenRepo.QueryAsync(query);
-            return ServiceResult<IEnumerable<ServiceToken>>.Success(services);
+            return Success(services);
         }
 
         public async Task<ServiceResult<ServiceToken>> FindServiceByNameAsync(string name)
@@ -39,7 +41,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
             if (service == null)
             {
-                return ServiceResult<ServiceToken>.Failed("service not found");
+                return Failed<ServiceToken>("service not found");
             }
 
             return ServiceResult<ServiceToken>.Success(service);
@@ -57,10 +59,10 @@ namespace Autyan.NiChiJou.Service.Identity
 
             if (service == null)
             {
-                return ServiceResult<ServiceToken>.Failed("service not found");
+                return Failed<ServiceToken>("service not found");
             }
 
-            return ServiceResult<ServiceToken>.Success(service);
+            return Success(service);
         }
     }
 }

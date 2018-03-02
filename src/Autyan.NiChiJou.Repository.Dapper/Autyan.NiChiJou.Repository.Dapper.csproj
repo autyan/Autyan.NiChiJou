@@ -7,10 +7,12 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26130-01" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj" />
+    <ProjectReference Include="..\Autyan.NiChiJou.DTO\Autyan.NiChiJou.DTO.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
     <ProjectReference Include="..\Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj" />
   </ItemGroup>

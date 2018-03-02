@@ -4,6 +4,7 @@ using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.Model.Identity;
+using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -29,7 +30,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
         public async Task<ServiceResult<SessionData>> CreateSessionAsync(IdentityUser user)
         {
-            if(user.Id == null) return ServiceResult<SessionData>.Failed(SessionServiceStatus.UserIdIsNull);
+            if(user.Id == null) return Failed<SessionData>(SessionServiceStatus.UserIdIsNull);
 
             var sessionId = CreateSessionId();
             var data = new SessionData
@@ -37,12 +38,12 @@ namespace Autyan.NiChiJou.Service.Identity
                 Id = sessionId,
                 UserId = user.Id.Value,
                 UserName = user.NickName,
-                UserMemeberCode = user.UserMemberCode
+                MemeberCode = user.MemberCode
             };
             await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
                 new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(double.Parse(Configuration["Session:Expiration"]))));
 
-            return ServiceResult<SessionData>.Success(data);
+            return Success(data);
         }
 
         public async Task<ServiceResult<SessionData>> GetSessionAsync(string sessionId)
@@ -50,9 +51,9 @@ namespace Autyan.NiChiJou.Service.Identity
             var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
             if (string.IsNullOrWhiteSpace(sessionStr))
             {
-                return ServiceResult<SessionData>.Failed(SessionServiceStatus.SessionNotFound);
+                return Failed<SessionData>(SessionServiceStatus.SessionNotFound);
             }
-            return ServiceResult<SessionData>.Success(JsonConvert.DeserializeObject<SessionData>(sessionStr));
+            return Success(JsonConvert.DeserializeObject<SessionData>(sessionStr));
         }
 
         public async Task<ServiceResult<long>> GetSessionUserIdAsync(string sessionId)
@@ -60,11 +61,11 @@ namespace Autyan.NiChiJou.Service.Identity
             var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
             if (string.IsNullOrWhiteSpace(sessionStr))
             {
-                return ServiceResult<long>.Failed(SessionServiceStatus.SessionNotFound);
+                return Failed<long>(SessionServiceStatus.SessionNotFound);
             }
 
             var sessionData = JsonConvert.DeserializeObject<SessionData>(sessionStr);
-            return ServiceResult<long>.Success(sessionData.UserId);
+            return Success(sessionData.UserId);
         }
 
         public async Task RemoveSessionAsync(string sessionId)

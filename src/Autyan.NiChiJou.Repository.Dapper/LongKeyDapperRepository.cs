@@ -20,7 +20,9 @@ namespace Autyan.NiChiJou.Repository.Dapper
             {
                 entity.CreatedBy = -1;
             }
-            return await base.InsertAsync(entity);
+            var insertedId = await base.InsertAsync(entity);
+            entity.Id = insertedId;
+            return insertedId;
         }
 
         public override async Task<int> UpdateByIdAsync(TEntity entity)

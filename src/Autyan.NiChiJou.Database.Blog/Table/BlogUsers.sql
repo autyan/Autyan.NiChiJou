@@ -1,10 +1,10 @@
 ﻿CREATE TABLE [dbo].[BlogUsers]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
-	[NickName] VARCHAR(50) NOT NULL, 
-	[AvatorUrl] VARCHAR(200) NULL, 
-	[UserMemberCode] VARCHAR(50) NOT NULL, 
-	[Gender] TINYINT NOT NULL,
+	[NickName] NVARCHAR(50) NOT NULL, 
+	[AvatorUrl] NVARCHAR(200) NULL, 
+	[MemberCode] NVARCHAR(50) NOT NULL, 
+	[Gender] TINYINT NULL,
 	[CreatedAt] DATETIMEOFFSET NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,
 	[ModifiedAt] DATETIMEOFFSET NULL,
@@ -13,4 +13,4 @@
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_BlogUsers_LoginUserId] ON [dbo].[BlogUsers] ([UserMemberCode])
+CREATE NONCLUSTERED INDEX [IX_BlogUsers_MemberCode] ON [dbo].[BlogUsers] ([MemberCode])

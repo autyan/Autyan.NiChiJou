@@ -12,7 +12,7 @@ namespace Autyan.NiChiJou.UnifyLogin
         public static IServiceCollection AddUnifyLogin(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<LoginApiManager, LoginApiManager>()
-                .AddSingleton<LoginAction, LoginAction>()
+                .AddSingleton<Passport, Passport>()
                 .AddAuthentication(options => options.DefaultScheme = configuration["Cookie:Schema"])
                 .AddCookie(configuration["Cookie:Schema"], options =>
                 {
