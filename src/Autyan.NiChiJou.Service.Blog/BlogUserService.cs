@@ -38,20 +38,31 @@ namespace Autyan.NiChiJou.Service.Blog
                 MemberCode = memberCode
             };
 
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var blogUserId = await BlogUserRepo.InsertAsync(blogUser);
-                var blogId = await BlogRepo.InsertAsync(new Model.Blog.Blog
-                {
-                    BlogName = $"{blogUser.NickName}'s Blog",
-                    BlogUserId = blogUser.Id
-                });
-                if (blogUserId <= 0 || blogId <= 0)
-                {
-                    return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
-                }
+            //using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            //{
+            //    var blogUserId = await BlogUserRepo.InsertAsync(blogUser);
+            //    var blogId = await BlogRepo.InsertAsync(new Model.Blog.Blog
+            //    {
+            //        BlogName = $"{blogUser.NickName}'s Blog",
+            //        BlogUserId = blogUser.Id
+            //    });
+            //    if (blogUserId <= 0 || blogId <= 0)
+            //    {
+            //        return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
+            //    }
 
-                scope.Complete();
+            //    scope.Complete();
+            //}
+
+            var blogUserId = await BlogUserRepo.InsertAsync(blogUser);
+            var blogId = await BlogRepo.InsertAsync(new Model.Blog.Blog
+            {
+                BlogName = $"{blogUser.NickName}'s Blog",
+                BlogUserId = blogUser.Id
+            });
+            if (blogUserId <= 0 || blogId <= 0)
+            {
+                return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
             }
 
             return Success(blogUser);

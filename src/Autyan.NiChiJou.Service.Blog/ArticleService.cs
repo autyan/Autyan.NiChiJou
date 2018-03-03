@@ -32,23 +32,37 @@ namespace Autyan.NiChiJou.Service.Blog
         public async Task<ServiceResult<Article>> CreateArticleAsync(Article article, string content)
         {
             if (article.Id != null) return Failed<Article>("article exists!");
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            //using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            //{
+            //    var create = await ArticleRepo.InsertAsync(article);
+            //    if (create <= 0)
+            //    {
+            //        return Failed<Article>("create article failed");
+            //    }
+            //    create = await ContentRepo.InsertAsync(new ArticleContent
+            //    {
+            //        ArticleId = create,
+            //        Content = content
+            //    });
+            //    if (create <= 0)
+            //    {
+            //        return Failed<Article>("create articleContent failed");
+            //    }
+            //    scope.Complete();
+            //}
+            var create = await ArticleRepo.InsertAsync(article);
+            if (create <= 0)
             {
-                var create = await ArticleRepo.InsertAsync(article);
-                if (create <= 0)
-                {
-                    return Failed<Article>("create article failed");
-                }
-                create = await ContentRepo.InsertAsync(new ArticleContent
-                {
-                    ArticleId = create,
-                    Content = content
-                });
-                if (create <= 0)
-                {
-                    return Failed<Article>("create articleContent failed");
-                }
-                scope.Complete();
+                return Failed<Article>("create article failed");
+            }
+            create = await ContentRepo.InsertAsync(new ArticleContent
+            {
+                ArticleId = create,
+                Content = content
+            });
+            if (create <= 0)
+            {
+                return Failed<Article>("create articleContent failed");
             }
             return Success(article);
         }
@@ -57,23 +71,38 @@ namespace Autyan.NiChiJou.Service.Blog
         {
             if (article.Id == null) return Failed<Article>("articleId is null");
 
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            //using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            //{
+            //    var create = await ArticleRepo.UpdateByIdAsync(article);
+            //    if (create <= 0)
+            //    {
+            //        return Failed<Article>("update article failed");
+            //    }
+            //    create = await ContentRepo.UpdateByConditionAsync(new ArticleContent
+            //    {
+            //        ArticleId = create,
+            //        Content = content
+            //    }, new { ArticleId = article.Id });
+            //    if (create <= 0)
+            //    {
+            //        return Failed<Article>("update articleContent failed");
+            //    }
+            //    scope.Complete();
+            //}
+
+            var create = await ArticleRepo.UpdateByIdAsync(article);
+            if (create <= 0)
             {
-                var create = await ArticleRepo.UpdateByIdAsync(article);
-                if (create <= 0)
-                {
-                    return Failed<Article>("update article failed");
-                }
-                create = await ContentRepo.UpdateByConditionAsync(new ArticleContent
-                {
-                    ArticleId = create,
-                    Content = content
-                }, new { ArticleId = article.Id });
-                if (create <= 0)
-                {
-                    return Failed<Article>("update articleContent failed");
-                }
-                scope.Complete();
+                return Failed<Article>("update article failed");
+            }
+            create = await ContentRepo.UpdateByConditionAsync(new ArticleContent
+            {
+                ArticleId = create,
+                Content = content
+            }, new { ArticleId = article.Id });
+            if (create <= 0)
+            {
+                return Failed<Article>("update articleContent failed");
             }
             return Success(article);
         }
