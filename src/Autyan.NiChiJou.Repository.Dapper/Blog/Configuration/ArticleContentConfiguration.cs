@@ -6,7 +6,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog.Configuration
     {
         public ArticleContentConfiguration()
         {
-            this["Content"].HasMaxLength(-1);
+            this["Content"].HasMaxLength(int.MaxValue);
         }
     }
 }

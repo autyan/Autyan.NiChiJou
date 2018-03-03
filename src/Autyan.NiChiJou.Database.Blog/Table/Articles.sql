@@ -1,8 +1,8 @@
 ﻿CREATE TABLE [dbo].[Articles]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
-	[Title] NVARCHAR(100) NOT NULL, 
-	[Extract] NVARCHAR(200) NULL, 
+	[Title] NVARCHAR(200) NOT NULL, 
+	[Extract] NVARCHAR(500) NULL, 
 	[BlogId] BIGINT NOT NULL, 
 	[Reads] INT NOT NULL,
 	[Comments] INT NOT NULL,
