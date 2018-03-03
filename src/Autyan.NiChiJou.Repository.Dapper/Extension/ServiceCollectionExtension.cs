@@ -17,9 +17,6 @@ namespace Autyan.NiChiJou.Repository.Dapper.Extension
             //load model Metadata
             MetadataContext.Instance.Initilize(AppDomain.CurrentDomain.GetAssemblies());
 
-            //default database use mssql
-            UseDapperWithMySql(services);
-
             services.AddScoped<IIdentityUserRepository, IdentityUserRepository>();
             services.AddScoped<IServiceTokenRepository, ServiceTokenRepository>();
             services.AddScoped<IBlogUserRepository, BlogUserRepository>();

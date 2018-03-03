@@ -34,6 +34,7 @@ namespace Autyan.NiChiJou.Blog
                 })
                 .AddNiChiJouDataModel()
                 .AddDapper()
+                .UseDapperWithMsSql()
                 .AddMvcComponent()
                 .AddBlogService()
                 .AddUnifyLogin(Configuration)
