@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Data;
-using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Model.Blog;
@@ -148,43 +147,43 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id)
         {
-            Logger.LogTrace("start Read Article from service");
             var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery { Id = id });
-            Logger.LogTrace("end Read Article from service");
             if (article == null)
             {
                 return Failed<ArticleDetail>(ArticleStatus.ArticleNotFound);
             }
 
-            Logger.LogTrace("start Read ArticleContent from service");
             var content = await ContentRepo.FirstOrDefaultAsync(new ArticleContentQuery { ArticleId = id });
-            Logger.LogTrace("end Read ArticleContent from service");
             if (content == null)
             {
                 return Failed<ArticleDetail>("Article Content Lost!");
             }
 
-            Logger.LogTrace("start Read ArticleComments from service");
             var comments = await CommentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
             {
                 PostId = id
             });
-            Logger.LogTrace("end Read ArticleComments from service");
 
-            Logger.LogTrace("start Read request cache from service");
-            var requestRepeat = await Cache.GetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>");
+            var key = $"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>";
+            Logger.LogTrace($"start Read request cache from service, key = {key}");
+            string requestRepeat = null;
+            try
+            {
+                requestRepeat = await Cache.GetStringAsync(key);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("read request cache failed", ex);
+            }
             Logger.LogTrace("end Read request cache from service");
             if (requestRepeat == null)
             {
                 article.Reads += 1;
                 article.LastReadAt = DateTimeOffset.Now;
-                Logger.LogTrace("start Update Article from service");
                 await ArticleRepo.UpdateByIdAsync(article);
-                Logger.LogTrace("end Update Article from service");
 
-                Logger.LogTrace("start update request cache from service");
                 await Cache.SetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested", new DistributedCacheEntryOptions{AbsoluteExpiration = DateTimeOffset.Now.AddDays(1)});
-                Logger.LogTrace("end update request cache from service");
             }
 
             return Success(new ArticleDetail
