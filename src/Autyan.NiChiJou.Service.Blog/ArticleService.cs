@@ -8,7 +8,7 @@ using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Service.Blog.ServiceStatusCode;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Blog
@@ -23,14 +23,14 @@ namespace Autyan.NiChiJou.Service.Blog
 
         private HttpContext HttpContext { get; }
 
-        private IDistributedCache Cache { get; }
+        private IMemoryCache Cache { get; }
 
         public ArticleService(ILoggerFactory loggerFactory,
             IArticleRepository articleRepository,
             IArticleCommentRepository articleCommentRepository,
             IArticleContentRepository articleContentRepository,
             IHttpContextAccessor httpContextAccessor,
-            IDistributedCache cache) : base(loggerFactory)
+            IMemoryCache cache) : base(loggerFactory)
         {
             ArticleRepo = articleRepository;
             CommentRepo = articleCommentRepository;
@@ -164,14 +164,12 @@ namespace Autyan.NiChiJou.Service.Blog
                 PostId = id
             });
 
-            var requestRepeat = await Cache.GetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>");
-            if (requestRepeat == null)
+            if (Cache.TryGetValue($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", out var _))
             {
                 article.Reads += 1;
                 article.LastReadAt = DateTimeOffset.Now;
                 await ArticleRepo.UpdateByIdAsync(article);
-
-                await Cache.SetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested", new DistributedCacheEntryOptions{AbsoluteExpiration = DateTimeOffset.Now.AddDays(1)});
+                Cache.Set($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested", DateTimeOffset.Now.AddDays(1));
             }
 
             return Success(new ArticleDetail
