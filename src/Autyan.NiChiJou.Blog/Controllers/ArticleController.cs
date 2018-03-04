@@ -101,7 +101,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
             return View();
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Comment(AddCommentViewModel model)
         {
