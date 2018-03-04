@@ -53,7 +53,21 @@ namespace Autyan.NiChiJou.Service.Blog
             var create = await ArticleRepo.InsertAsync(article);
             if (create <= 0)
             {
-                return Failed<Article>("create article failed");
+                var create = await ArticleRepo.InsertAsync(article);
+                if (create <= 0)
+                {
+                    return Failed<Article>("create article failed");
+                }
+                create = await ContentRepo.InsertAsync(new ArticleContent
+                {
+                    ArticleId = create,
+                    Content = content
+                });
+                if (create <= 0)
+                {
+                    return Failed<Article>("create articleContent failed");
+                }
+                scope.Complete();
             }
             create = await ContentRepo.InsertAsync(new ArticleContent
             {
