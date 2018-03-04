@@ -164,19 +164,7 @@ namespace Autyan.NiChiJou.Service.Blog
                 PostId = id
             });
 
-            var key = $"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>";
-            Logger.LogTrace($"start Read request cache from service, key = {key}");
-            string requestRepeat = null;
-            try
-            {
-                requestRepeat = await Cache.GetStringAsync(key);
-
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("read request cache failed", ex);
-            }
-            Logger.LogTrace("end Read request cache from service");
+            var requestRepeat = await Cache.GetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>");
             if (requestRepeat == null)
             {
                 article.Reads += 1;

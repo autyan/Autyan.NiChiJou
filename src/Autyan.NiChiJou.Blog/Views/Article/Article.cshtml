@@ -1,32 +1,18 @@
-﻿@using Microsoft.Extensions.Logging
-@model Autyan.NiChiJou.DTO.Blog.ArticleDetail
+﻿@model Autyan.NiChiJou.DTO.Blog.ArticleDetail
 @{
     ViewData["Title"] = Model.Title;
 }
-@inject ILoggerFactory LoggerFactory;
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        @{
-            var logger = LoggerFactory.CreateLogger(GetType());
-        }
-        @{
-            logger.LogTrace("render title");
-        }
         <h3>@Model.Title</h3>
         <input asp-for="Id" type="hidden" />
         <hr />
-        @{
-            logger.LogTrace("render content");
-        }
         @Html.Raw(Model.Content)
         <hr />
         <ul class="list-group">
             <li class="list-group-item">
                 <div>
-                    @{
-                        logger.LogTrace("render comment count");
-                    }
                     @Model.Comments.Count() comments
                 </div>
                 <div class="input-group">
@@ -37,10 +23,8 @@
                 </div>
                 <div id="articleComments">
                     @{
-                        logger.LogTrace("render all comment");
                         foreach (var articleComment in Model.Comments)
                         {
-                            logger.LogTrace("render single comment");
                             <hr />
                             <span class="tag">@articleComment.CreatedAt?.LocalDateTime</span>
                             <span class="tag">@(articleComment.CommentedBy ?? "anonymous")</span>
