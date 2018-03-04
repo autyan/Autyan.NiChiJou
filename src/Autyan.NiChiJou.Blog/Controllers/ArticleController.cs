@@ -32,9 +32,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetArticleAsync(long id)
         {
-            Logger.LogTrace("start Read Article");
             var article = await ArticleService.ReadArticleDetailByIdAsync(id);
-            Logger.LogTrace("end Read Article");
             if (article.Succeed)
             {
                 return View(nameof(Article), article.Data);
