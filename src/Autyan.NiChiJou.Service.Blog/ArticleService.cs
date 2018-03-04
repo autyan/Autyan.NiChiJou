@@ -164,7 +164,7 @@ namespace Autyan.NiChiJou.Service.Blog
                 PostId = id
             });
 
-            if (Cache.TryGetValue($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", out var _))
+            if (!Cache.TryGetValue($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", out var _))
             {
                 article.Reads += 1;
                 article.LastReadAt = DateTimeOffset.Now;
