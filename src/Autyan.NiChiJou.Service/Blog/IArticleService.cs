@@ -19,5 +19,7 @@ namespace Autyan.NiChiJou.Service.Blog
         Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id);
 
         Task<ServiceResult<PagedResult<ArticlePreview>>> GetPagedArticleAsync(ArticleQuery query);
+
+        Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post);
     }
 }

@@ -2,7 +2,7 @@
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY, 
 	[Content] NVARCHAR(4000) NOT NULL, 
-	[CommentedBy] NVARCHAR(200) NULL, 
+	[CommentedBy] BIGINT NULL, 
 	[PostId] BIGINT NOT NULL, 
 	[ToComment] BIGINT NULL, 
 	[CreatedAt] DATETIMEOFFSET NOT NULL, 

@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 using Autyan.NiChiJou.Core.Data;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
@@ -103,7 +103,7 @@ namespace Autyan.NiChiJou.Service.Blog
             {
                 ArticleId = create,
                 Content = content
-            }, new {ArticleId = article.Id});
+            }, new { ArticleId = article.Id });
             if (create <= 0)
             {
                 return Failed<Article>("update articleContent failed");
@@ -114,7 +114,7 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<Article>> FindArticleAsync(long id)
         {
-            var article = await ArticleRepo.FirstOrDefaultAsync(new {Id = id});
+            var article = await ArticleRepo.FirstOrDefaultAsync(new { Id = id });
             if (article == null)
             {
                 return Failed<Article>(ArticleStatus.ArticleNotFound);
@@ -131,25 +131,28 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<string>> LoadArticleContentAsync(long id)
         {
-            var content = await ContentRepo.FirstOrDefaultAsync(new {ArticleId = id});
+            var content = await ContentRepo.FirstOrDefaultAsync(new { ArticleId = id });
             return Success(content?.Content);
         }
 
         public async Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id)
         {
-            var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery {Id = id});
+            var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery { Id = id });
             if (article == null)
             {
                 return Failed<ArticleDetail>(ArticleStatus.ArticleNotFound);
             }
 
-            var content = await ContentRepo.FirstOrDefaultAsync(new ArticleContentQuery {ArticleId = id});
+            var content = await ContentRepo.FirstOrDefaultAsync(new ArticleContentQuery { ArticleId = id });
             if (content == null)
             {
                 return Failed<ArticleDetail>("Article Content Lost!");
             }
 
-            var comments = await CommentRepo.QueryAsync(new {PostId = id});
+            var comments = await CommentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
+            {
+                PostId = id
+            });
 
             article.Reads += 1;
             article.LastReadAt = DateTimeOffset.Now;
@@ -163,6 +166,26 @@ namespace Autyan.NiChiJou.Service.Blog
                 Content = content.Content,
                 Comments = comments
             });
+        }
+
+        public async Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post)
+        {
+            var insertResult = await CommentRepo.InsertAsync(post);
+            if (insertResult <= 0)
+            {
+                return Failed<ArticleCommentDetails>("Insert Comment Failed");
+            }
+
+            var article = await ArticleRepo.FirstOrDefaultAsync(new {Id = post.PostId});
+            article.Comments += 1;
+            await ArticleRepo.UpdateByIdAsync(article);
+
+            var comments = await CommentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
+            {
+                Id = insertResult
+            });
+
+            return Success(comments.FirstOrDefault());
         }
     }
 }

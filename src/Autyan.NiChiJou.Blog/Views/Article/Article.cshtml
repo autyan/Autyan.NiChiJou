@@ -6,6 +6,7 @@
 <div class="panel panel-primary">
     <div class="panel-body">
         <h3>@Model.Title</h3>
+        <input asp-for="Id" type="hidden" />
         <hr />
         @Html.Raw(Model.Content)
         <hr />
@@ -15,26 +16,45 @@
                     @Model.Comments.Count() comments
                 </div>
                 <div class="input-group">
-                    <input type="text" class="form-control" />
+                    <input id="newComment" type="text" class="form-control" />
                     <div class="input-group-btn">
-                        <input type="button" class="btn btn-primary" value="Add comment" />
+                        <input id="addComment" type="button" class="btn btn-primary" value="Add comment" />
                     </div>
                 </div>
-                @{
-                    foreach (var articleComment in Model.Comments)
-                    {
-                        <hr />
-                        <span class="tag">@articleComment.CreatedAt?.LocalDateTime</span>
-                        <span class="tag">@(articleComment.CommentedBy ?? "anonymous")</span>
-                        <div class="comContent">
-                            <p>
-                                <i>@articleComment.Content</i>
-                            </p>
-                        </div>
+                <div id="articleComments">
+                    @{
+                        foreach (var articleComment in Model.Comments)
+                        {
+                            <hr />
+                            <span class="tag">@articleComment.CreatedAt?.LocalDateTime</span>
+                            <span class="tag">@(articleComment.CommentedBy ?? "anonymous")</span>
+                            <div class="comContent">
+                                <p>
+                                    <i>@articleComment.Content</i>
+                                </p>
+                            </div>
+                        }
                     }
-                }
+                </div>
             </li>
         </ul>
     </div>
 </div>
 
+@section Scripts
+{
+    <script type="text/javascript">
+        $('#addComment').on('click', function () {
+            base.AjaxPost('/Article/Comment', { ArticleId: $('#Id').val(), Content: $('#newComment').val() }, function (ret) {
+                $('#articleComments').append('<hr /><span class="tag">'
+                    + new Date(ret.createdAt).toLocaleString('en-GB').replace(',', '')
+                    + '</span><span class="tag">'
+                    + (ret.commentedBy === null ? 'anonymous' : ret.commentedBy)
+                    + '</span><div class="comContent"><p><i>'
+                    + ret.content
+                    + '</i></p></div>');
+                $('#newComment').empty('');
+            });
+        });
+    </script>
+}

@@ -6,7 +6,7 @@ namespace Autyan.NiChiJou.Model.Blog
     {
         public virtual string Content { get; set; }
 
-        public virtual string CommentedBy { get; set; }
+        public virtual long? CommentedBy { get; set; }
 
         public virtual long? PostId { get; set; }
 
@@ -15,7 +15,7 @@ namespace Autyan.NiChiJou.Model.Blog
         public virtual long? ToComment { get; set; }
     }
 
-    public class PostCommentQuery : LongKeyBaseEntityQuery
+    public class ArticleCommentQuery : LongKeyBaseEntityQuery
     {
         public string Content { get; set; }
 

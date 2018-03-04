@@ -47,6 +47,23 @@
     <footer>
         <p style="text-align: center;">&copy; 2018 - のんびり毎日</p>
     </footer>
+    <div class="modal fade" id="baseModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h3 class="modal-title"></h3>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="modal-cancel" data-dismiss="modal"></button>
+                    <button type="button" class="btn btn-primary" id="modal-confirm" style="display: none;">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>

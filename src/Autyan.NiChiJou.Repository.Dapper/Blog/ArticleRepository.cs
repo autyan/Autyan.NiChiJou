@@ -36,8 +36,16 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog
                 .Append("LEFT JOIN Blogs ON Articles.BlogId = Blogs.Id\r\n")
                 .Append("LEFT JOIN BlogUsers ON Blogs.BlogUserid= BlogUsers.Id\r\n")
                 .Append("LEFT JOIN ArticleContents ON ArticleContents.ArticleId = Articles.Id\r\n")
-                .Append(
-                    "LEFT JOIN (SELECT PostId, MAX(CreatedAt) AS LastCommentedAt FROM ArticleComments GROUP BY ArticleComments.PostId) c ON c.PostId = Articles.Id ORDER BY ");
+                .Append("LEFT JOIN (SELECT PostId, MAX(CreatedAt) AS LastCommentedAt FROM ArticleComments GROUP BY ArticleComments.PostId) c ON c.PostId = Articles.Id WHERE 1=1 ");
+            foreach (var property in GetProperties(query.GetType()))
+            {
+                if (property.GetValue(query) != null)
+                {
+                    strBuilder.Append($" AND {property.Name} = @{property.Name} ");
+                }
+            }
+
+            strBuilder.Append(" ORDER BY ");
             if (query.Asc == null && query.Desc == null)
             {
                 strBuilder.Append(" Id ");

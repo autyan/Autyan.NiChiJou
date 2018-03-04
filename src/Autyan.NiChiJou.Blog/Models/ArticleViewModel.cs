@@ -34,4 +34,14 @@ namespace Autyan.NiChiJou.Blog.Models
 
         public bool RenderPager { get; set; }
     }
+
+    public class AddCommentViewModel
+    {
+        [Required]
+        public long ArticleId { get; set; }
+
+        [Required]
+        [MaxLength(500)]
+        public string Content { get; set; }
+    }
 }

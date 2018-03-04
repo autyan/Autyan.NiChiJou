@@ -101,5 +101,26 @@ namespace Autyan.NiChiJou.Blog.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Comment(AddCommentViewModel model)
+        {
+            var comment = new ArticleComment
+            {
+                PostId = model.ArticleId,
+                Content = model.Content
+            };
+            if (IdentityContext.Identity != null)
+            {
+                comment.CommentedBy = IdentityContext.Identity.UserId;
+            }
+
+            var result = await ArticleService.AddCommentOnArticle(comment);
+            if (!result.Succeed)
+            {
+                return Json("Failed");
+            }
+            return Json(result.Data);
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Autyan.NiChiJou.Model.Blog;
 
 namespace Autyan.NiChiJou.DTO.Blog
 {
@@ -13,6 +12,6 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public long? BlogId { get; set; }
 
-        public IEnumerable<ArticleComment> Comments { get; set; }
+        public IEnumerable<ArticleCommentDetails> Comments { get; set; }
     }
 }
