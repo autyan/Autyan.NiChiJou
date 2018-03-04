@@ -166,7 +166,7 @@ namespace Autyan.NiChiJou.Service.Blog
             });
 
             var requestRepeat = await Cache.GetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>");
-            if (requestRepeat != null)
+            if (requestRepeat == null)
             {
                 article.Reads += 1;
                 article.LastReadAt = DateTimeOffset.Now;
