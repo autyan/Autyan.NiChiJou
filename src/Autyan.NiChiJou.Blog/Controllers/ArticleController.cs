@@ -7,6 +7,7 @@ using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Service.Blog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Blog.Controllers
 {
@@ -16,18 +17,24 @@ namespace Autyan.NiChiJou.Blog.Controllers
 
         private IIdentityContext<BlogIdentity> IdentityContext { get; }
 
+        private ILogger Logger { get; }
+
         public ArticleController(IArticleService articleService,
-            IIdentityContext<BlogIdentity> identityContext)
+            IIdentityContext<BlogIdentity> identityContext,
+            ILoggerFactory loggerFactory)
         {
             ArticleService = articleService;
             IdentityContext = identityContext;
+            Logger = loggerFactory.CreateLogger(GetType());
         }
 
         [HttpGet("Article/Posts/{id:long}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetArticleAsync(long id)
         {
+            Logger.LogTrace("start Read Article");
             var article = await ArticleService.ReadArticleDetailByIdAsync(id);
+            Logger.LogTrace("end Read Article");
             if (article.Succeed)
             {
                 return View(nameof(Article), article.Data);
