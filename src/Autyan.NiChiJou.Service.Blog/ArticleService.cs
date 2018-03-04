@@ -50,25 +50,13 @@ namespace Autyan.NiChiJou.Service.Blog
             //    }
             //    scope.Complete();
             //}
+
             var create = await ArticleRepo.InsertAsync(article);
             if (create <= 0)
             {
-                var create = await ArticleRepo.InsertAsync(article);
-                if (create <= 0)
-                {
-                    return Failed<Article>("create article failed");
-                }
-                create = await ContentRepo.InsertAsync(new ArticleContent
-                {
-                    ArticleId = create,
-                    Content = content
-                });
-                if (create <= 0)
-                {
-                    return Failed<Article>("create articleContent failed");
-                }
-                scope.Complete();
+                return Failed<Article>("create article failed");
             }
+
             create = await ContentRepo.InsertAsync(new ArticleContent
             {
                 ArticleId = create,
@@ -78,6 +66,7 @@ namespace Autyan.NiChiJou.Service.Blog
             {
                 return Failed<Article>("create articleContent failed");
             }
+
             return Success(article);
         }
 
@@ -109,21 +98,23 @@ namespace Autyan.NiChiJou.Service.Blog
             {
                 return Failed<Article>("update article failed");
             }
+
             create = await ContentRepo.UpdateByConditionAsync(new ArticleContent
             {
                 ArticleId = create,
                 Content = content
-            }, new { ArticleId = article.Id });
+            }, new {ArticleId = article.Id});
             if (create <= 0)
             {
                 return Failed<Article>("update articleContent failed");
             }
+
             return Success(article);
         }
 
         public async Task<ServiceResult<Article>> FindArticleAsync(long id)
         {
-            var article = await ArticleRepo.FirstOrDefaultAsync(new { Id = id });
+            var article = await ArticleRepo.FirstOrDefaultAsync(new {Id = id});
             if (article == null)
             {
                 return Failed<Article>(ArticleStatus.ArticleNotFound);
@@ -140,13 +131,13 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<string>> LoadArticleContentAsync(long id)
         {
-            var content = await ContentRepo.FirstOrDefaultAsync(new { ArticleId = id });
+            var content = await ContentRepo.FirstOrDefaultAsync(new {ArticleId = id});
             return Success(content?.Content);
         }
 
         public async Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id)
         {
-            var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery { Id = id });
+            var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery {Id = id});
             if (article == null)
             {
                 return Failed<ArticleDetail>(ArticleStatus.ArticleNotFound);
