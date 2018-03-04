@@ -2,11 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Data;
+using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Service.Blog.ServiceStatusCode;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Blog
@@ -19,14 +22,22 @@ namespace Autyan.NiChiJou.Service.Blog
 
         private IArticleContentRepository ContentRepo { get; }
 
+        private HttpContext HttpContext { get; }
+
+        private IDistributedCache Cache { get; }
+
         public ArticleService(ILoggerFactory loggerFactory,
             IArticleRepository articleRepository,
             IArticleCommentRepository articleCommentRepository,
-            IArticleContentRepository articleContentRepository) : base(loggerFactory)
+            IArticleContentRepository articleContentRepository,
+            IHttpContextAccessor httpContextAccessor,
+            IDistributedCache cache) : base(loggerFactory)
         {
             ArticleRepo = articleRepository;
             CommentRepo = articleCommentRepository;
             ContentRepo = articleContentRepository;
+            HttpContext = httpContextAccessor.HttpContext;
+            Cache = cache;
         }
 
         public async Task<ServiceResult<Article>> CreateArticleAsync(Article article, string content)
@@ -154,9 +165,14 @@ namespace Autyan.NiChiJou.Service.Blog
                 PostId = id
             });
 
-            article.Reads += 1;
-            article.LastReadAt = DateTimeOffset.Now;
-            await ArticleRepo.UpdateByIdAsync(article);
+            var requestRepeat = await Cache.GetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>");
+            if (requestRepeat != null)
+            {
+                article.Reads += 1;
+                article.LastReadAt = DateTimeOffset.Now;
+                await ArticleRepo.UpdateByIdAsync(article);
+                await Cache.SetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested");
+            }
 
             return Success(new ArticleDetail
             {
