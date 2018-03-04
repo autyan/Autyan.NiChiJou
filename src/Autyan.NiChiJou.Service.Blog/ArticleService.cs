@@ -171,7 +171,7 @@ namespace Autyan.NiChiJou.Service.Blog
                 article.Reads += 1;
                 article.LastReadAt = DateTimeOffset.Now;
                 await ArticleRepo.UpdateByIdAsync(article);
-                await Cache.SetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested");
+                await Cache.SetStringAsync($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested", new DistributedCacheEntryOptions{AbsoluteExpiration = DateTimeOffset.Now.AddDays(1)});
             }
 
             return Success(new ArticleDetail
