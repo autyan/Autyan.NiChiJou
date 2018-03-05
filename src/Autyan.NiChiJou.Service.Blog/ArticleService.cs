@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 using Autyan.NiChiJou.Core.Data;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
@@ -43,49 +42,42 @@ namespace Autyan.NiChiJou.Service.Blog
         public async Task<ServiceResult<Article>> CreateArticleAsync(Article article, string content)
         {
             if (article.Id != null) return Failed<Article>("article exists!");
-            try
-            {
-                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                {
-                    var create = await ArticleRepo.InsertAsync(article);
-                    if (create <= 0)
-                    {
-                        return Failed<Article>("create article failed");
-                    }
-
-                    create = await ContentRepo.InsertAsync(new ArticleContent
-                    {
-                        ArticleId = create,
-                        Content = content
-                    });
-                    if (create <= 0)
-                    {
-                        return Failed<Article>("create articleContent failed");
-                    }
-
-                    scope.Complete();
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("fetch article failed.", ex);
-            }
-
-            //var create = await ArticleRepo.InsertAsync(article);
-            //if (create <= 0)
+            //using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             //{
-            //    return Failed<Article>("create article failed");
+            //    var create = await ArticleRepo.InsertAsync(article);
+            //    if (create <= 0)
+            //    {
+            //        return Failed<Article>("create article failed");
+            //    }
+
+            //    create = await ContentRepo.InsertAsync(new ArticleContent
+            //    {
+            //        ArticleId = create,
+            //        Content = content
+            //    });
+            //    if (create <= 0)
+            //    {
+            //        return Failed<Article>("create articleContent failed");
+            //    }
+
+            //    scope.Complete();
             //}
 
-            //create = await ContentRepo.InsertAsync(new ArticleContent
-            //{
-            //    ArticleId = create,
-            //    Content = content
-            //});
-            //if (create <= 0)
-            //{
-            //    return Failed<Article>("create articleContent failed");
-            //}
+            var create = await ArticleRepo.InsertAsync(article);
+            if (create <= 0)
+            {
+                return Failed<Article>("create article failed");
+            }
+
+            create = await ContentRepo.InsertAsync(new ArticleContent
+            {
+                ArticleId = create,
+                Content = content
+            });
+            if (create <= 0)
+            {
+                return Failed<Article>("create articleContent failed");
+            }
 
             return Success(article);
         }
