@@ -1,4 +1,5 @@
-﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
+﻿using System.Net;
+using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
@@ -62,11 +63,19 @@ namespace Autyan.NiChiJou.Blog
                     .UseStatusCodePagesWithRedirects("/Error/{0}");
             }
 
-            app.UseStaticFiles()
-                .UseForwardedHeaders(new ForwardedHeadersOptions
+            var forwardedHeadersOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+            foreach (var configurationSection in Configuration.GetSection("Proxies").Value.Split(","))
+            {
+                if(IPAddress.TryParse(configurationSection, out var addr))
                 {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-                })
+                    forwardedHeadersOptions.KnownProxies.Add(addr);
+                }
+            }
+            app.UseStaticFiles()
+                .UseForwardedHeaders(forwardedHeadersOptions)
                 .UseAuthentication()
                 .UseMvc(routes =>
                 {
