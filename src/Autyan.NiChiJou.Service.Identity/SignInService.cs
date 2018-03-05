@@ -6,6 +6,7 @@ using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.Model.Identity;
 using Autyan.NiChiJou.Repository.Identity;
 using Autyan.NiChiJou.Service.Identity.ServiceStatusCode;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Service.Identity
@@ -14,14 +15,22 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private IIdentityUserRepository UserRepo { get; }
 
+        private IDistributedCache Cache { get; }
+
         public SignInService(IIdentityUserRepository userRepository,
-            ILoggerFactory loggerFactory): base(loggerFactory)
+            ILoggerFactory loggerFactory,
+            IDistributedCache cache): base(loggerFactory)
         {
             UserRepo = userRepository;
+            Cache = cache;
         }
 
         public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegistration model)
         {
+            if (Cache.GetStringAsync($"Identity.Registration.InviteCode{model.InviteCode}") == null)
+            {
+                return Failed<IdentityUser>(IdentityStatus.InvalidInviteCode);
+            }
             var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)
             {

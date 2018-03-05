@@ -67,7 +67,8 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
             var registerResult = await SignInManager.RegisterUserAsync(new UserRegistration
             {
                 LoginName = model.LoginName,
-                Password = model.Password
+                Password = model.Password,
+                InviteCode = model.InviteCode
             });
 
             if (registerResult.Succeed)
