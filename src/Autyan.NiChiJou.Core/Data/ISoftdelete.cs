@@ -4,6 +4,6 @@ namespace Autyan.NiChiJou.Core.Data
 {
     public interface ISoftdelete
     {
-        DateTimeOffset? DeletedAt { get; set; }
+        DateTime? DeletedAt { get; set; }
     }
 }

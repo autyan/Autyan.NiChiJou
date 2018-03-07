@@ -20,12 +20,12 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public long? Comments { get; set; }
 
-        public DateTimeOffset? LastReadAt { get; set; }
+        public DateTime? LastReadAt { get; set; }
 
-        public DateTimeOffset? LastCommentedAt { get; set; }
+        public DateTime? LastCommentedAt { get; set; }
 
-        public DateTimeOffset? PostedAt { get; set; }
+        public DateTime? PostedAt { get; set; }
 
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

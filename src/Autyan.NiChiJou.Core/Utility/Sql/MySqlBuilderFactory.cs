@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Autyan.NiChiJou.Core.Utility.Sql
+﻿namespace Autyan.NiChiJou.Core.Utility.Sql
 {
     public class MySqlBuilderFactory : ISqlBuilderFactory
     {

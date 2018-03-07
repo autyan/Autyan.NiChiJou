@@ -10,8 +10,8 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public string Extract { get; set; }
 
-        public DateTimeOffset CreateAt { get; set; }
+        public DateTime CreateAt { get; set; }
 
-        public DateTimeOffset? ModifyAt { get; set; }
+        public DateTime? ModifyAt { get; set; }
     }
 }

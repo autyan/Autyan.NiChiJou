@@ -71,15 +71,14 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             builder.Update(TableName);
-            foreach (var column in Columns.Where(c => c != "Id"))
+            foreach (var column in Columns)
             {
                 builder.Set(column, $"@{column}");
             }
 
             builder.WhereAnd("Id = @Id");
-            entity.ModifiedAt = DateTimeOffset.Now;
+            entity.ModifiedAt = DateTime.Now;
 
-            //var execurePar = ParseExecuteParameters(entity);
             return await Connection.ExecuteAsync(builder.End(), entity);
         }
 
@@ -148,52 +147,12 @@ namespace Autyan.NiChiJou.Repository.Dapper
         {
             var builder = StartSql();
             entity.CreatedAt = DateTime.Now;
-            switch (KeyOption)
+            builder.InsertInto(TableName, KeyOption);
+            foreach (var column in Columns)
             {
-                case DatabaseGeneratedOption.None:
-                    GetSequenceInsertSql(builder);
-                    break;
-                case DatabaseGeneratedOption.Identity:
-                    GetIdentityInsertSql(builder);
-                    break;
-                case DatabaseGeneratedOption.Computed:
-                    GetComputedInsertSql(builder);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                builder.Set(column, $"@{column}");
             }
-            builder.Output(" INSERTED.ID ");
-            //var executePar = ParseExecuteParameters(entity);
             return await Connection.ExecuteScalarAsync<long>(builder.End(), entity);
-        }
-
-        private void GetSequenceInsertSql(ISqlBuilder builder)
-        {
-            builder.InsertInto(TableName).Set("Id", "NEXT VALUE FOR DBO.EntityId");
-            foreach (var column in Columns.Where(c => c != "Id").ToArray())
-            {
-                builder.Set(column, $"@{column}");
-            }
-        }
-
-        private void GetIdentityInsertSql(ISqlBuilder builder)
-        {
-            var insertColumns = Columns.Where(c => c != "Id").ToArray();
-            builder.InsertInto(TableName);
-            foreach (var column in insertColumns)
-            {
-                builder.Set(column, $"@{column}");
-            }
-        }
-
-        private void GetComputedInsertSql(ISqlBuilder builder)
-        {
-            var insertColumns = Columns.Where(c => c != "Id").ToArray();
-            builder.InsertInto(TableName);
-            foreach (var column in insertColumns)
-            {
-                builder.Set(column, $"@{column}");
-            }
         }
 
         public virtual async Task<int> GetCountAsync(object condition)
@@ -217,7 +176,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
         protected virtual ISqlBuilder BuildQuerySql(object query)
         {
             var builder = StartSql();
-            builder.Select(string.Join(",", Columns)).FromTable(TableName);
+            builder.Select($"{Metadata.Key}, {string.Join(",", Columns)}").FromTable(TableName);
             AppendWhere(builder, query);
 
             return builder;

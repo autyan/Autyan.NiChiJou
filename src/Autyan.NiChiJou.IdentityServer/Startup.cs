@@ -34,7 +34,7 @@ namespace Autyan.NiChiJou.IdentityServer
                 .AddIdentityCache(Configuration)
                 .AddNiChiJouDataModel()
                 .AddDapper()
-                .UseDapperWithMsSql()
+                .UseDapperWithMySql()
                 .AddIdentityService()
                 .AddMvcComponent()
                 .AddAuthentication(options => options.DefaultScheme = Configuration["Cookie:Schema"])

@@ -1,6 +1,6 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using MySql.Data.MySqlClient;
 
 namespace Autyan.NiChiJou.Core.Repository.DbConnectionFactory
 {
@@ -12,7 +12,7 @@ namespace Autyan.NiChiJou.Core.Repository.DbConnectionFactory
 
         public IDbConnection GetConnection(string name)
         {
-            return new SqlConnection(GetConnectionString(name));
+            return new MySqlConnection(GetConnectionString(name));
         }
     }
 }

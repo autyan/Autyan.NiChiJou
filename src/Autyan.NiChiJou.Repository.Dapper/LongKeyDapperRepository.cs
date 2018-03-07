@@ -37,7 +37,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
         protected override Dictionary<string, object> ParseUpdateValues(object paramters)
         {
             var dic = base.ParseUpdateValues(paramters);
-            dic.Add("ModifiedAt", DateTimeOffset.Now);
+            dic.Add("ModifiedAt", DateTime.Now);
             dic.Add("ModifiedBy", -1);
             return dic;
         }

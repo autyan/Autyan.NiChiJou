@@ -6,10 +6,10 @@
 	[BlogId] BIGINT NOT NULL, 
 	[Reads] INT NOT NULL,
 	[Comments] INT NOT NULL,
-	[LastReadAt] DATETIMEOFFSET NULL,
-	[CreatedAt] DATETIMEOFFSET NOT NULL, 
+	[LastReadAt] datetime2(7) NULL,
+	[CreatedAt] datetime2(7) NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,
-	[ModifiedAt] DATETIMEOFFSET NULL,
+	[ModifiedAt] datetime2(7) NULL,
 	[ModifiedBy] BIGINT NULL
 )
 

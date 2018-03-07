@@ -1,4 +1,6 @@
-﻿namespace Autyan.NiChiJou.Core.Utility.Sql
+﻿using System.Linq;
+
+namespace Autyan.NiChiJou.Core.Utility.Sql
 {
     public class MsSqlBuilder : SqlBuilder
     {
@@ -9,13 +11,18 @@
 
         public static ISqlBuilder Start() => new MsSqlBuilder();
 
-        protected override void ConstructInsert()
+        protected override void SequenceInsert()
         {
-            base.ConstructInsert();
-            if (!string.IsNullOrWhiteSpace(OutputColumns))
-            {
-                StrBuilder.Append(" OUTPUT ").Append(OutputColumns);
-            }
+            StrBuilder.Append(" ( ").Append(KeyColumn).Append(", ").Append(string.Join(", ", Values.Select(v => v.Key)))
+                .Append(" )").Append(" OUTPUT INSERTED.").Append(KeyColumn).Append(" ")
+                .Append(" VALUES ( ").Append("NEXT VALUE FOR EntityId, ")
+                .Append(string.Join(", ", Values.Where(v => !string.IsNullOrEmpty(v.Value)).Select(v => v.Value)))
+                .Append(")");
+        }
+
+        protected override void ComputedInsert()
+        {
+            throw new System.NotImplementedException();
         }
 
         protected override void BuildTakeSkip()

@@ -12,6 +12,6 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public long? ToComment { get; set; }
 
-        public DateTimeOffset? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

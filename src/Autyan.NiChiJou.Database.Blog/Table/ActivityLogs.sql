@@ -6,9 +6,8 @@
 	[Content] NVARCHAR(1000) NOT NULL, 
 	[OperateIpAddress] NVARCHAR(50) NULL DEFAULT '*', 
 	[ClientType] TINYINT NOT NULL, 
-	[CreatedAt] DATETIMEOFFSET NOT NULL, 
+	[CreatedAt] datetime2(7) NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL
-	CONSTRAINT [FK_ActivityLogs_ToLoginUser] FOREIGN KEY ([OperateUserId]) REFERENCES [BlogUsers]([Id])
 )
 
 GO

@@ -168,8 +168,8 @@ namespace Autyan.NiChiJou.Service.Blog
 
             if (!Cache.TryGetValue($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", out var _))
             {
-                article.Reads += 1;
-                article.LastReadAt = DateTimeOffset.Now;
+                article.ReadCount += 1;
+                article.LastReadAt = DateTime.Now;
                 await ArticleRepo.UpdateByIdAsync(article);
                 Cache.Set($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested", DateTimeOffset.Now.AddDays(1));
             }

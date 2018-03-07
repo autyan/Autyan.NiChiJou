@@ -18,8 +18,8 @@ namespace Autyan.NiChiJou.Core.Data
 
     public class BaseEntity
     {
-        public DateTimeOffset? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
-        public DateTimeOffset? ModifiedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

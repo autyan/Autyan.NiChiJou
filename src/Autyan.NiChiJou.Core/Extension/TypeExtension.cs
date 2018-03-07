@@ -6,8 +6,7 @@ namespace Autyan.NiChiJou.Core.Extension
     {
         public static bool IsQueryTypes(this Type type)
         {
-            if (type.IsPrimitive || type == typeof(string) || type.IsArray || type == typeof(DateTime)
-                || type == typeof(DateTimeOffset) || type == typeof(Enum))
+            if (type.IsPrimitive || type == typeof(string) || type.IsArray || type == typeof(DateTime) || type == typeof(Enum))
             {
                 return true;
             }

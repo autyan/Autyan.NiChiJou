@@ -10,9 +10,9 @@
 	[PhoneNumberConfirmed] BIT NOT NULL, 
 	[PasswordHash] NVARCHAR(200) NOT NULL, 
 	[SecuritySalt] NVARCHAR(200) NOT NULL, 
-	[CreatedAt] DATETIMEOFFSET NOT NULL, 
+	[CreatedAt] datetime2(7) NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,
-	[ModifiedAt] DATETIMEOFFSET NULL,
+	[ModifiedAt] datetime2(7) NULL,
 	[ModifiedBy] BIGINT NULL
 )
 

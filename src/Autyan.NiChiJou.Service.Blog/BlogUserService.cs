@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Transactions;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
