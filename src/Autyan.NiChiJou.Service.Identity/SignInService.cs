@@ -27,7 +27,8 @@ namespace Autyan.NiChiJou.Service.Identity
 
         public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegistration model)
         {
-            if (Cache.GetStringAsync($"Identity.Registration.InviteCode{model.InviteCode}") == null)
+            var cacheValue = await Cache.GetStringAsync($"Identity.Registration.InviteCode{model.InviteCode}");
+            if (cacheValue == null)
             {
                 return Failed<IdentityUser>(IdentityStatus.InvalidInviteCode);
             }
@@ -54,6 +55,8 @@ namespace Autyan.NiChiJou.Service.Identity
             {
                 Id = id
             });
+
+            await Cache.RemoveAsync($"Identity.Registration.InviteCode{model.InviteCode}");
             return Success(user);
         }
 
