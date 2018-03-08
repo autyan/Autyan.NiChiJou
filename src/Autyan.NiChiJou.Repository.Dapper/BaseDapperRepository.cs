@@ -82,6 +82,21 @@ namespace Autyan.NiChiJou.Repository.Dapper
             return await Connection.ExecuteAsync(builder.End(), entity);
         }
 
+        public virtual async Task<int> PartialUpdateByIdAsync(TEntity entity)
+        {
+            var builder = StartSql();
+            builder.Update(TableName);
+            foreach (var updateProp in GetObjectValues(entity))
+            {
+                builder.Set(updateProp.Key, $"@{updateProp.Key}");
+            }
+
+            builder.WhereAnd("Id = @Id");
+            entity.ModifiedAt = DateTime.Now;
+
+            return await Connection.ExecuteAsync(builder.End(), entity);
+        }
+
         public virtual async Task<int> UpdateByConditionAsync(object updateParamters, object condition)
         {
             var dic = ParseUpdateValues(updateParamters);

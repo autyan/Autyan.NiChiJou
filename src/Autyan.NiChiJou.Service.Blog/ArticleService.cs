@@ -89,7 +89,7 @@ namespace Autyan.NiChiJou.Service.Blog
 
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var create = await ArticleRepo.UpdateByIdAsync(article);
+                var create = await ArticleRepo.PartialUpdateByIdAsync(article);
                 if (create <= 0)
                 {
                     return Failed<Article>("update article failed");
