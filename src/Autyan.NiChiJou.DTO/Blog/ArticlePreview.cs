@@ -16,7 +16,7 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public string BlogName { get; set; }
 
-        public long? Reads { get; set; }
+        public long? ReadCount { get; set; }
 
         public long? Comments { get; set; }
 

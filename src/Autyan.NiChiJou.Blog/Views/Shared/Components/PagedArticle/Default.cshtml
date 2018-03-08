@@ -21,7 +21,7 @@
                     <a href="/Blog/@Html.UrlEncoder.Encode(articlePreview.BlogName)">@articlePreview.Author</a>
                 </span>
                 <span class="glyphicon glyphicon-calendar tag" aria-hidden="true"></span><span class="tag">@articlePreview.PostedAt?.ToLocalTime()</span>
-                <span class="glyphicon glyphicon-eye-open tag" aria-hidden="true"></span><span class="tag">@articlePreview.Reads</span>
+                <span class="glyphicon glyphicon-eye-open tag" aria-hidden="true"></span><span class="tag">@articlePreview.ReadCount</span>
                 <span class="glyphicon glyphicon-comment tag" aria-hidden="true"></span><span class="tag">@articlePreview.Comments</span>
                 <a style="float: right;" asp-controller="Article" asp-action="GetArticleAsync" asp-route-id="@articlePreview.Id">Read More >>></a>
             </div>
