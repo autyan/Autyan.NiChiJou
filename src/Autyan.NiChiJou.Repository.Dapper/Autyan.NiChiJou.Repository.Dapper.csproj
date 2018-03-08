@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26224-02" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26308-03" />
   </ItemGroup>
 
   <ItemGroup>

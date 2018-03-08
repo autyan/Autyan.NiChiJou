@@ -8,6 +8,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
     <PackageReference Include="MySql.Data" Version="6.10.6" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26224-02" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.0-preview2-26308-03" />
   </ItemGroup>
 </Project>
