@@ -94,9 +94,8 @@ namespace Autyan.NiChiJou.Service.Blog
                 {
                     return Failed<Article>("update article failed");
                 }
-                create = await ContentRepo.UpdateByConditionAsync(new ArticleContent
+                create = await ContentRepo.UpdateByConditionAsync(new
                 {
-                    ArticleId = create,
                     Content = content
                 }, new { ArticleId = article.Id });
                 if (create <= 0)
