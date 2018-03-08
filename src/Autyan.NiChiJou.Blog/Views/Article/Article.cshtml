@@ -45,7 +45,7 @@
     {
     <script type="text/javascript">
         $('#addComment').on('click', function () {
-            $('#addComment').addClass("disabled").prop('disabled', true);
+            $('#addComment').prop('disabled', true);
             base.AjaxPost('/Article/Comment', { ArticleId: $('#Id').val(), Content: $('#newComment').val() }, function (ret) {
                 $('#articleComments').append('<hr /><span class="tag">'
                     + new Date(ret.createdAt).toLocaleString('en-GB').replace(',', '')
@@ -56,7 +56,7 @@
                     + '</i></p></div>');
                 $('#newComment').val('');
             });
-            $('#addComment').removeClass("disabled").prop('disabled', false);
+            $('#addComment').prop('disabled', false);
         });
     </script>
 }
