@@ -110,10 +110,11 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
                     // If not a ajax request, redirect to error pages.
                     var options = new UnhandledExceptionOptions
                     {
-                        RequestId = requestId,
-#if DEBUG
-                        Exception = ex
+                        RequestId = requestId
                     };
+
+#if DEBUG
+                    options.Exception = ex;
 #endif
                     _cache.Set(requestId, options, TimeSpan.FromMinutes(5));
                     var location = string.Format(CultureInfo.InvariantCulture, "Errors/Error{0}?requestId={1}", context.Response.StatusCode, requestId);
