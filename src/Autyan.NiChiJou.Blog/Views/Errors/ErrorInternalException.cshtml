@@ -14,7 +14,11 @@
         <li class="list-group-item">
             <div class="input-group">
                 <span class="input-group-addon">RequestId</span>
-                <label class="form-control">@Model.RequestId</label>
+                <label class="form-control">
+
+                    @(Model == null ? "error infomation expired" : Model.RequestId)
+
+                </label>
             </div>
         </li>
         @{

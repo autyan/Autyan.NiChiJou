@@ -23,7 +23,10 @@ namespace Autyan.NiChiJou.Blog.Controllers
         [Route("Errors/Error500")]
         public IActionResult ErrorInternalException(string requestId)
         {
-            _cache.TryGetValue(requestId, out var option);
+            if (_cache.TryGetValue(requestId, out var option))
+            {
+                _cache.Remove(requestId);
+            }
             return View(option);
         }
     }
