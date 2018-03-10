@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
@@ -20,8 +19,16 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
 
         private string Key {get;}
 
-        public T Identity => _identity ??
-                            (_identity = Cache.GetDeserializedAsync<T>($"SessionIdContext.<{typeof(T).FullName}>.<{Key}>").Result ?? new T());
+        public T Identity
+        {
+            get
+            {
+                return _identity ??
+                       (_identity =
+                           Cache.GetDeserializedAsync<T>($"SessionIdContext.<{typeof(T).FullName}>.<{Key}>").Result ??
+                           new T());
+            }
+        }
 
         public ClaimsPrincipal User { get; }
 
@@ -30,8 +37,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
         {
             Cache = cache;
             Context = httpContextAccessor.HttpContext;
-            Key = Context.Request.Cookies["SessionIdContext"];
-            User = Context.User;
+            Key = Context?.Request.Cookies["SessionIdContext"];
+            User = Context?.User;
         }
 
         public async Task SetIdentityAsync(string key,T identity)

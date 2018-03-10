@@ -7,17 +7,17 @@ namespace Autyan.NiChiJou.Service.Identity
 {
     public class MembershipService : BaseService, IMembershipService
     {
-        private ISessionService SessionService { get; }
+        private readonly ISessionService _sessionService;
 
         public MembershipService(ILoggerFactory loggerFactory,
             ISessionService sessionService) : base(loggerFactory)
         {
-            SessionService = sessionService;
+            _sessionService = sessionService;
         }
 
         public async Task<ServiceResult<Membership>> FindMemberBySessionIdAsync(string sessionId)
         {
-            var session = await SessionService.GetSessionAsync(sessionId);
+            var session = await _sessionService.GetSessionAsync(sessionId);
             if (!session.Succeed)
             {
                 return FailedFrom<Membership>(session);

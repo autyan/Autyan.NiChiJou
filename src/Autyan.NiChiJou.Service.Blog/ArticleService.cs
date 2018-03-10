@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Transactions;
 using Autyan.NiChiJou.Core.Data;
@@ -8,7 +9,6 @@ using Autyan.NiChiJou.DTO.Blog;
 using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Repository.Blog;
 using Autyan.NiChiJou.Service.Blog.ServiceStatusCode;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
@@ -16,28 +16,24 @@ namespace Autyan.NiChiJou.Service.Blog
 {
     public class ArticleService : BaseService, IArticleService
     {
-        private IArticleRepository ArticleRepo { get; }
+        private readonly IArticleRepository _articleRepo;
 
-        private IArticleCommentRepository CommentRepo { get; }
+        private readonly IArticleCommentRepository _commentRepo;
 
-        private IArticleContentRepository ContentRepo { get; }
+        private readonly IArticleContentRepository _contentRepo;
 
-        private HttpContext HttpContext { get; }
-
-        private IMemoryCache Cache { get; }
+        private readonly IMemoryCache _cache;
 
         public ArticleService(ILoggerFactory loggerFactory,
             IArticleRepository articleRepository,
             IArticleCommentRepository articleCommentRepository,
             IArticleContentRepository articleContentRepository,
-            IHttpContextAccessor httpContextAccessor,
             IMemoryCache cache) : base(loggerFactory)
         {
-            ArticleRepo = articleRepository;
-            CommentRepo = articleCommentRepository;
-            ContentRepo = articleContentRepository;
-            HttpContext = httpContextAccessor.HttpContext;
-            Cache = cache;
+            _articleRepo = articleRepository;
+            _commentRepo = articleCommentRepository;
+            _contentRepo = articleContentRepository;
+            _cache = cache;
         }
 
         public async Task<ServiceResult<Article>> CreateArticleAsync(Article article, string content)
@@ -45,13 +41,13 @@ namespace Autyan.NiChiJou.Service.Blog
             if (article.Id != null) return Failed<Article>("article exists!");
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var create = await ArticleRepo.InsertAsync(article);
+                var create = await _articleRepo.InsertAsync(article);
                 if (create <= 0)
                 {
                     return Failed<Article>("create article failed");
                 }
 
-                create = await ContentRepo.InsertAsync(new ArticleContent
+                create = await _contentRepo.InsertAsync(new ArticleContent
                 {
                     ArticleId = create,
                     Content = content
@@ -73,12 +69,12 @@ namespace Autyan.NiChiJou.Service.Blog
 
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var create = await ArticleRepo.PartialUpdateByIdAsync(article);
+                var create = await _articleRepo.PartialUpdateByIdAsync(article);
                 if (create <= 0)
                 {
                     return Failed<Article>("update article failed");
                 }
-                create = await ContentRepo.UpdateByConditionAsync(new
+                create = await _contentRepo.UpdateByConditionAsync(new
                 {
                     Content = content
                 }, new { ArticleId = article.Id });
@@ -94,7 +90,7 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<Article>> FindArticleAsync(long id)
         {
-            var article = await ArticleRepo.FirstOrDefaultAsync(new { Id = id });
+            var article = await _articleRepo.FirstOrDefaultAsync(new { Id = id });
             if (article == null)
             {
                 return Failed<Article>(ArticleStatus.ArticleNotFound);
@@ -105,41 +101,41 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<PagedResult<ArticlePreview>>> GetPagedArticleAsync(ArticleQuery query)
         {
-            var result = await ArticleRepo.QueryPagedArticlePreviewAsync(query);
+            var result = await _articleRepo.QueryPagedArticlePreviewAsync(query);
             return Success(result);
         }
 
         public async Task<ServiceResult<string>> LoadArticleContentAsync(long id)
         {
-            var content = await ContentRepo.FirstOrDefaultAsync(new { ArticleId = id });
+            var content = await _contentRepo.FirstOrDefaultAsync(new { ArticleId = id });
             return Success(content?.Content);
         }
 
-        public async Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id)
+        public async Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id, IPAddress ipAddress)
         {
-            var article = await ArticleRepo.FirstOrDefaultAsync(new ArticleQuery { Id = id });
+            var article = await _articleRepo.FirstOrDefaultAsync(new ArticleQuery { Id = id });
             if (article == null)
             {
                 return Failed<ArticleDetail>(ArticleStatus.ArticleNotFound);
             }
 
-            var content = await ContentRepo.FirstOrDefaultAsync(new ArticleContentQuery { ArticleId = id });
+            var content = await _contentRepo.FirstOrDefaultAsync(new ArticleContentQuery { ArticleId = id });
             if (content == null)
             {
                 return Failed<ArticleDetail>("Article Content Lost!");
             }
 
-            var comments = await CommentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
+            var comments = await _commentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
             {
                 PostId = id
             });
 
-            if (!Cache.TryGetValue($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", out var _))
+            if (!_cache.TryGetValue($"article.read.<{id}>.<{ipAddress}>", out var _))
             {
                 article.ReadCount += 1;
                 article.LastReadAt = DateTime.Now;
-                await ArticleRepo.UpdateByIdAsync(article);
-                Cache.Set($"article.read.<{id}>.<{HttpContext.Connection.RemoteIpAddress}>", "Requested", DateTimeOffset.Now.AddDays(1));
+                await _articleRepo.UpdateByIdAsync(article);
+                _cache.Set($"article.read.<{id}>.<{ipAddress}>", "Requested", DateTimeOffset.Now.AddDays(1));
             }
 
             return Success(new ArticleDetail
@@ -154,17 +150,17 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post)
         {
-            var insertResult = await CommentRepo.InsertAsync(post);
+            var insertResult = await _commentRepo.InsertAsync(post);
             if (insertResult <= 0)
             {
                 return Failed<ArticleCommentDetails>("Insert Comment Failed");
             }
 
-            var article = await ArticleRepo.FirstOrDefaultAsync(new {Id = post.PostId});
+            var article = await _articleRepo.FirstOrDefaultAsync(new {Id = post.PostId});
             article.Comments += 1;
-            await ArticleRepo.UpdateByIdAsync(article);
+            await _articleRepo.UpdateByIdAsync(article);
 
-            var comments = await CommentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
+            var comments = await _commentRepo.LoadArticleCommentDetailsAsync(new ArticleCommentQuery
             {
                 Id = insertResult
             });

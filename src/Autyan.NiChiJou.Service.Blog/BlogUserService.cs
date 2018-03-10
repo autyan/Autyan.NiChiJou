@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Transactions;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
@@ -12,20 +13,20 @@ namespace Autyan.NiChiJou.Service.Blog
 {
     public class BlogUserService : BaseService, IBlogUserService
     {
-        private IBlogUserRepository BlogUserRepo { get; }
+        private readonly IBlogUserRepository _blogUserRepo;
 
-        private IBlogRepository BlogRepo { get; }
+        private readonly IBlogRepository _blogRepo;
 
-        private IDistributedCache Cache { get; }
+        private readonly IDistributedCache _cache;
 
         public BlogUserService(ILoggerFactory loggerFactory,
             IBlogUserRepository blogUserRepository,
             IBlogRepository blogRepository,
             IDistributedCache cache) : base(loggerFactory)
         {
-            BlogUserRepo = blogUserRepository;
-            BlogRepo = blogRepository;
-            Cache = cache;
+            _blogUserRepo = blogUserRepository;
+            _blogRepo = blogRepository;
+            _cache = cache;
         }
 
         public async Task<ServiceResult<BlogUser>> CreateBlogUserAsync(string nikeName, string memberCode)
@@ -37,31 +38,20 @@ namespace Autyan.NiChiJou.Service.Blog
                 MemberCode = memberCode
             };
 
-            //using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            //{
-            //    var blogUserId = await BlogUserRepo.InsertAsync(blogUser);
-            //    var blogId = await BlogRepo.InsertAsync(new Model.Blog.Blog
-            //    {
-            //        BlogName = $"{blogUser.NickName}'s Blog",
-            //        BlogUserId = blogUser.Id
-            //    });
-            //    if (blogUserId <= 0 || blogId <= 0)
-            //    {
-            //        return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
-            //    }
-
-            //    scope.Complete();
-            //}
-
-            var blogUserId = await BlogUserRepo.InsertAsync(blogUser);
-            var blogId = await BlogRepo.InsertAsync(new Model.Blog.Blog
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                BlogName = $"{blogUser.NickName}'s Blog",
-                BlogUserId = blogUser.Id
-            });
-            if (blogUserId <= 0 || blogId <= 0)
-            {
-                return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
+                var blogUserId = await _blogUserRepo.InsertAsync(blogUser);
+                var blogId = await _blogRepo.InsertAsync(new Model.Blog.Blog
+                {
+                    BlogName = $"{blogUser.NickName}'s Blog",
+                    BlogUserId = blogUser.Id
+                });
+                if (blogUserId <= 0 || blogId <= 0)
+                {
+                    return Failed<BlogUser>(BlogUserStatus.CreateBlogUserFailed);
+                }
+
+                scope.Complete();
             }
 
             return Success(blogUser);
@@ -69,8 +59,8 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<BlogUser>> FindBlogUserByMemberCodeAsync(string memberCode)
         {
-            var blogUser = await Cache.GetDeserializedAsync<BlogUser>($"memberCode.BlogUser.<{memberCode}>")
-                           ?? await BlogUserRepo.FirstOrDefaultAsync(new { MemberCode = memberCode });
+            var blogUser = await _cache.GetDeserializedAsync<BlogUser>($"memberCode.BlogUser.<{memberCode}>")
+                           ?? await _blogUserRepo.FirstOrDefaultAsync(new { MemberCode = memberCode });
 
             if (blogUser == null)
             {
@@ -82,7 +72,7 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<BlogIdentity>> CreateBlogIdentityAsync(BlogUser user)
         {
-            var blog = await BlogRepo.FirstOrDefaultAsync(new {BlogUserId = user.Id});
+            var blog = await _blogRepo.FirstOrDefaultAsync(new {BlogUserId = user.Id});
             return Success(new BlogIdentity
             {
                 UserId = user.Id,
@@ -95,7 +85,7 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<BlogUser>> FindBlogUserByIdAsync(long id)
         {
-            var user = await BlogUserRepo.FirstOrDefaultAsync(new BlogUserQuery {Id = id});
+            var user = await _blogUserRepo.FirstOrDefaultAsync(new BlogUserQuery {Id = id});
             if (user == null)
             {
                 return Failed<BlogUser>(BlogUserStatus.BlogUserNotExists);

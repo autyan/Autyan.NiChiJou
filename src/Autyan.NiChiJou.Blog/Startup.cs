@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Autyan.NiChiJou.Core.Mvc.Attribute;
 using Autyan.NiChiJou.Core.Mvc.Extension;
+using Autyan.NiChiJou.Core.Mvc.Middleware;
 using Autyan.NiChiJou.Model.Extension;
 using Autyan.NiChiJou.Repository.Dapper.Extension;
 using Autyan.NiChiJou.Service.Blog.Extension;
@@ -46,6 +47,7 @@ namespace Autyan.NiChiJou.Blog
                         .AddAuthenticationSchemes(Configuration["Cookie:Schema"]);
                     options.Filters.Add(new AuthorizeFilter(builder.Build()));
                     options.Filters.Add(new ViewModelValidationActionFilterAttribute());
+                    options.Filters.Add(new AjaxRequestActionFilterAttribute());
                 });
         }
 
@@ -59,8 +61,7 @@ namespace Autyan.NiChiJou.Blog
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error")
-                    .UseStatusCodePagesWithRedirects("/Error/{0}");
+                app.UseMiddleware<UnifyExceptionHandlerMiddleware>();
             }
 
             var forwardedHeadersOptions = new ForwardedHeadersOptions
@@ -69,7 +70,7 @@ namespace Autyan.NiChiJou.Blog
             };
             foreach (var configurationSection in Configuration.GetSection("Proxies").Value.Split(","))
             {
-                if(IPAddress.TryParse(configurationSection, out var addr))
+                if (IPAddress.TryParse(configurationSection, out var addr))
                 {
                     forwardedHeadersOptions.KnownProxies.Add(addr);
                 }

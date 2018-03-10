@@ -148,11 +148,12 @@ function ajaxFailure(ret) {
 }
 
 function ajaxSuccess(ret, params, callback) {
-    if (!IsNullOrEmpty(ret.PostForm)) {
-        $('#' + ret.PostForm).submit();
+    if (!IsNullOrEmpty(ret.Data) && !IsNullOrEmpty(ret.Data.PostForm)) {
+        $('#' + ret.Data.PostForm).submit();
+        return;
     }
     if (!IsNullOrEmpty(callback) && IsFunction(callback) && ret.Data != null) {
-        callback(ret, params);
+        callback(ret.Data, params);
     }
 }
 

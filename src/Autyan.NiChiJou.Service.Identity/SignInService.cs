@@ -13,26 +13,26 @@ namespace Autyan.NiChiJou.Service.Identity
 {
     public class SignInService : BaseService, ISignInService
     {
-        private IIdentityUserRepository UserRepo { get; }
+        private readonly IIdentityUserRepository _userRepo;
 
-        private IDistributedCache Cache { get; }
+        private readonly IDistributedCache _cache;
 
         public SignInService(IIdentityUserRepository userRepository,
             ILoggerFactory loggerFactory,
             IDistributedCache cache): base(loggerFactory)
         {
-            UserRepo = userRepository;
-            Cache = cache;
+            _userRepo = userRepository;
+            _cache = cache;
         }
 
         public async Task<ServiceResult<IdentityUser>> RegisterUserAsync(UserRegistration model)
         {
-            var cacheValue = await Cache.GetStringAsync($"Identity.Registration.InviteCode{model.InviteCode}");
+            var cacheValue = await _cache.GetStringAsync($"Identity.Registration.InviteCode{model.InviteCode}");
             if (cacheValue == null)
             {
                 return Failed<IdentityUser>(IdentityStatus.InvalidInviteCode);
             }
-            var existUser = await UserRepo.FirstOrDefaultAsync(new { model.LoginName });
+            var existUser = await _userRepo.FirstOrDefaultAsync(new { model.LoginName });
             if (existUser != null)
             {
                 return Failed<IdentityUser>(IdentityStatus.LoginNameExists);
@@ -50,19 +50,19 @@ namespace Autyan.NiChiJou.Service.Identity
                 EmailConfirmed = false,
                 PhoneNumberConfirmed = false
             };
-            var id = await UserRepo.InsertAsync(user);
-            user = await UserRepo.GetByIdAsync(new IdentityUser
+            var id = await _userRepo.InsertAsync(user);
+            user = await _userRepo.GetByIdAsync(new IdentityUser
             {
                 Id = id
             });
 
-            await Cache.RemoveAsync($"Identity.Registration.InviteCode{model.InviteCode}");
+            await _cache.RemoveAsync($"Identity.Registration.InviteCode{model.InviteCode}");
             return Success(user);
         }
 
         public async Task<ServiceResult<IdentityUser>> PasswordSignInAsync(string loginName, string password)
         {
-            var user = await UserRepo.FirstOrDefaultAsync(new { LoginName = loginName });
+            var user = await _userRepo.FirstOrDefaultAsync(new { LoginName = loginName });
             if (user == null)
             {
                 return Failed<IdentityUser>(IdentityStatus.UserNotFound);
