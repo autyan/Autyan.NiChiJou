@@ -7,8 +7,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;
 using Autyan.NiChiJou.Core.Component;
-using Autyan.NiChiJou.Model.Identity;
-using Autyan.NiChiJou.Service.Identity;
+using Autyan.NiChiJou.Core.Mvc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,9 +21,9 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 {
     public class ServiceTokenAuthenticationhandler : AuthenticationHandler<ServiceTokenAuthenticationOptions>, IAuthorizationRequirement
     {
-        private IMemoryCache MemoryCache { get; }
+        private readonly IMemoryCache _memoryCache;
 
-        private IApplicationAuthorizationService ApplicationAuthorizationService { get; }
+        private readonly IServiceTokenProvider _serviceTokenProvider;
 
         private bool IsServiceTokenRequest { get; set; }
 
@@ -33,11 +32,11 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             UrlEncoder encoder,
             ISystemClock clock,
             IMemoryCache memoryCache,
-            IApplicationAuthorizationService applicationAuthorizationService)
+            IServiceTokenProvider serviceTokenProvider)
             : base(options, logger, encoder, clock)
         {
-            MemoryCache = memoryCache;
-            ApplicationAuthorizationService = applicationAuthorizationService;
+            _memoryCache = memoryCache;
+            _serviceTokenProvider = serviceTokenProvider;
         }
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -94,20 +93,16 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
             return credArray.Length == 4 ? credArray : null;
         }
 
-        private bool IsValidRequest(HttpRequest req, string appId, string incomingBase64Signature, string nonce, string requestTimeStamp, out ServiceToken tokenInfo)
+        private bool IsValidRequest(HttpRequest req, string appId, string incomingBase64Signature, string nonce, string requestTimeStamp, out InternalServiceToken tokenInfo)
         {
             tokenInfo = null;
             var requestContentBase64String = "";
             var requestUri = HttpUtility.UrlEncode(req.GetEncodedUrl().ToLower());
             var requestHttpMethod = req.Method;
 
-            var app = ApplicationAuthorizationService.FindServiceByAppId(appId).Result;
-            if (!app.Succeed)
-            {
-                return false;
-            }
+            var app = _serviceTokenProvider.FindServiceByAppIdAsync(appId).Result;
 
-            tokenInfo = app.Data;
+            tokenInfo = app;
             var sharedKey = tokenInfo.ApiKey;
 
             if (IsReplayRequest(nonce, requestTimeStamp))
@@ -138,7 +133,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         private bool IsReplayRequest(string nonce, string requestTimeStamp)
         {
-            if (MemoryCache.TryGetValue(nonce, out object _))
+            if (_memoryCache.TryGetValue(nonce, out object _))
             {
                 return true;
             }
@@ -154,7 +149,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
                 return true;
             }
 
-            MemoryCache.Set(nonce, requestTimeStamp, DateTimeOffset.UtcNow.AddSeconds(Options.RequestMaxAgeSeconds));
+            _memoryCache.Set(nonce, requestTimeStamp, DateTimeOffset.UtcNow.AddSeconds(Options.RequestMaxAgeSeconds));
 
             return false;
         }

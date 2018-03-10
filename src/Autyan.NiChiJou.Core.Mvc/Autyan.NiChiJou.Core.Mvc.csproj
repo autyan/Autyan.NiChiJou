@@ -16,12 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Autyan.NiChiJou.Core\Autyan.NiChiJou.Core.csproj" />
-    <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
-    <ProjectReference Include="..\Autyan.NiChiJou.Repository\Autyan.NiChiJou.Repository.csproj">
-      <Project>{DF8579C0-A791-47AB-A443-2441533535BB}</Project>
-      <Name>Autyan.NiChiJou.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Autyan.NiChiJou.Service\Autyan.NiChiJou.Service.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Authorization\Requirement\" />

@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Autyan.NiChiJou.Model\Autyan.NiChiJou.Model.csproj" />
-  </ItemGroup>
-
 </Project>

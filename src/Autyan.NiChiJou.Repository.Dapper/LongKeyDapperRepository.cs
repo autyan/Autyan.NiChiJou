@@ -40,7 +40,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
             {
                 entity.ModifiedBy = -1;
             }
-            return await base.UpdateByIdAsync(entity);
+            return await base.PartialUpdateByIdAsync(entity);
         }
 
         protected override Dictionary<string, object> ParseUpdateValues(object paramters)

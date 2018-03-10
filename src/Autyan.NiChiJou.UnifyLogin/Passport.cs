@@ -11,28 +11,28 @@ namespace Autyan.NiChiJou.UnifyLogin
 {
     public class Passport
     {
-        private IHttpContextAccessor HttpContextAccessor { get; }
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private AutyanCookieOptions Options { get; }
+        private readonly AutyanCookieOptions _options;
 
-        private LoginApiManager ApiManager { get; }
+        private readonly LoginApiManager _apiManager;
 
-        public UnifyLoginMember Member { get; set; }
+        public UnifyLoginMember Member { get; private set; }
 
         public Passport(IHttpContextAccessor httpContextAccessor,
             IOptions<AutyanCookieOptions> options,
             LoginApiManager apiManager)
         {
-            HttpContextAccessor = httpContextAccessor;
-            Options = options.Value;
-            ApiManager = apiManager;
+            _httpContextAccessor = httpContextAccessor;
+            _options = options.Value;
+            _apiManager = apiManager;
         }
 
         public async Task<bool> VerifySecurityTokenAsync(string token)
         {
-            var sessionId = await ApiManager.VerifyTokenAsync(token);
+            var sessionId = await _apiManager.VerifyTokenAsync(token);
             if (string.IsNullOrWhiteSpace(sessionId)) return false;
-            var member = await ApiManager.GetMemberInfoAsync(sessionId);
+            var member = await _apiManager.GetMemberInfoAsync(sessionId);
             if (member == null) return false;
             Member = member;
             return true;
@@ -43,7 +43,7 @@ namespace Autyan.NiChiJou.UnifyLogin
             if(Member == null) throw new ArgumentNullException(nameof(Member));
             var claims = new List<Claim>
             {
-                new Claim(Options.Schema, string.Empty),
+                new Claim(_options.Schema, string.Empty),
                 new Claim(nameof(Member.MemberCode), Member.MemberCode),
                 new Claim(ClaimTypes.Name, Member.NikeName)
             };
@@ -53,7 +53,7 @@ namespace Autyan.NiChiJou.UnifyLogin
             }
 
             var claimsIdentity = new ClaimsIdentity(
-                claims, Options.Schema);
+                claims, _options.Schema);
 
             var authProperties = new AuthenticationProperties
             {
@@ -62,14 +62,14 @@ namespace Autyan.NiChiJou.UnifyLogin
                 IssuedUtc = DateTimeOffset.UtcNow
             };
 
-            await HttpContextAccessor.HttpContext.SignInAsync(Options.Schema,
+            await _httpContextAccessor.HttpContext.SignInAsync(_options.Schema,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
         }
 
         public async Task CookieLogoutAsync()
         {
-            await HttpContextAccessor.HttpContext.SignOutAsync(Options.Schema);
+            await _httpContextAccessor.HttpContext.SignOutAsync(_options.Schema);
         }
     }
 }

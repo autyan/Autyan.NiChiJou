@@ -1,4 +1,5 @@
 ﻿using Autyan.NiChiJou.Core.Mvc.Attribute;
+using Autyan.NiChiJou.Core.Mvc.Authorization;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.Model.Extension;
@@ -37,6 +38,8 @@ namespace Autyan.NiChiJou.IdentityServer
                 .UseDapperWithMySql()
                 .AddIdentityService()
                 .AddMvcComponent()
+                .AddScoped<IServiceTokenProvider, ServiceTokenProvider>()
+                .AddScoped<SignInManager, SignInManager>()
                 .AddAuthentication(options => options.DefaultScheme = Configuration["Cookie:Schema"])
                 .AddCookieAuthentication(Configuration)
                 .AddServiceTokenAuthentication(Configuration)

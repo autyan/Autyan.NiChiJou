@@ -2,12 +2,11 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using Autyan.NiChiJou.Core.Context;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Autyan.NiChiJou.Core.Mvc.Models;
 using Autyan.NiChiJou.Core.Mvc.Options;
-using Autyan.NiChiJou.DTO.Blog;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -24,21 +23,18 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
         private readonly ILogger _logger;
         private readonly Func<object, Task> _clearCacheHeadersDelegate;
         private readonly DiagnosticSource _diagnosticSource;
-        private readonly IIdentityContext<BlogIdentity> _identityContex;
         private readonly IMemoryCache _cache;
 
         public UnifyExceptionHandlerMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             DiagnosticSource diagnosticSource,
-            IIdentityContext<BlogIdentity> identityContext,
             IMemoryCache cache)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<UnifyExceptionHandlerMiddleware>();
             _clearCacheHeadersDelegate = ClearCacheHeadersAsync;
             _diagnosticSource = diagnosticSource;
-            _identityContex = identityContext;
             _cache = cache;
         }
 
@@ -51,9 +47,10 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
             catch (Exception ex)
             {
                 var requestId = Guid.NewGuid().ToString().ToLower(CultureInfo.CurrentCulture);
+                var userId = context.User?.Claims.FirstOrDefault(c => c.Type == "MemberCode")?.Value;
                 _logger.LogError(0, ex, "An unhandled exception has occurred: " +
                                         $"RequestId => {requestId}, RequestUrl => {context.Request.GetDisplayUrl()}, " +
-                                        $"RequestUser => { _identityContex?.Identity?.MemberCode ?? "Anonymous" }, " +
+                                        $"RequestUser => { userId ?? "Anonymous" }, " +
                                         $"RemoteIpAddress => { context.Connection.RemoteIpAddress}");
                 // We can't do anything if the response has already started, just abort.
                 if (context.Response.HasStarted)
@@ -117,8 +114,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
                     options.Exception = ex;
 #endif
                     _cache.Set(requestId, options, TimeSpan.FromMinutes(5));
-                    var location = string.Format(CultureInfo.InvariantCulture, "Errors/Error{0}?requestId={1}", context.Response.StatusCode, requestId);
-                    context.Response.Redirect(context.Request.PathBase + location);
+                    var location = string.Format(CultureInfo.InvariantCulture, "/Errors/Error{0}?requestId={1}", context.Response.StatusCode, requestId);
+                    context.Response.Redirect(location);
                     return;
                 }
                 catch (Exception ex2)

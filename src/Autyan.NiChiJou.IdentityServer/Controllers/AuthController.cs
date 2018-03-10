@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Autyan.NiChiJou.Core.Mvc.Authorization;
 using Autyan.NiChiJou.DTO.Identity;
 using Autyan.NiChiJou.IdentityServer.Consts;
 using Autyan.NiChiJou.IdentityServer.Models.Auth;

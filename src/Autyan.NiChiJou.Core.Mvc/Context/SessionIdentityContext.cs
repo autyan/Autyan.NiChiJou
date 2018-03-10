@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Autyan.NiChiJou.Core.Component;
 using Autyan.NiChiJou.Core.Context;
 using Autyan.NiChiJou.Core.Mvc.Extension;
 using Microsoft.AspNetCore.Http;
@@ -19,16 +19,10 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
 
         private string Key {get;}
 
-        public T Identity
-        {
-            get
-            {
-                return _identity ??
-                       (_identity =
-                           Cache.GetDeserializedAsync<T>($"SessionIdContext.<{typeof(T).FullName}>.<{Key}>").Result ??
-                           new T());
-            }
-        }
+        public T Identity => _identity ??
+                             (_identity =
+                                 Cache.GetDeserializedAsync<T>($"SessionIdContext.<{typeof(T).FullName}>.<{Key}>").Result ??
+                                 new T());
 
         public ClaimsPrincipal User { get; }
 
@@ -37,8 +31,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
         {
             Cache = cache;
             Context = httpContextAccessor.HttpContext;
-            Key = Context?.Request.Cookies["SessionIdContext"];
             User = Context?.User;
+            Key = User?.Claims.FirstOrDefault(c => c.Type == "MemberCode")?.Value;
         }
 
         public async Task SetIdentityAsync(string key,T identity)
@@ -47,9 +41,7 @@ namespace Autyan.NiChiJou.Core.Mvc.Context
             {
                 throw new ArgumentNullException(nameof(identity));
             }
-            var keyMd5 = HashEncrypter.Md5EncryptToBase64(key);
-            Context.Response.Cookies.Append("SessionIdContext", keyMd5);
-            await Cache.SetSerializedAsync($"SessionIdContext.<{typeof(T).FullName}>.<{keyMd5}>", identity, new DistributedCacheEntryOptions());
+            await Cache.SetSerializedAsync($"SessionIdContext.<{typeof(T).FullName}>.<{key}>", identity, new DistributedCacheEntryOptions());
             _identity = identity;
         }
     }
