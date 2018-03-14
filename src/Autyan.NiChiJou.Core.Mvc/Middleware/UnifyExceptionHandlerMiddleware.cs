@@ -51,7 +51,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
                 _logger.LogError(0, ex, "An unhandled exception has occurred: " +
                                         $"RequestId => {requestId}, RequestUrl => {context.Request.GetDisplayUrl()}, " +
                                         $"RequestUser => { userId ?? "Anonymous" }, " +
-                                        $"RemoteIpAddress => { context.Connection.RemoteIpAddress}");
+                                        $"RemoteIpAddress => { context.Connection.RemoteIpAddress}\r\n" +
+                                        $"Exceptions => {ex}");
                 // We can't do anything if the response has already started, just abort.
                 if (context.Response.HasStarted)
                 {
