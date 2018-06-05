@@ -7,32 +7,27 @@ using Autyan.NiChiJou.Model.Blog;
 using Autyan.NiChiJou.Service.Blog;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Autyan.NiChiJou.Blog.Controllers
 {
     public class ArticleController : Controller
     {
-        private IArticleService ArticleService { get; }
+        private readonly IArticleService _articleService;
 
-        private IIdentityContext<BlogIdentity> IdentityContext { get; }
-
-        private ILogger Logger { get; }
+        private readonly IIdentityContext<BlogIdentity> _identityContext;
 
         public ArticleController(IArticleService articleService,
-            IIdentityContext<BlogIdentity> identityContext,
-            ILoggerFactory loggerFactory)
+            IIdentityContext<BlogIdentity> identityContext)
         {
-            ArticleService = articleService;
-            IdentityContext = identityContext;
-            Logger = loggerFactory.CreateLogger(GetType());
+            _articleService = articleService;
+            _identityContext = identityContext;
         }
 
         [HttpGet("Article/Posts/{id:long}")]
         [AllowAnonymous]
         public async Task<IActionResult> GetArticleAsync(long id)
         {
-            var article = await ArticleService.ReadArticleDetailByIdAsync(id);
+            var article = await _articleService.ReadArticleDetailByIdAsync(id, HttpContext.Connection.RemoteIpAddress);
             if (article.Succeed)
             {
                 return View(nameof(Article), article.Data);
@@ -47,22 +42,22 @@ namespace Autyan.NiChiJou.Blog.Controllers
             ServiceResult<Article> result;
             if (model.Id == null)
             {
-                result = await ArticleService.CreateArticleAsync(new Article
+                result = await _articleService.CreateArticleAsync(new Article
                 {
                     Id = model.Id,
                     Title = model.Title,
                     Extract = model.Extract,
-                    BlogId = IdentityContext.Identity.BlogId
+                    BlogId = _identityContext.Identity.BlogId
                 }, model.Content);
             }
             else
             {
-                result = await ArticleService.UpdateArticleAsync(new Article
+                result = await _articleService.UpdateArticleAsync(new Article
                 {
                     Id = model.Id,
                     Title = model.Title,
                     Extract = model.Extract,
-                    BlogId = IdentityContext.Identity.BlogId
+                    BlogId = _identityContext.Identity.BlogId
                 }, model.Content);
             }
 
@@ -81,7 +76,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
         {
             if (id != null)
             {
-                var article = await ArticleService.FindArticleAsync(id.Value);
+                var article = await _articleService.FindArticleAsync(id.Value);
                 if (article.Succeed && article.Data.Id != null)
                 {
                     var model = new ArticleEditorViewModel
@@ -89,7 +84,7 @@ namespace Autyan.NiChiJou.Blog.Controllers
                         Id = id.Value,
                         Title = article.Data.Title
                     };
-                    var content = await ArticleService.LoadArticleContentAsync(article.Data.Id.Value);
+                    var content = await _articleService.LoadArticleContentAsync(article.Data.Id.Value);
                     model.Content = content.Data;
                     return View(model);
                 }
@@ -115,12 +110,12 @@ namespace Autyan.NiChiJou.Blog.Controllers
                 PostId = model.ArticleId,
                 Content = model.Content
             };
-            if (IdentityContext.Identity != null)
+            if (_identityContext.Identity != null)
             {
-                comment.CommentedBy = IdentityContext.Identity.UserId;
+                comment.CommentedBy = _identityContext.Identity.UserId;
             }
 
-            var result = await ArticleService.AddCommentOnArticle(comment);
+            var result = await _articleService.AddCommentOnArticle(comment);
             if (!result.Succeed)
             {
                 return Json("Failed");

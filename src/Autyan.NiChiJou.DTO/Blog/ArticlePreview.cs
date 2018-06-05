@@ -16,16 +16,16 @@ namespace Autyan.NiChiJou.DTO.Blog
 
         public string BlogName { get; set; }
 
-        public long? Reads { get; set; }
+        public long? ReadCount { get; set; }
 
         public long? Comments { get; set; }
 
-        public DateTimeOffset? LastReadAt { get; set; }
+        public DateTime? LastReadAt { get; set; }
 
-        public DateTimeOffset? LastCommentedAt { get; set; }
+        public DateTime? LastCommentedAt { get; set; }
 
-        public DateTimeOffset? PostedAt { get; set; }
+        public DateTime? PostedAt { get; set; }
 
-        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

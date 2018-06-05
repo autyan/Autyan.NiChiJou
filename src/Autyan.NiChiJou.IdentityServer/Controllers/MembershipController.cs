@@ -10,16 +10,16 @@ namespace Autyan.NiChiJou.IdentityServer.Controllers
     [Authorize(Policy = AuthorizePolicy.InternalServiceOnly)]
     public class MembershipController : Controller
     {
-        private IMembershipService MembershipService { get; }
+        private readonly IMembershipService _membershipService;
 
         public MembershipController(IMembershipService membershipService)
         {
-            MembershipService = membershipService;
+            _membershipService = membershipService;
         }
 
         public async Task<IActionResult> MemberInfo(SessionMemberViewModel model)
         {
-            var membership = await MembershipService.FindMemberBySessionIdAsync(model.SessionId);
+            var membership = await _membershipService.FindMemberBySessionIdAsync(model.SessionId);
             return Json(membership.Data);
         }
     }

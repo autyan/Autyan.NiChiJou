@@ -1,6 +1,5 @@
 ﻿using System;
 using Autyan.NiChiJou.Core.Context;
-using Autyan.NiChiJou.Core.Mvc.Authorization;
 using Autyan.NiChiJou.Core.Mvc.Context;
 using Autyan.NiChiJou.Core.Mvc.DistributedCache;
 using Autyan.NiChiJou.Core.Options;
@@ -41,7 +40,6 @@ namespace Autyan.NiChiJou.Core.Mvc.Extension
 
         public static IServiceCollection AddMvcComponent(this IServiceCollection services)
         {
-            services.AddTransient<SignInManager, SignInManager>();
             services.TryAdd(ServiceDescriptor.Scoped(typeof(IIdentityContext<>), typeof(SessionIdentityContext<>)));
             return services;
         }

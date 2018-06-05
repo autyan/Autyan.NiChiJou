@@ -17,6 +17,9 @@ namespace Autyan.NiChiJou.Service.Identity.ServiceStatusCode
         UserNotFound = 2000,
 
         [Description("Invalid Password!")]
-        InvalidPassword = 2001
+        InvalidPassword = 2001,
+
+        [Description("Invalid InviteCode")]
+        InvalidInviteCode = 2002,
     }
 }

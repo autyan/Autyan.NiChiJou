@@ -22,20 +22,23 @@ namespace Autyan.NiChiJou.Repository.Dapper
 
         protected DatabaseItemConfiguration()
         {
-            PropertyDefinitions = ItemType.GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public).Where(p => DatabaseTypes.Contains(p.PropertyType))
-                .Select(p => new PropertyDefinition
-                {
-                    Name = p.Name,
-                    PropertyInfo = p
-                });
-            var keyColumn = PropertyDefinitions.FirstOrDefault(p => p.PropertyInfo.HasAttribute(typeof(KeyAttribute)));
+            var dbColumnProperties = ItemType
+                .GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => DatabaseTypes.Contains(p.PropertyType)).ToList();
+            var keyColumn = dbColumnProperties.FirstOrDefault(p => p.HasAttribute(typeof(KeyAttribute)));
             if (keyColumn != null)
             {
                 Key = keyColumn.Name;
                 KeyOption =
-                    ((DatabaseGeneratedAttribute) keyColumn.PropertyInfo.GetAttributeValue(typeof(DatabaseGeneratedAttribute)))
+                    ((DatabaseGeneratedAttribute) keyColumn.GetAttributeValue(typeof(DatabaseGeneratedAttribute)))
                     .DatabaseGeneratedOption;
             }
+            PropertyDefinitions = dbColumnProperties
+                .Where(p => p.Name != Key).Select(p => new PropertyDefinition
+                {
+                    Name = p.Name,
+                    PropertyInfo = p
+                });
         }
 
         protected PropertyDefinition this[string name]
@@ -61,7 +64,7 @@ namespace Autyan.NiChiJou.Repository.Dapper
         protected static readonly Type[] DatabaseTypes = {
             typeof (int), typeof (long), typeof (byte), typeof (bool), typeof (short), typeof (string),typeof(decimal),
             typeof (int?), typeof (long?), typeof (byte?), typeof (bool?), typeof (short?),typeof(decimal?),
-            typeof (DateTime), typeof (DateTime?), typeof(DateTimeOffset), typeof(DateTimeOffset?)
+            typeof (DateTime), typeof (DateTime?)
         };
     }
 }

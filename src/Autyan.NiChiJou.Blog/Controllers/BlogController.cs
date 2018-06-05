@@ -9,17 +9,17 @@ namespace Autyan.NiChiJou.Blog.Controllers
     [AllowAnonymous]
     public class BlogController : Controller
     {
-        private IBlogService BlogService { get; }
+        private readonly IBlogService _blogService;
 
         public BlogController(IBlogService blogService)
         {
-            BlogService = blogService;
+            _blogService = blogService;
         }
 
         [Route("Blog/{blogName}")]
         public async Task<IActionResult> UserBlog(string blogName, PagedQueryViewModel model)
         {
-            var blogIndex = await BlogService.LoadBlogByNameAsync(blogName);
+            var blogIndex = await _blogService.LoadBlogByNameAsync(blogName);
             if (!blogIndex.Succeed)
             {
                 return NotFound();

@@ -9,17 +9,17 @@ namespace Autyan.NiChiJou.Service.Blog
 {
     public class BlogService : BaseService, IBlogService
     {
-        private IBlogRepository BlogRepo { get; }
+        private readonly IBlogRepository _blogRepo;
 
         public BlogService(ILoggerFactory loggerFactory,
             IBlogRepository blogRepository) : base(loggerFactory)
         {
-            BlogRepo = blogRepository;
+            _blogRepo = blogRepository;
         }
 
         public async Task<ServiceResult<BlogIndex>> LoadBlogByNameAsync(string blogName)
         {
-            var blog = await BlogRepo.FirstOrDefaultAsync(new { BlogName = blogName });
+            var blog = await _blogRepo.FirstOrDefaultAsync(new { BlogName = blogName });
             if (blog == null) return Failed<BlogIndex>(BlogStatus.BlogNotFound);
 
             return Success(new BlogIndex

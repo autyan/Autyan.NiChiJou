@@ -26,7 +26,7 @@
                         foreach (var articleComment in Model.Comments)
                         {
                             <hr />
-                            <span class="tag">@articleComment.CreatedAt?.LocalDateTime</span>
+                            <span class="tag">@articleComment.CreatedAt?.ToLocalTime()</span>
                             <span class="tag">@(articleComment.CommentedBy ?? "anonymous")</span>
                             <div class="comContent">
                                 <p>
@@ -45,6 +45,7 @@
     {
     <script type="text/javascript">
         $('#addComment').on('click', function () {
+            $('#addComment').prop('disabled', true);
             base.AjaxPost('/Article/Comment', { ArticleId: $('#Id').val(), Content: $('#newComment').val() }, function (ret) {
                 $('#articleComments').append('<hr /><span class="tag">'
                     + new Date(ret.createdAt).toLocaleString('en-GB').replace(',', '')
@@ -53,8 +54,9 @@
                     + '</span><div class="comContent"><p><i>'
                     + ret.content
                     + '</i></p></div>');
-                $('#newComment').empty('');
+                $('#newComment').val('');
             });
+            $('#addComment').prop('disabled', false);
         });
     </script>
 }

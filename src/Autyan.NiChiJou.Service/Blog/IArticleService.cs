@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Data;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Blog;
@@ -16,7 +17,7 @@ namespace Autyan.NiChiJou.Service.Blog
 
         Task<ServiceResult<string>> LoadArticleContentAsync(long id);
 
-        Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id);
+        Task<ServiceResult<ArticleDetail>> ReadArticleDetailByIdAsync(long id, IPAddress ipAddress);
 
         Task<ServiceResult<PagedResult<ArticlePreview>>> GetPagedArticleAsync(ArticleQuery query);
 

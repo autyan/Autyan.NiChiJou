@@ -1,0 +1,43 @@
+﻿@model Autyan.NiChiJou.Core.Mvc.Options.UnhandledExceptionOptions
+@{
+    ViewData["Title"] = "ErrorInternalException";
+}
+
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h3>Oops, something happend!</h3>
+    </div>
+    <div class="panel-body">
+        <p>Sorry, server encountered unhandlered errors, please contact admin to report this error.</p>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="input-group">
+                <span class="input-group-addon">RequestId</span>
+                <label class="form-control">
+
+                    @(Model == null ? "error infomation expired" : Model.RequestId)
+
+                </label>
+            </div>
+        </li>
+        @{
+            if (Model?.Exception != null)
+            {
+                <li class="list-group-item">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 style="text-align: center">ExceptionStack</h4>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+                                @Model.Exception
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+

@@ -5,9 +5,9 @@
 	[CommentedBy] BIGINT NULL, 
 	[PostId] BIGINT NOT NULL, 
 	[ToComment] BIGINT NULL, 
-	[CreatedAt] DATETIMEOFFSET NOT NULL, 
+	[CreatedAt] datetime2(7) NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,
-	[ModifiedAt] DATETIMEOFFSET NULL,
+	[ModifiedAt] datetime2(7) NULL,
 	[ModifiedBy] BIGINT NULL
 )
 

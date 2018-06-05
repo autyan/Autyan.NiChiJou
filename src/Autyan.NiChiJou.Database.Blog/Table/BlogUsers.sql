@@ -5,9 +5,9 @@
 	[AvatorUrl] NVARCHAR(200) NULL, 
 	[MemberCode] NVARCHAR(50) NOT NULL, 
 	[Gender] TINYINT NULL,
-	[CreatedAt] DATETIMEOFFSET NOT NULL, 
+	[CreatedAt] DATETIME2 NOT NULL, 
 	[CreatedBy] BIGINT NOT NULL,
-	[ModifiedAt] DATETIMEOFFSET NULL,
+	[ModifiedAt] DATETIME2 NULL,
 	[ModifiedBy] BIGINT NULL
 )
 

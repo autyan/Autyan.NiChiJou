@@ -9,17 +9,17 @@ namespace Autyan.NiChiJou.Service.Identity
 {
     public class IdentityUserService : BaseService, IIdentityUserService
     {
-        protected static IIdentityUserRepository UserRepo { get; private set; }
+        private readonly IIdentityUserRepository _userRepo;
 
         public IdentityUserService(IIdentityUserRepository userRepo,
             ILoggerFactory loggerFactory) : base(loggerFactory)
         {
-            UserRepo = userRepo;
+            _userRepo = userRepo;
         }
 
         public async Task<ServiceResult<IdentityUser>> GetUserByIdAsync(long id)
         {
-            var user = await UserRepo.GetByIdAsync(new IdentityUser {Id = id});
+            var user = await _userRepo.GetByIdAsync(new IdentityUser {Id = id});
             if (user == null)
             {
                 return Failed<IdentityUser>(IdentityStatus.UserNotFound);

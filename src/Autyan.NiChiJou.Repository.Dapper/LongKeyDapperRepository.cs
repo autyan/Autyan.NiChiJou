@@ -34,11 +34,20 @@ namespace Autyan.NiChiJou.Repository.Dapper
             return await base.UpdateByIdAsync(entity);
         }
 
+        public override async Task<int> PartialUpdateByIdAsync(TEntity entity)
+        {
+            if (entity.ModifiedBy == null)
+            {
+                entity.ModifiedBy = -1;
+            }
+            return await base.PartialUpdateByIdAsync(entity);
+        }
+
         protected override Dictionary<string, object> ParseUpdateValues(object paramters)
         {
             var dic = base.ParseUpdateValues(paramters);
-            dic.Add("ModifiedAt", DateTimeOffset.Now);
-            dic.Add("ModifiedBy", -1);
+            dic["ModifiedAt"] = DateTime.Now;
+            dic["ModifiedBy"] = -1;
             return dic;
         }
     }

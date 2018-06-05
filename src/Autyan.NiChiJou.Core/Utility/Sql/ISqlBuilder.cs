@@ -1,8 +1,12 @@
-﻿namespace Autyan.NiChiJou.Core.Utility.Sql
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Autyan.NiChiJou.Core.Utility.Sql
 {
     public interface ISqlBuilder
     {
-        ISqlBuilder InsertInto(string table);
+        ISqlBuilder SetKeyColumn(string keyColumn);
+
+        ISqlBuilder InsertInto(string table, DatabaseGeneratedOption option = DatabaseGeneratedOption.None);
 
         ISqlBuilder SelectCount();
 

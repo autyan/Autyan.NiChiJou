@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
@@ -29,16 +30,27 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
 
         protected string OutputColumns;
 
+        protected DatabaseGeneratedOption KeyGeneratedOption { get; private set; }
+
+        protected string KeyColumn = "Id";
+
         private void CheckAction()
         {
             if (Action != null) throw new InvalidOperationException("action set already.");
         }
 
-        public ISqlBuilder InsertInto(string table)
+        public ISqlBuilder SetKeyColumn(string keyColumn)
+        {
+            KeyColumn = keyColumn;
+            return this;
+        }
+
+        public ISqlBuilder InsertInto(string table, DatabaseGeneratedOption option = DatabaseGeneratedOption.None)
         {
             CheckAction();
             Action = Sql.Action.Insert;
             TableName = table;
+            KeyGeneratedOption = option;
             return this;
         }
 
@@ -164,23 +176,38 @@ namespace Autyan.NiChiJou.Core.Utility.Sql
         protected void BuildInsert()
         {
             ConstructInsert();
-            CompleteInsert();
+            BuildWhere();
         }
 
         protected virtual void ConstructInsert()
         {
-            StrBuilder.Append("INSERT INTO ").Append(TableName)
-                .Append(" (").Append(string.Join(", ", Values.Select(v => v.Key)))
-                .Append(" )");
+            StrBuilder.Append("INSERT INTO ").Append(TableName);
+            switch (KeyGeneratedOption)
+            {
+                case DatabaseGeneratedOption.None:
+                    SequenceInsert();
+                    break;
+                case DatabaseGeneratedOption.Identity:
+                    IdentityInsert();
+                    break;
+                case DatabaseGeneratedOption.Computed:
+                    ComputedInsert();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
         }
 
-        private void CompleteInsert()
+        protected abstract void SequenceInsert();
+
+        protected virtual void IdentityInsert()
         {
-            StrBuilder.Append(" VALUES (")
-                .Append(string.Join(", ", Values.Where(v => !string.IsNullOrEmpty(v.Value)).Select(v => v.Value)))
-                .Append(")");
-            BuildWhere();
+            StrBuilder.Append(" (").Append(string.Join(", ", Values.Select(v => v.Key)))
+            .Append(" )").Append(" VALUES (").Append(string.Join(", ", Values.Select(v => v.Value)));
         }
+
+        protected abstract void ComputedInsert();
 
         protected virtual void BuildSelect()
         {

@@ -19,7 +19,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog
 
         public override Task<long> InsertAsync(Article entity)
         {
-            entity.Reads = 0;
+            entity.ReadCount = 0;
             entity.Comments = 0;
             return base.InsertAsync(entity);
         }
@@ -29,7 +29,7 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog
             var count = await GetCountAsync(query);
             var strBuilder = new StringBuilder();
             strBuilder.Append(
-                    "SELECT Articles.Id AS Id, Articles.CreatedAt AS CreatedAt, Title, Extract, BlogId, BlogName, Reads, Comments, LastReadAt, ")
+                    "SELECT Articles.Id AS Id, Articles.CreatedAt AS CreatedAt, Title, Extract, BlogId, BlogName, ReadCount, Comments, LastReadAt, ")
                 .Append("BlogUsers.NickName AS Author, c.LastCommentedAt AS LastCommentedAt, ArticleContents.ModifiedAt AS UpdatedAt, ")
                 .Append("Articles.CreatedAt AS PostedAt\r\n")
                 .Append("FROM Articles\r\n")
@@ -66,8 +66,13 @@ namespace Autyan.NiChiJou.Repository.Dapper.Blog
                     strBuilder.Append(string.Join(",", query.Desc.Select(d => $"{d} DESC ")));
                 }
             }
-            strBuilder.Append(" OFFSET ").Append(query.Skip ?? 0).Append(" ROWS FETCH NEXT ").Append(query.Take)
-                .Append(" ROWS ONLY ;");
+
+            //MSSQL SKIP TAKE
+            //strBuilder.Append(" OFFSET ").Append(query.Skip ?? 0).Append(" ROWS FETCH NEXT ").Append(query.Take)
+            //    .Append(" ROWS ONLY ;");
+
+            //MYSQL SKIP TAKE
+            strBuilder.Append(" LIMIT ").Append(query.Take).Append(" OFFSET ").Append(query.Skip ?? 0);
 
             var results = await Connection.QueryAsync<ArticlePreview>(strBuilder.ToString(), query);
 

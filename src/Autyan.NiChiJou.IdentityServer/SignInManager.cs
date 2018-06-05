@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Component;
+using Autyan.NiChiJou.Core.Mvc.Authorization;
 using Autyan.NiChiJou.Core.Options;
 using Autyan.NiChiJou.Core.Service;
 using Autyan.NiChiJou.DTO.Identity;
@@ -14,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 
-namespace Autyan.NiChiJou.Core.Mvc.Authorization
+namespace Autyan.NiChiJou.IdentityServer
 {
     public class SignInManager
     {

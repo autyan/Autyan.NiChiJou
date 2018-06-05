@@ -16,16 +16,16 @@ namespace Autyan.NiChiJou.Service.Identity
     {
         private static readonly Random SeedRandom = new Random();
 
-        private IDistributedCache Cache { get; }
+        private readonly IDistributedCache _cache;
 
-        private IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
         public SessionService(IDistributedCache cache,
             IConfiguration configuration,
             ILoggerFactory loggerFactory): base(loggerFactory)
         {
-            Cache = cache;
-            Configuration = configuration;
+            _cache = cache;
+            _configuration = configuration;
         }
 
         public async Task<ServiceResult<SessionData>> CreateSessionAsync(IdentityUser user)
@@ -40,15 +40,15 @@ namespace Autyan.NiChiJou.Service.Identity
                 UserName = user.NickName,
                 MemeberCode = user.MemberCode
             };
-            await Cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
-                new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(double.Parse(Configuration["Session:Expiration"]))));
+            await _cache.SetStringAsync($"user.session.<{sessionId}>", JsonConvert.SerializeObject(data),
+                new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(double.Parse(_configuration["Session:Expiration"]))));
 
             return Success(data);
         }
 
         public async Task<ServiceResult<SessionData>> GetSessionAsync(string sessionId)
         {
-            var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
+            var sessionStr = await _cache.GetStringAsync($"user.session.<{sessionId}>");
             if (string.IsNullOrWhiteSpace(sessionStr))
             {
                 return Failed<SessionData>(SessionServiceStatus.SessionNotFound);
@@ -58,7 +58,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
         public async Task<ServiceResult<long>> GetSessionUserIdAsync(string sessionId)
         {
-            var sessionStr = await Cache.GetStringAsync($"user.session.<{sessionId}>");
+            var sessionStr = await _cache.GetStringAsync($"user.session.<{sessionId}>");
             if (string.IsNullOrWhiteSpace(sessionStr))
             {
                 return Failed<long>(SessionServiceStatus.SessionNotFound);
@@ -70,7 +70,7 @@ namespace Autyan.NiChiJou.Service.Identity
 
         public async Task RemoveSessionAsync(string sessionId)
         {
-            await Cache.RemoveAsync($"user.session.<{sessionId}>");
+            await _cache.RemoveAsync($"user.session.<{sessionId}>");
         }
 
         private static string CreateSessionId()

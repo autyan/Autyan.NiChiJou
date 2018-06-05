@@ -12,13 +12,13 @@ namespace Autyan.NiChiJou.Core.Data
 
         public TKey IdTo { get; set; }
 
-        public DateTimeOffset? CreatedAtFrom { get; set; }
+        public DateTime? CreatedAtFrom { get; set; }
 
-        public DateTimeOffset? CreatedAtTo { get; set; }
+        public DateTime? CreatedAtTo { get; set; }
 
-        public DateTimeOffset? ModifiedAtFrom { get; set; }
+        public DateTime? ModifiedAtFrom { get; set; }
 
-        public DateTimeOffset? ModifiedAtTo { get; set; }
+        public DateTime? ModifiedAtTo { get; set; }
 
         public int? Take { get; set; }
 

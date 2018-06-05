@@ -21,6 +21,9 @@ namespace Autyan.NiChiJou.IdentityServer.Models.Auth
         [Required]
         public string LoginName { get; set; }
 
+        [Required(ErrorMessage = "InviteCode is required")]
+        public string InviteCode { get; set; }
+
         [Required]
         public string Password { get; set; }
 

@@ -1,6 +1,12 @@
 ﻿// Write your JavaScript code.
 var base = {};
 
+$.ajaxSetup({
+    beforeSend: function (xhr) {
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    }
+});
+
 base.AjaxGet = function (ajaxUrl, params, callback) {
     ajaxUrl = ajaxUrl + '?t=' + Date.now();
     $.ajax(ajaxUrl,
@@ -142,17 +148,18 @@ function ajaxFailure(ret) {
 }
 
 function ajaxSuccess(ret, params, callback) {
-    if (!IsNullOrEmpty(ret.PostForm)) {
-        $('#' + ret.PostForm).submit();
+    if (!IsNullOrEmpty(ret.Data) && !IsNullOrEmpty(ret.Data.PostForm)) {
+        $('#' + ret.Data.PostForm).submit();
+        return;
     }
-    if (!IsNullOrEmpty(callback) && IsFunction(callback)) {
-        callback(ret, params);
+    if (!IsNullOrEmpty(callback) && IsFunction(callback) && ret.Data != null) {
+        callback(ret.Data, params);
     }
 }
 
 function ajaxComplete(ret) {
-    if (ret.responseJSON) {
-        var res = ret.responseJSON;
+    if (ret.ExtraInfo) {
+        var res = ret.ExtraInfo;
         if (!IsNullOrEmpty(res.Message)) {
             var message = res.Message;
             if (res.Exception !== null) {

@@ -13,40 +13,40 @@ namespace Autyan.NiChiJou.Blog.Controllers
 {
     public class AuthController : Controller
     {
-        private Passport Passport { get; }
+        private readonly Passport _passport;
 
-        private IBlogUserService BlogUserService { get; }
+        private readonly IBlogUserService _blogUserService;
 
-        private IIdentityContext<BlogIdentity> IdentityContext { get; }
+        private readonly IIdentityContext<BlogIdentity> _identityContext;
 
-        private IOptions<AutyanCookieOptions> Options { get; }
+        private readonly IOptions<AutyanCookieOptions> _options;
 
         public AuthController(Passport action,
             IBlogUserService blogUserService,
             IIdentityContext<BlogIdentity> identityContext,
             IOptions<AutyanCookieOptions> options)
         {
-            Passport = action;
-            BlogUserService = blogUserService;
-            IdentityContext = identityContext;
-            Options = options;
+            _passport = action;
+            _blogUserService = blogUserService;
+            _identityContext = identityContext;
+            _options = options;
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> MemberLogin(string token)
         {
-            var loginSucceed = await Passport.VerifySecurityTokenAsync(token);
+            var loginSucceed = await _passport.VerifySecurityTokenAsync(token);
             if (loginSucceed)
             {
-                var findResult = await BlogUserService.FindBlogUserByMemberCodeAsync(Passport.Member.MemberCode);
+                var findResult = await _blogUserService.FindBlogUserByMemberCodeAsync(_passport.Member.MemberCode);
                 if (!findResult.Succeed && findResult.ErrorCode == (int)BlogUserStatus.BlogUserNotExists)
                 {
-                    findResult = await BlogUserService.CreateBlogUserAsync(Passport.Member.NikeName, Passport.Member.MemberCode);
+                    findResult = await _blogUserService.CreateBlogUserAsync(_passport.Member.NikeName, _passport.Member.MemberCode);
                 }
                 var blogUser = findResult.Data;
-                var identity = await BlogUserService.CreateBlogIdentityAsync(blogUser);
-                await IdentityContext.SetIdentityAsync(Passport.Member.MemberCode, identity.Data);
-                await Passport.CookieLogin(null);
+                var identity = await _blogUserService.CreateBlogIdentityAsync(blogUser);
+                await _identityContext.SetIdentityAsync(_passport.Member.MemberCode, identity.Data);
+                await _passport.CookieLogin(null);
             }
             return Redirect("/");
         }
@@ -54,19 +54,19 @@ namespace Autyan.NiChiJou.Blog.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            return Redirect(Options.Value.RegisterPath);
+            return Redirect(_options.Value.RegisterPath);
         }
 
         [AllowAnonymous]
         public IActionResult Login()
         {
-            return Redirect(Options.Value.LoginPath);
+            return Redirect(_options.Value.LoginPath);
         }
 
         public async Task<IActionResult> Logout()
         {
-            await Passport.CookieLogoutAsync();
-            return Redirect(Options.Value.LogoutPath);
+            await _passport.CookieLogoutAsync();
+            return Redirect(_options.Value.LogoutPath);
         }
     }
 }

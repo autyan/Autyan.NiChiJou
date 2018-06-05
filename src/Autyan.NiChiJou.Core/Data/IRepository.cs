@@ -17,6 +17,8 @@ namespace Autyan.NiChiJou.Core.Data
 
         Task<int> UpdateByIdAsync(TEntity entity);
 
+        Task<int> PartialUpdateByIdAsync(TEntity entity);
+
         Task<int> UpdateByConditionAsync(object updateParamters, object condition);
 
         Task<PagedResult<TEntity>> PagingQueryAsync(IPagedQuery query);
