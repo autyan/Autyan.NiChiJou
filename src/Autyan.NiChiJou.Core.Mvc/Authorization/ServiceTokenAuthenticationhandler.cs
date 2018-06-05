@@ -41,7 +41,8 @@ namespace Autyan.NiChiJou.Core.Mvc.Authorization
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var authorizaHeader = ((FrameRequestHeaders) Request.Headers).HeaderAuthorization.ToString();
+            //var authorizaHeader = ((FrameRequestHeaders) Request.Headers).HeaderAuthorization.ToString();
+            var authorizaHeader = Request.Headers["Authorization"].ToString();
             if (!string.IsNullOrWhiteSpace(authorizaHeader) && authorizaHeader.StartsWith(Options.AuthenticationSchema))
             {
                 IsServiceTokenRequest = true;

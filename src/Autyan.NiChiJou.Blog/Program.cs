@@ -17,7 +17,7 @@ namespace Autyan.NiChiJou.Blog
             try
             {
                 logger.Debug("init main");
-                BuildWebHost(args).Run();
+                BuildWebHost(args).Build().Run();
             }
             catch (Exception ex)
             {
@@ -25,10 +25,10 @@ namespace Autyan.NiChiJou.Blog
                 logger.Error(ex, "Stopped program because of exception");
                 throw;
             }
-            BuildWebHost(args).Run();
+            BuildWebHost(args).Build().Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UserHostSettings()
@@ -37,7 +37,7 @@ namespace Autyan.NiChiJou.Blog
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
-                .UseNLog()  // NLog: setup NLog for Dependency injection
-                .Build();
+                .UseNLog();  // NLog: setup NLog for Dependency injection
+                //.Build();
     }
 }
