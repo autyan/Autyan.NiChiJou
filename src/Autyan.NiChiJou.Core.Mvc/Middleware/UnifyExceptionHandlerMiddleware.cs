@@ -10,8 +10,10 @@ using Autyan.NiChiJou.Core.Mvc.Options;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 
@@ -24,18 +26,21 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
         private readonly Func<object, Task> _clearCacheHeadersDelegate;
         private readonly DiagnosticSource _diagnosticSource;
         private readonly IMemoryCache _cache;
+        private readonly IOptions<MvcJsonOptions> _options;
 
         public UnifyExceptionHandlerMiddleware(
             RequestDelegate next,
             ILoggerFactory loggerFactory,
             DiagnosticSource diagnosticSource,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            IOptions<MvcJsonOptions> options)
         {
             _next = next;
             _logger = loggerFactory.CreateLogger<UnifyExceptionHandlerMiddleware>();
             _clearCacheHeadersDelegate = ClearCacheHeadersAsync;
             _diagnosticSource = diagnosticSource;
             _cache = cache;
+            _options = options;
         }
 
         public async Task Invoke(HttpContext context)
@@ -80,12 +85,12 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
                         jsonResponse.Messages.Add("Request Failed");
 
 #if DEBUG
-                        jsonResponse.Exception = context.Features.Get<IExceptionHandlerFeature>().Error;
+                        jsonResponse.Exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 #endif
                         context.Response.ContentType = "application/json";
                         using (var writer = new StreamWriter(context.Response.Body))
                         {
-                            new JsonSerializer().Serialize(writer, jsonResponse);
+                            JsonSerializer.CreateDefault(_options.Value.SerializerSettings).Serialize(writer, jsonResponse);
                             await writer.FlushAsync().ConfigureAwait(false);
                         }
 

@@ -72,4 +72,7 @@
   <ItemGroup>
     <None Include="MySql.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Autyan.NiChiJou.Database.Blog.refactorlog" />
+  </ItemGroup>
 </Project>

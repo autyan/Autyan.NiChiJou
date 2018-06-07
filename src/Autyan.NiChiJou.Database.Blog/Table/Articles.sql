@@ -4,7 +4,7 @@
 	[Title] NVARCHAR(200) NOT NULL, 
 	[Extract] NVARCHAR(500) NULL, 
 	[BlogId] BIGINT NOT NULL, 
-	[Reads] INT NOT NULL,
+	[ReadCount] BIGINT NOT NULL,
 	[Comments] INT NOT NULL,
 	[LastReadAt] datetime2(7) NULL,
 	[CreatedAt] datetime2(7) NOT NULL, 

@@ -56,7 +56,7 @@ create table Articles
   Title      varchar(200) charset utf8 not null,
   Extract    varchar(500) charset utf8 null,
   BlogId     bigint                    not null,
-  `Reads`    int                       not null,
+  ReadCount  bigint                    not null,
   Comments   int                       not null,
   LastReadAt datetime                  null,
   CreatedAt  datetime                  not null,
