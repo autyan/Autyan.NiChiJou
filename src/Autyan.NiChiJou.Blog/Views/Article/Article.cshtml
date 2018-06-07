@@ -45,6 +45,7 @@
     {
     <script type="text/javascript">
         $('#addComment').on('click', function () {
+            if ($('#newComment').val().length === 0) return;
             $('#addComment').prop('disabled', true);
             base.AjaxPost('/Article/Comment', { ArticleId: $('#Id').val(), Content: $('#newComment').val() }, function (ret) {
                 $('#articleComments').append('<hr /><span class="tag">'

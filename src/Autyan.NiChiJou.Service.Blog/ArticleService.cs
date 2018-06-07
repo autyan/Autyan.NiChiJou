@@ -150,6 +150,10 @@ namespace Autyan.NiChiJou.Service.Blog
 
         public async Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post, string memberCode, IPAddress ipaddress)
         {
+            if (string.IsNullOrWhiteSpace(post.Content))
+            {
+                return Failed<ArticleCommentDetails>("comment can not be empty.");
+            }
             if(_cache.TryGetValue($"article.comment.<{post.PostId}>.<{(string.IsNullOrWhiteSpace(memberCode) ? "Anonymous" : memberCode)}>.<{ipaddress}>", out var _))
             {
                 return Failed<ArticleCommentDetails>("you are comment too fast, take a break!");
