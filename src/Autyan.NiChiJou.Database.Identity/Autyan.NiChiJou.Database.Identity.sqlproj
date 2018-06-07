@@ -65,4 +65,7 @@
     <Build Include="Table\IdentityUsers.sql" />
     <Build Include="Table\ServiceTokens.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MySql.sql" />
+  </ItemGroup>
 </Project>

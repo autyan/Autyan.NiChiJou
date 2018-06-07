@@ -69,4 +69,7 @@
     <Build Include="Table\ArticleComments.sql" />
     <Build Include="Table\ArticleContents.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MySql.sql" />
+  </ItemGroup>
 </Project>
