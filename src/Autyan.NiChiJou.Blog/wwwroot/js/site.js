@@ -148,20 +148,20 @@ function ajaxFailure(ret) {
 }
 
 function ajaxSuccess(ret, params, callback) {
-    if (!IsNullOrEmpty(ret.Data) && !IsNullOrEmpty(ret.Data.PostForm)) {
-        $('#' + ret.Data.PostForm).submit();
+    if (!IsNullOrEmpty(ret.data) && !IsNullOrEmpty(ret.data.PostForm)) {
+        $('#' + ret.data.PostForm).submit();
         return;
     }
-    if (!IsNullOrEmpty(callback) && IsFunction(callback) && ret.Data != null) {
-        callback(ret.Data, params);
+    if (!IsNullOrEmpty(callback) && IsFunction(callback) && ret.data != null) {
+        callback(ret.data, params);
     }
 }
 
 function ajaxComplete(ret) {
-    if (!IsNullOrEmpty(ret.Data.Messages)) {
-        var message = ret.Data.Messages.join("\r\n");
-        if (ret.Data.Exception !== null) {
-            message += ('<br/>ExceptionInfo:<br/>' + ret.Data.Exception);
+    if (!IsNullOrEmpty(ret.data.messages)) {
+        var message = ret.data.messages.join("\r\n");
+        if (ret.data.exception !== null) {
+            message += ('<br/>ExceptionInfo:<br/>' + ret.data.exception);
         }
         Msg(message, { title: '提示！' });
     }
