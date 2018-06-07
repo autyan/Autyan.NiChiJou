@@ -21,6 +21,6 @@ namespace Autyan.NiChiJou.Service.Blog
 
         Task<ServiceResult<PagedResult<ArticlePreview>>> GetPagedArticleAsync(ArticleQuery query);
 
-        Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post);
+        Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post, string memberCode, IPAddress ipaddress);
     }
 }

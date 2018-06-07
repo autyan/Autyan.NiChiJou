@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Autyan.NiChiJou.Core.Mvc.Models
 {
@@ -6,14 +7,9 @@ namespace Autyan.NiChiJou.Core.Mvc.Models
     {
         public object Data { get; set; }
 
-        public JsonExtraInfo ExtraInfo { get; set; }
-    }
-
-    public class JsonExtraInfo
-    {
         public string RequestId { get; set; }
 
-        public string Message { get; set; }
+        public List<string> Messages { get; set; } = new List<string>();
 
         public Exception Exception { get; set; }
     }

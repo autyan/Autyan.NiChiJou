@@ -148,9 +148,14 @@ namespace Autyan.NiChiJou.Service.Blog
             });
         }
 
-        public async Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post)
+        public async Task<ServiceResult<ArticleCommentDetails>> AddCommentOnArticle(ArticleComment post, string memberCode, IPAddress ipaddress)
         {
+            if(_cache.TryGetValue($"article.comment.<{post.PostId}>.<{(string.IsNullOrWhiteSpace(memberCode) ? "Anonymous" : memberCode)}>.<{ipaddress}>", out var _))
+            {
+                return Failed<ArticleCommentDetails>("you are comment too fast, take a break!");
+            }
             var insertResult = await _commentRepo.InsertAsync(post);
+            _cache.Set($"article.comment.<{post.PostId}>.<{(string.IsNullOrWhiteSpace(memberCode) ? "Anonymous" : memberCode)}>.<{ipaddress}>", "commented", DateTimeOffset.Now.AddMinutes(5));
             if (insertResult <= 0)
             {
                 return Failed<ArticleCommentDetails>("Insert Comment Failed");

@@ -115,10 +115,10 @@ namespace Autyan.NiChiJou.Blog.Controllers
                 comment.CommentedBy = _identityContext.Identity.UserId;
             }
 
-            var result = await _articleService.AddCommentOnArticle(comment);
+            var result = await _articleService.AddCommentOnArticle(comment, _identityContext.Identity?.MemberCode, HttpContext.Connection.RemoteIpAddress);
             if (!result.Succeed)
             {
-                return Json("Failed");
+                return Json(result);
             }
             return Json(result.Data);
         }

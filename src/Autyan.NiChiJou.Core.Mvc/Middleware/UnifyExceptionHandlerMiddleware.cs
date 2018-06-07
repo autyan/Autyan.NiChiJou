@@ -75,15 +75,12 @@ namespace Autyan.NiChiJou.Core.Mvc.Middleware
                     {
                         var jsonResponse = new JsonResponse
                         {
-                            ExtraInfo = new JsonExtraInfo
-                            {
-                                RequestId = requestId,
-                                Message = "Request Failed"
-                            }
+                            RequestId = requestId
                         };
+                        jsonResponse.Messages.Add("Request Failed");
 
 #if DEBUG
-                        jsonResponse.ExtraInfo.Exception = context.Features.Get<IExceptionHandlerFeature>().Error;
+                        jsonResponse.Exception = context.Features.Get<IExceptionHandlerFeature>().Error;
 #endif
                         context.Response.ContentType = "application/json";
                         using (var writer = new StreamWriter(context.Response.Body))

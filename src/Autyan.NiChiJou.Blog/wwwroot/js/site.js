@@ -158,14 +158,11 @@ function ajaxSuccess(ret, params, callback) {
 }
 
 function ajaxComplete(ret) {
-    if (ret.ExtraInfo) {
-        var res = ret.ExtraInfo;
-        if (!IsNullOrEmpty(res.Message)) {
-            var message = res.Message;
-            if (res.Exception !== null) {
-                message += ('<br/>ExceptionInfo:<br/>' + res.Exception);
-            }
-            Msg(message, { title: '提示！' });
+    if (!IsNullOrEmpty(ret.Data.Messages)) {
+        var message = ret.Data.Messages.join("\r\n");
+        if (ret.Data.Exception !== null) {
+            message += ('<br/>ExceptionInfo:<br/>' + ret.Data.Exception);
         }
+        Msg(message, { title: '提示！' });
     }
 }

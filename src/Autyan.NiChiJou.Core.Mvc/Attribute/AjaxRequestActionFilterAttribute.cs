@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autyan.NiChiJou.Core.Mvc.Models;
+using Autyan.NiChiJou.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -11,17 +12,23 @@ namespace Autyan.NiChiJou.Core.Mvc.Attribute
     {
         public override async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
-            if (context.Result is JsonResult result)
+            if (context.Result is JsonResult result && !(result.Value is JsonResponse))
             {
-                result.Value = new JsonResponse
+                var response = new JsonResponse();
+                if (result.Value is ServiceResult serviceResult)
                 {
-                    Data = result.Value
-                };
+                    response.Messages.AddRange(serviceResult.Messages);
+                }
+                else
+                {
+                    response.Data = result.Value;
+                }
 
-                return;
+                result.Value = response;
             }
 
             await base.OnResultExecutionAsync(context, next);
+
         }
     }
 }
